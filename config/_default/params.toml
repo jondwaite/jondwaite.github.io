@@ -2,7 +2,7 @@
 enableSearch = true
 
 # socials
-twitter = "@janedoe"
+twitter = "@jondwaite"
 largeTwitterCard = false # set to true if you want to show a large twitter card image. The default is a small twitter card image
 introDescription = "Technologist, perpetual student, teacher, continual incremental improvement."
 # introURL = "about/" # set the url for the 'read more' button below the introDescription, or set to false to not show the button
@@ -127,7 +127,7 @@ languageMenuName = "🌐"
 
 # The year when ths website was created, this value is used in the copyright
 # notice of the footer.
-# since = 2016
+since = 2016
 
 # Show related content at the end of an article based on the 'series' taxonomy. Can be set in post front matter.
 # showRelatedInArticle = false
@@ -135,7 +135,7 @@ languageMenuName = "🌐"
 
 # website author
 [author]
-name = "Jane Doe"
+name = "Jon Waite"
 # photo = "images/jane-doe.png" #include this if you would like to show the author photo on the sidebar
 
 [plausible_analytics]
