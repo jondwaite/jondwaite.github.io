@@ -8,13 +8,13 @@ categories:
   - Uncategorized
 
 ---
-So I had an &#8216;interesting&#8217; email from Oracle cloud (OCI) which I almost missed:<figure class="wp-block-image size-large">
+So I had an 'interesting' email from Oracle cloud (OCI) which I almost missed:<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="761" height="800" src="https://kiwicloud.ninja/wp-content/uploads/2022/04/image-761x800.png" alt="" class="wp-image-68982" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/04/image-761x800.png 761w, https://kiwicloud.ninja/wp-content/uploads/2022/04/image-285x300.png 285w, https://kiwicloud.ninja/wp-content/uploads/2022/04/image-768x807.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/04/image-143x150.png 143w, https://kiwicloud.ninja/wp-content/uploads/2022/04/image.png 1001w" sizes="(max-width: 761px) 100vw, 761px" /> </figure> 
 
-As this site (kiwicloud.ninja) is currently hosted on the &#8216;Free Tier&#8217; of Oracle Cloud I was a bit concerned, but figured the odds of being impacted were low and I &#8216;should be alright&#8217;.
+As this site (kiwicloud.ninja) is currently hosted on the 'Free Tier' of Oracle Cloud I was a bit concerned, but figured the odds of being impacted were low and I 'should be alright'.
 
-Unfortunately &#8211; turned out it wasn&#8217;t alright, OCI had &#8216;unintentionally reclaimed&#8217; the public IP address which the site used and I had to jump into the Oracle dashboard and navigate through to assign a new reserved public IP address to the site.
+Unfortunately - turned out it wasn't alright, OCI had 'unintentionally reclaimed' the public IP address which the site used and I had to jump into the Oracle dashboard and navigate through to assign a new reserved public IP address to the site.
 
 Then I had to find my DNS registration logins and update those so that the domain pointed correctly to the updated public IP (unfortunately my previous public IP had already been reallocated and so was unavailable to reassign).
 

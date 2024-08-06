@@ -31,7 +31,7 @@ There is certainly no ‘right’ answer to the question of persistent storage f
 
 In this post I will detail a deployment using a <a rel="noopener" href="https://ceph.com/" target="_blank" class="broken_link">ceph</a> storage cluster to provide a highly available and scalable storage platform and the configuration required to enable a CSE deployed k8s cluster to use dynamic persistent volumes (DPVs) in this environment.
 
-Due to the large number of servers/VMs involved, and the possibility of confusion / working on the wrong server console &#8211; I&#8217;ve added buttons like this<img loading="lazy" decoding="async" width="170" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-both.png" alt="" class="wp-image-881" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-both.png 170w, https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-both-150x28.png 150w" sizes="(max-width: 170px) 100vw, 170px" /> prior to each section to show which system(s) the commands should be used on.
+Due to the large number of servers/VMs involved, and the possibility of confusion / working on the wrong server console - I've added buttons like this<img loading="lazy" decoding="async" width="170" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-both.png" alt="" class="wp-image-881" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-both.png 170w, https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-both-150x28.png 150w" sizes="(max-width: 170px) 100vw, 170px" /> prior to each section to show which system(s) the commands should be used on.
 
 ### Disclaimer {.wp-block-heading}
 
@@ -116,7 +116,7 @@ You should ensure that you have the following enabled and configured in your env
 
 ## Ceph Storage Cluster {.wp-block-heading}
 
-The process below describes installing and configuring a ceph cluster on virtualised hardware. If you have an existing ceph cluster available or are building on physical hardware it&#8217;s best to follow the ceph official documentation at <a rel="noreferrer noopener" href="http://docs.ceph.com/docs/mimic/start/" target="_blank" class="broken_link">this link</a> for your circumstances.
+The process below describes installing and configuring a ceph cluster on virtualised hardware. If you have an existing ceph cluster available or are building on physical hardware it's best to follow the ceph official documentation at <a rel="noreferrer noopener" href="http://docs.ceph.com/docs/mimic/start/" target="_blank" class="broken_link">this link</a> for your circumstances.
 
 ### Ceph Server Builds {.wp-block-heading}
 
@@ -136,7 +136,7 @@ Each server should now be restarted to ensure the new Linux kernel is loaded and
 
 ### Ceph Admin Account {.wp-block-heading}
 
-We need a user account configured on each of the ceph servers to allow ceph-deploy to work and to co-ordinate access, this account must NOT be named &#8216;ceph&#8217; due to potential conflicts in the ceph-deploy scripts, but can be called just about anything else. In this lab environment I&#8217;ve used &#8216;cephadmin&#8217;. First we create the account on each server and set the password, the 3rd line permits the cephadmin user to use &#8216;sudo&#8217; without a password which is required for the ceph-deploy script:<figure class="wp-block-image">
+We need a user account configured on each of the ceph servers to allow ceph-deploy to work and to co-ordinate access, this account must NOT be named 'ceph' due to potential conflicts in the ceph-deploy scripts, but can be called just about anything else. In this lab environment I've used 'cephadmin'. First we create the account on each server and set the password, the 3rd line permits the cephadmin user to use 'sudo' without a password which is required for the ceph-deploy script:<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="170" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-both.png" alt="" class="wp-image-881" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-both.png 170w, https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-both-150x28.png 150w" sizes="(max-width: 170px) 100vw, 170px" /> </figure> 
 
@@ -152,7 +152,7 @@ Execute the following on the ceph admin node (as cephadmin):<figure class="wp-bl
 
 <pre class="EnlighterJSRAW" data-enlighter-language="msdos" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">$ ssh-keygen -t rsa</pre>
 
-Accept the default path (/home/cephadmin/.ssh/id\_rsa) and don&#8217;t set a key passphrase. You should copy the generated .ssh/id\_rsa (private key) file to your admin workstation so you can use it to authenticate to the ceph servers.
+Accept the default path (/home/cephadmin/.ssh/id\_rsa) and don't set a key passphrase. You should copy the generated .ssh/id\_rsa (private key) file to your admin workstation so you can use it to authenticate to the ceph servers.
 
 Next, enable password logins (temporarily) on the storage nodes (ceph01,2 & 3) by running the following on each node:<figure class="wp-block-image">
 
@@ -192,7 +192,7 @@ Optional: It is now safe to re-disable password authentication on the ceph serve
 <pre class="EnlighterJSRAW" data-enlighter-language="msdos" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">$ sudo sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config
 $ sudo systemctl restart sshd</pre>
 
-You&#8217;ll need to resolve any authentication issues before proceeding as the ceph-deploy script relies on being able to obtain sudo-level remote access to all of the storage nodes to install ceph successfully.
+You'll need to resolve any authentication issues before proceeding as the ceph-deploy script relies on being able to obtain sudo-level remote access to all of the storage nodes to install ceph successfully.
 
 You should also at this stage confirm that you have time synchronised to an external source on each ceph node so that the server clocks agree, by default on Ubuntu 16.04 timesyncd is configured automatically so nothing needs to be done here in our case. You can check this on Ubuntu 16.04 by running timedatectl:<figure class="wp-block-image">
 
@@ -227,7 +227,7 @@ On all nodes, update and install ceph-common:<figure class="wp-block-image">
 
 <pre class="EnlighterJSRAW" data-enlighter-language="msdos" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">$ sudo apt update; sudo apt install ceph-common -y</pre>
 
-**Note:** Installing ceph-common on the storage nodes isn&#8217;t strictly required as the ceph-deploy script can do this during cluster initiation, but pre-installing it in this way pulls in several dependencies (e.g. python v2 and associated modules) which can prevent ceph-deploy from running if not present so it is easier to do this way.
+**Note:** Installing ceph-common on the storage nodes isn't strictly required as the ceph-deploy script can do this during cluster initiation, but pre-installing it in this way pulls in several dependencies (e.g. python v2 and associated modules) which can prevent ceph-deploy from running if not present so it is easier to do this way.
 
 Next again working on the admin node logged in as cephadmin, make a directory to store the ceph cluster configuration files and change to that directory. Note that ceph-deploy will use and write files to the current directory so make sure you are in this folder whenever making changes to the ceph configuration.<figure class="wp-block-image">
 
@@ -235,13 +235,13 @@ Next again working on the admin node logged in as cephadmin, make a directory to
 
 <pre class="EnlighterJSRAW" data-enlighter-language="msdos" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">$ sudo apt install ceph-deploy -y</pre>
 
-Now we can create the initial ceph cluster from the admin node, use ceph-deploy with the &#8216;new&#8217; switch and supply the monitor nodes (in our case all 3 nodes will be both monitors and OSD nodes). Make sure you do NOT use sudo for this command and only run on the admin node:<figure class="wp-block-image">
+Now we can create the initial ceph cluster from the admin node, use ceph-deploy with the 'new' switch and supply the monitor nodes (in our case all 3 nodes will be both monitors and OSD nodes). Make sure you do NOT use sudo for this command and only run on the admin node:<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-admin-btn.png" alt="" class="wp-image-880" /> </figure> 
 
 <pre class="EnlighterJSRAW" data-enlighter-language="msdos" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">$ ceph-deploy new ceph01 ceph02 ceph03</pre>
 
-If everything has run correctly you&#8217;ll see output similar to the following:<figure class="wp-block-image">
+If everything has run correctly you'll see output similar to the following:<figure class="wp-block-image">
 
 [<img decoding="async" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/image_thumb-1.png" alt="image" />][2]<figcaption>ceph-deploy output</figcaption></figure> 
 
@@ -279,13 +279,13 @@ This will run through the installation of ceph and pre-requisite packages on eac
 
 ### Ceph Configuration {.wp-block-heading}
 
-Once you&#8217;ve successfully installed ceph on each node, use the following (again from only the admin node) to deploy the initial ceph monitor services:<figure class="wp-block-image">
+Once you've successfully installed ceph on each node, use the following (again from only the admin node) to deploy the initial ceph monitor services:<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-admin-btn.png" alt="" class="wp-image-880" /> </figure> 
 
 <pre class="EnlighterJSRAW" data-enlighter-language="msdos" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">$ ceph-deploy mon create-initial</pre>
 
-If all goes well you&#8217;ll get some messages at the completion of this process showing the keyring files being stored in your &#8216;mycluster&#8217; folder, you can check these exist:<figure class="wp-block-image">
+If all goes well you'll get some messages at the completion of this process showing the keyring files being stored in your 'mycluster' folder, you can check these exist:<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-admin-btn.png" alt="" class="wp-image-880" /> </figure> 
 
@@ -302,7 +302,7 @@ drwxr-xr-x 5 cephadmin cephadmin   4096 Jan 25 00:57 ..
 -rw-rw-r-- 1 cephadmin cephadmin 128136 Jan 25 01:17 ceph-deploy-ceph.log
 -rw------- 1 cephadmin cephadmin     73 Jan 25 01:03 ceph.mon.keyring</pre>
 
-To avoid having to specify the monitor node address and ceph.client.admin.keyring path in every command, we can now deploy these to each node so they are available automatically. Again working from the &#8216;mycluster&#8217; folder on the admin node:<figure class="wp-block-image">
+To avoid having to specify the monitor node address and ceph.client.admin.keyring path in every command, we can now deploy these to each node so they are available automatically. Again working from the 'mycluster' folder on the admin node:<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-admin-btn.png" alt="" class="wp-image-880" /> </figure> 
 
@@ -312,7 +312,7 @@ This should give the following:<figure class="wp-block-image">
 
 [<img decoding="async" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/image_thumb-2.png" alt="image" />][3]</figure> 
 
-Next we need to deploy the manager (&#8216;mgr&#8217;) service to the OSD nodes, again working from the &#8216;mycluster&#8217; folder on the admin node:
+Next we need to deploy the manager ('mgr') service to the OSD nodes, again working from the 'mycluster' folder on the admin node:
 
 <pre class="EnlighterJSRAW" data-enlighter-language="msdos" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">$ ceph-deploy mgr create ceph01 ceph02 ceph03</pre>
 
@@ -336,9 +336,9 @@ At this stage we can check that all of the mon and mgr services are started and 
     usage:   0 B used, 0 B / 0 B avail
     pgs:</pre>
 
-As you can see, the manager (&#8216;mgr&#8217;) service is installed on all 3 nodes but only active on the first and in standby mode on the other 2 &#8211; this is normal and correct. The monitor (&#8216;mon&#8217;) service is running on all of the storage nodes.
+As you can see, the manager ('mgr') service is installed on all 3 nodes but only active on the first and in standby mode on the other 2 - this is normal and correct. The monitor ('mon') service is running on all of the storage nodes.
 
-Next we can configure the disks attached to our storage nodes for use by ceph. Ensure that you know and use the correct identifier for your disk devices (in this case, we are using the 2nd SCSI disk attached to the storage node VMs which is at /dev/sdb so that&#8217;s what we&#8217;ll use in the commands below). As before, run the following only on the admin node:<figure class="wp-block-image">
+Next we can configure the disks attached to our storage nodes for use by ceph. Ensure that you know and use the correct identifier for your disk devices (in this case, we are using the 2nd SCSI disk attached to the storage node VMs which is at /dev/sdb so that's what we'll use in the commands below). As before, run the following only on the admin node:<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-admin-btn.png" alt="" class="wp-image-880" /> </figure> 
 
@@ -346,7 +346,7 @@ Next we can configure the disks attached to our storage nodes for use by ceph. E
 $ ceph-deploy osd create --data /dev/sdb ceph02
 $ ceph-deploy osd create --data /dev/sdb ceph03</pre>
 
-For each command the last line of the logs shown when run should be similar to &#8216;Host ceph01 is now ready for osd use.&#8217;
+For each command the last line of the logs shown when run should be similar to 'Host ceph01 is now ready for osd use.'
 
 We can now check the overall cluster health with:<figure class="wp-block-image">
 
@@ -372,14 +372,14 @@ $ ssh ceph01 sudo ceph -s
 
 As you can see, the 3 x 50GB disks have now been added and the total (150 GiB) capacity is available under the data: section.
 
-Now we need to create a ceph storage pool ready for Kubernetes to consume from &#8211; the default name of this pool is &#8216;rbd&#8217; (if not specified), but it is strongly recommended to name it differently from the default when using for k8s so I&#8217;ve created a storage pool called &#8216;kube&#8217; in this example (again running from the mycluster folder on the admin node):<figure class="wp-block-image">
+Now we need to create a ceph storage pool ready for Kubernetes to consume from - the default name of this pool is 'rbd' (if not specified), but it is strongly recommended to name it differently from the default when using for k8s so I've created a storage pool called 'kube' in this example (again running from the mycluster folder on the admin node):<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-admin-btn.png" alt="" class="wp-image-880" /> </figure> 
 
 <pre class="EnlighterJSRAW" data-enlighter-language="msdos" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">$ sudo ceph osd pool create kube 30 30
 pool 'kube' created</pre>
 
-The two &#8217;30&#8217;s are important &#8211; you should review the ceph documentation <a href="http://docs.ceph.com/docs/mimic/rados/configuration/pool-pg-config-ref" target="_blank" rel="noopener" class="broken_link">here</a> for Pool, PG and CRUSH configuration to establish values for PG and PGP appropriate to your environment.
+The two '30's are important - you should review the ceph documentation <a href="http://docs.ceph.com/docs/mimic/rados/configuration/pool-pg-config-ref" target="_blank" rel="noopener" class="broken_link">here</a> for Pool, PG and CRUSH configuration to establish values for PG and PGP appropriate to your environment.
 
 We now associated this pool with the rbd (RADOS block device) application so it is available to be used as a RADOS block device:<figure class="wp-block-image">
 
@@ -392,7 +392,7 @@ enabled application 'rbd' on pool 'kube'</pre>
 
 The easiest way to test our ceph cluster is working correctly and can provide storage is to attempt creating and using a new RADOS Block Device (rbd) volume from our admin node.
 
-Before this will work we need to tune the rbd features map by editing ceph.conf on our client to disable rbd features that aren&#8217;t available in our Linux kernel (on admin/client node):<figure class="wp-block-image">
+Before this will work we need to tune the rbd features map by editing ceph.conf on our client to disable rbd features that aren't available in our Linux kernel (on admin/client node):<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/ceph-admin-btn.png" alt="" class="wp-image-880" /> </figure> 
 
@@ -481,18 +481,18 @@ $ sudo rmdir /testmnt</pre>
 
 Using VMware Container Service Extension (CSE) makes it easy to deploy and configure a base Kubernetes cluster into our vCloud Director platform. I previously wrote a post [here][4] with a step-by-step guide to using CSE.
 
-First we need an ssh key pair to provide to the CSE nodes as they are deployed to allow us to access them. You could re-use the cephadmin key-pair created in the previous section, or generate a new set. As I&#8217;m using Windows as my client OS I used the **puttygen** utility included in the [PuTTY][5] package to generate a new keypair and save them to a .ssh directory in my home folder.
+First we need an ssh key pair to provide to the CSE nodes as they are deployed to allow us to access them. You could re-use the cephadmin key-pair created in the previous section, or generate a new set. As I'm using Windows as my client OS I used the **puttygen** utility included in the [PuTTY][5] package to generate a new keypair and save them to a .ssh directory in my home folder.
 
 **Important Note:** Check your public key file in a text editor prior to deploying the cluster, if it looks like this:<figure class="wp-block-image">
 
 <img decoding="async" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-12.png" alt="This image has an empty alt attribute; its file name is image-12.png" /> <figcaption>Public key as generated by PuTTYGen (incorrect)  
 </figcaption></figure> 
 
-You will need to change it to be all on one line starting &#8216;ssh-rsa&#8217; and with none of the extra text as follows:<figure class="wp-block-image">
+You will need to change it to be all on one line starting 'ssh-rsa' and with none of the extra text as follows:<figure class="wp-block-image">
 
 <img decoding="async" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-11.png" alt="This image has an empty alt attribute; its file name is image-11.png" /> </figure> 
 
-If you do not make this change this you won&#8217;t be able to authenticate to your cluster nodes once deployed.
+If you do not make this change this you won't be able to authenticate to your cluster nodes once deployed.
 
 Next we login to vCD using the vcd-cli (see my post linked above if you need to install/configure vcd-cli and the CSE extension):<figure class="wp-block-image">
 
@@ -502,13 +502,13 @@ Now we can see what virtual Datacenters (VDCs) are available to us:<figure class
 
 <img loading="lazy" decoding="async" width="170" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn.png" alt="" class="wp-image-879" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn.png 170w, https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn-150x28.png 150w" sizes="(max-width: 170px) 100vw, 170px" /> </figure> <figure class="wp-block-image"><img loading="lazy" decoding="async" width="312" height="68" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-5.png" alt="" class="wp-image-833" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-5.png 312w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-5-300x65.png 300w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-5-150x33.png 150w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-5-250x54.png 250w" sizes="(max-width: 312px) 100vw, 312px" /><figcaption>Showing available VDCs</figcaption></figure> 
 
-If we had multiple VDCs available, we need to select which one is &#8216;in_use&#8217; (active) for deployment of our cluster using &#8216;vcd vdc use &#8220;<VDC Name>&#8221;&#8216;. In this case we only have a single VDC and it&#8217;s already active/in use.
+If we had multiple VDCs available, we need to select which one is 'in_use' (active) for deployment of our cluster using 'vcd vdc use &#8220;<VDC Name>&#8221;'. In this case we only have a single VDC and it's already active/in use.
 
 We can get the information of our VDC which will help us fill out the required properties when creating our k8s cluster:<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="170" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn.png" alt="" class="wp-image-879" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn.png 170w, https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn-150x28.png 150w" sizes="(max-width: 170px) 100vw, 170px" /> </figure> <figure class="wp-block-image"><img loading="lazy" decoding="async" width="485" height="633" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-6.png" alt="" class="wp-image-834" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-6.png 485w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-6-230x300.png 230w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-6-115x150.png 115w" sizes="(max-width: 485px) 100vw, 485px" /><figcaption>VDC Properties returned by vdc info</figcaption></figure> 
 
-We will be using the &#8216;Tyrell Servers A03&#8217; network (where our ceph cluster exists) and the &#8216;A03 VSAN Performance&#8217; storage profile for our cluster.
+We will be using the 'Tyrell Servers A03' network (where our ceph cluster exists) and the 'A03 VSAN Performance' storage profile for our cluster.
 
 To get the options available when creating a cluster we can see the cluster creation help:<figure class="wp-block-image">
 
@@ -522,7 +522,7 @@ Looking in vCloud Director we can see the new vApp and VMs deployed:<figure clas
 
 <img loading="lazy" decoding="async" width="800" height="365" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-18-800x365.png" alt="" class="wp-image-854" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-18-800x365.png 800w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-18-300x137.png 300w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-18-768x350.png 768w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-18-150x68.png 150w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-18-250x114.png 250w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-18.png 1275w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-We obtain the kubectl config of our cluster and store this for later use (make the .kube folder first if it doesn&#8217;t already exist):<figure class="wp-block-image">
+We obtain the kubectl config of our cluster and store this for later use (make the .kube folder first if it doesn't already exist):<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="170" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn.png" alt="" class="wp-image-879" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn.png 170w, https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn-150x28.png 150w" sizes="(max-width: 170px) 100vw, 170px" /> </figure> 
 
@@ -532,7 +532,7 @@ And get the details of our k8s nodes from vcd-cli:<figure class="wp-block-image"
 
 <img loading="lazy" decoding="async" width="170" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn.png" alt="" class="wp-image-879" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn.png 170w, https://kiwicloud.ninja/wp-content/uploads/2019/01/admin-ws-btn-150x28.png 150w" sizes="(max-width: 170px) 100vw, 170px" /> </figure> <figure class="wp-block-image"><img loading="lazy" decoding="async" width="336" height="122" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-19.png" alt="" class="wp-image-855" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-19.png 336w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-19-300x109.png 300w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-19-150x54.png 150w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-19-250x91.png 250w" sizes="(max-width: 336px) 100vw, 336px" /></figure> 
 
-Next we need to update and install the ceph client on each cluster node &#8211; run the following on each node (including the master). To do this we can connect via ssh as root using the key pair we specified when creating the cluster.<figure class="wp-block-image">
+Next we need to update and install the ceph client on each cluster node - run the following on each node (including the master). To do this we can connect via ssh as root using the key pair we specified when creating the cluster.<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="170" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/k8s-both-btn.png" alt="" class="wp-image-884" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/k8s-both-btn.png 170w, https://kiwicloud.ninja/wp-content/uploads/2019/01/k8s-both-btn-150x28.png 150w" sizes="(max-width: 170px) 100vw, 170px" /> </figure> 
 
@@ -613,7 +613,7 @@ root@mstr-x4nb:~# rmdir /testmnt/
 root@mstr-x4nb:~# rbd remove kube/testvol02
 Removing image: 100% complete...done.</pre>
 
-Note: If the **rbd map** command hangs you may still be running the stock Linux kernel on the kubernetes nodes &#8211; make sure you have restarted them.
+Note: If the **rbd map** command hangs you may still be running the stock Linux kernel on the kubernetes nodes - make sure you have restarted them.
 
 Now we have a functional ceph storage cluster capable of serving block storage devices over the network, and a Kubernetes cluster configured able to mount rbd devices and use these. In the next section we will configure kubernetes and ceph together with the rbd-provisioner container to enable dynamic persistent storage for pods deployed into our infrastructure.
 
@@ -621,13 +621,13 @@ Now we have a functional ceph storage cluster capable of serving block storage d
 
 ### Kubernetes secrets {.wp-block-heading}
 
-We need to first tell Kubernetes account information to be used to connect to the ceph cluster, to do this we create a &#8216;secret&#8217; for the ceph admin user, and also create a client user to be used by k8s provisioning. Working on the kubernetes master node is easiest for this as it has ceph and kubectl already configured from our previous steps:<figure class="wp-block-image">
+We need to first tell Kubernetes account information to be used to connect to the ceph cluster, to do this we create a 'secret' for the ceph admin user, and also create a client user to be used by k8s provisioning. Working on the kubernetes master node is easiest for this as it has ceph and kubectl already configured from our previous steps:<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/k8s-master-btn.png" alt="" class="wp-image-885" /> </figure> 
 
 <pre class="EnlighterJSRAW" data-enlighter-language="msdos" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group=""># ceph auth get-key client.admin</pre>
 
-This will return a key like &#8216;AQCLY0pcFXBYIxAAhmTCXWwfSIZxJ3WhHnqK/w==&#8217; which is used in the next command (**Note:** the &#8216;=&#8217; sign between **&#8211;from-literal** and **key** is **not** a typo &#8211; it actually needs to be like this).<figure class="wp-block-image">
+This will return a key like 'AQCLY0pcFXBYIxAAhmTCXWwfSIZxJ3WhHnqK/w==' which is used in the next command (**Note:** the '=' sign between **-from-literal** and **key** is **not** a typo - it actually needs to be like this).<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/k8s-master-btn.png" alt="" class="wp-image-885" /> </figure> 
 
@@ -635,7 +635,7 @@ This will return a key like &#8216;AQCLY0pcFXBYIxAAhmTCXWwfSIZxJ3WhHnqK/w==&#821
 --from-literal=key='AQCLY0pcFXBYIxAAhmTCXWwfSIZxJ3WhHnqK/w==' --namespace=kube-system
 secret "ceph-secret" created</pre>
 
-We can now create a new ceph user &#8216;kube&#8217; and register the secret from this user in kubernetes as &#8216;ceph-secret-kube&#8217;:<figure class="wp-block-image">
+We can now create a new ceph user 'kube' and register the secret from this user in kubernetes as 'ceph-secret-kube':<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/k8s-master-btn.png" alt="" class="wp-image-885" /> </figure> 
 
@@ -648,7 +648,7 @@ secret "ceph-secret-kube" created</pre>
 
 ### rbd-provisioner {.wp-block-heading}
 
-Kubernetes is in the process of moving storage provisioners (such as the rbd one we will be using) out of its main packages and into separate projects and packages. There&#8217;s also an issue that the kubernetes-controller-manager container no longer has access to an &#8216;rbd&#8217; binary in order to be able to connect to a ceph cluster directly. We therefore need to deploy a small &#8216;rbd-provisioner&#8217; to act as the go-between from the kubernetes cluster to the ceph storage cluster. This project is available under [this][7] link and the steps below show how to obtain get a kubernetes pod running the rbd-provisioner service up and running (again working from the k8s cluster &#8216;master&#8217; node):<figure class="wp-block-image">
+Kubernetes is in the process of moving storage provisioners (such as the rbd one we will be using) out of its main packages and into separate projects and packages. There's also an issue that the kubernetes-controller-manager container no longer has access to an 'rbd' binary in order to be able to connect to a ceph cluster directly. We therefore need to deploy a small 'rbd-provisioner' to act as the go-between from the kubernetes cluster to the ceph storage cluster. This project is available under [this][7] link and the steps below show how to obtain get a kubernetes pod running the rbd-provisioner service up and running (again working from the k8s cluster 'master' node):<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/k8s-master-btn.png" alt="" class="wp-image-885" /> </figure> 
 
@@ -672,13 +672,13 @@ rolebinding.rbac.authorization.k8s.io "rbd-provisioner" created
 serviceaccount "rbd-provisioner" created
 # cd</pre>
 
-You should now be able to see the &#8216;rbd-provisioner&#8217; container starting and then running in kubernetes:<figure class="wp-block-image">
+You should now be able to see the 'rbd-provisioner' container starting and then running in kubernetes:<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/k8s-master-btn.png" alt="" class="wp-image-885" /> </figure> <figure class="wp-block-image"><img loading="lazy" decoding="async" width="566" height="259" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-22.png" alt="" class="wp-image-860" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/01/image-22.png 566w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-22-300x137.png 300w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-22-150x69.png 150w, https://kiwicloud.ninja/wp-content/uploads/2019/01/image-22-250x114.png 250w" sizes="(max-width: 566px) 100vw, 566px" /></figure> 
 
 ### Testing it out {.wp-block-heading}
 
-Now we can create our kubernetes Storageclass using this storage ready for a pod to make a persistent volume claim (PVC) against. Create the following as a new file (I&#8217;ve named mine &#8216;rbd-storageclass.yaml&#8217;). Change the &#8216;monitors&#8217; line to reflect the IP addresses of the &#8216;mon&#8217; nodes in your ceph cluster (in our case these are on the ceph01, ceph02 and ceph03 nodes on the IP addresses shown in the file).<figure class="wp-block-image">
+Now we can create our kubernetes Storageclass using this storage ready for a pod to make a persistent volume claim (PVC) against. Create the following as a new file (I've named mine 'rbd-storageclass.yaml'). Change the 'monitors' line to reflect the IP addresses of the 'mon' nodes in your ceph cluster (in our case these are on the ceph01, ceph02 and ceph03 nodes on the IP addresses shown in the file).<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/k8s-master-btn.png" alt="" class="wp-image-885" /> </figure> 
 
@@ -706,7 +706,7 @@ You can then add this StorageClass to kubernetes using:<figure class="wp-block-i
 <pre class="EnlighterJSRAW" data-enlighter-language="msdos" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group=""># kubectl create -f ./rbd-storageclass.yaml
 storageclass.storage.k8s.io "rbd" created</pre>
 
-Next we can create a test PVC and make sure that storage is created in our ceph cluster and assigned to the pod. Create a new file &#8216;pvc-test.yaml&#8217; as:<figure class="wp-block-image">
+Next we can create a test PVC and make sure that storage is created in our ceph cluster and assigned to the pod. Create a new file 'pvc-test.yaml' as:<figure class="wp-block-image">
 
 <img loading="lazy" decoding="async" width="105" height="32" src="https://kiwicloud.ninja/wp-content/uploads/2019/01/k8s-master-btn.png" alt="" class="wp-image-885" /> </figure> 
 
@@ -737,7 +737,7 @@ Namespace:     default
 StorageClass:  rbd
 Status:        Bound
 Volume:        pvc-1e9bdbfd-22a8-11e9-ba77-005056340036
-Labels:        &lt;none>
+Labels:        <none>
 Annotations:   pv.kubernetes.io/bind-completed=yes
                pv.kubernetes.io/bound-by-controller=yes
                volume.beta.kubernetes.io/storage-provisioner=ceph.com/rbd
@@ -820,11 +820,11 @@ As we can see, our test claim has successfully requested and bound a persistent 
   </tr>
 </table>
 
-Wow, this post ended up way longer than I was anticipating when I started writing it. Hopefully there&#8217;s something useful for you in amongst all of that.
+Wow, this post ended up way longer than I was anticipating when I started writing it. Hopefully there's something useful for you in amongst all of that.
 
-I&#8217;d like to thank members of the vExpert community for their encouragement and advice in getting this post written up and as always, if you have any feedback please leave a comment.
+I'd like to thank members of the vExpert community for their encouragement and advice in getting this post written up and as always, if you have any feedback please leave a comment.
 
-Time-permitting, there will be a followup to this post which details how to deploy containers to this platform using the persistent storage made available, both directly in Kubernetes and using Helm charts. I&#8217;d also like to cover some of the more advanced issues using persistent storage in containers raises &#8211; in particular backup/recovery and replication/high availability of data stored in this manner.
+Time-permitting, there will be a followup to this post which details how to deploy containers to this platform using the persistent storage made available, both directly in Kubernetes and using Helm charts. I'd also like to cover some of the more advanced issues using persistent storage in containers raises - in particular backup/recovery and replication/high availability of data stored in this manner.
 
 Jon
 

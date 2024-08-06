@@ -35,7 +35,7 @@ Service Providers can define policies and apply these on a per-tenant basis to c
 
 <ul class="wp-block-list">
   <li>
-    How many customer VMs can be replicated (a fixed number of VMs or &#8216;unlimited&#8217;).
+    How many customer VMs can be replicated (a fixed number of VMs or 'unlimited').
   </li>
   <li>
     What the minimum configurable RPO interval is for VM replication (as low as 5 minutes for vSphere 6.5+ environments and up to 24 hours).
@@ -49,9 +49,9 @@ Service Providers can define policies and apply these on a per-tenant basis to c
   <figure class="aligncenter is-resized"><img loading="lazy" decoding="async" src="https://kiwicloud.ninja/wp-content/uploads/2019/04/vcav-policies.png" alt="" class="wp-image-1019" width="435" height="386" srcset="https://kiwicloud.ninja/wp-content/uploads/2019/04/vcav-policies.png 580w, https://kiwicloud.ninja/wp-content/uploads/2019/04/vcav-policies-300x266.png 300w, https://kiwicloud.ninja/wp-content/uploads/2019/04/vcav-policies-150x133.png 150w, https://kiwicloud.ninja/wp-content/uploads/2019/04/vcav-policies-169x150.png 169w" sizes="(max-width: 435px) 100vw, 435px" /><figcaption>vCloud Availability Policy Definition</figcaption></figure>
 </div>
 
-Since the release of vCAv 3.0 I&#8217;ve been deploying and testing the solution components, this is the first part in a series of posts is designed to emulate a complete &#8216;real-world&#8217; deployment consisting of 2 distinct cloud provider sites and a &#8216;customer&#8217; on-premises infrastructure so I can detail all of the deployment, configuration and end-user usage scenarios across these.
+Since the release of vCAv 3.0 I've been deploying and testing the solution components, this is the first part in a series of posts is designed to emulate a complete 'real-world' deployment consisting of 2 distinct cloud provider sites and a 'customer' on-premises infrastructure so I can detail all of the deployment, configuration and end-user usage scenarios across these.
 
-To configure a production-realistic environment, I have deployed separate vCAv appliances for the &#8216;cloud&#8217;, &#8216;replicator&#8217; and &#8216;tunnel&#8217; functions, a typical service provider network diagram with the ports used by vCAv for communication is shown in the diagram below. Note that in an actual production implementation the &#8216;tunnel&#8217; appliance would generally be deployed into a DMZ network with the &#8216;cloud&#8217; (Replication Manager and vApp Replication Manager) and &#8216;replicator&#8217; appliances deployed into the Service Provider management network.
+To configure a production-realistic environment, I have deployed separate vCAv appliances for the 'cloud', 'replicator' and 'tunnel' functions, a typical service provider network diagram with the ports used by vCAv for communication is shown in the diagram below. Note that in an actual production implementation the 'tunnel' appliance would generally be deployed into a DMZ network with the 'cloud' (Replication Manager and vApp Replication Manager) and 'replicator' appliances deployed into the Service Provider management network.
 
 <div class="wp-block-image">
   <figure class="aligncenter"><img decoding="async" src="https://kiwicloud.ninja/wp-content/uploads/2019/04/vCA-High-Level-Architecture-2-2.svg" alt="" class="wp-image-1027" /><figcaption>vCloud Availability 3.0 Network Architecture & Ports</figcaption></figure>

@@ -48,7 +48,7 @@ Note: Depending on disk speed It can take a considerable time to extract CloudBu
 
 Once the VM is up and running from the TP2 CloudBuilder vhdx image, make the following changes:
 
-  * Install VMware Tools (required to add the VMXNET3 network driver) and restart when prompted. &#8211; See note below, E1000 network adapter may be a better choice.
+  * Install VMware Tools (required to add the VMXNET3 network driver) and restart when prompted. - See note below, E1000 network adapter may be a better choice.
   * (Optional) Rename the computer and restart when prompted.
   * (Optional) Change the VM’s IP address to a static IPv4 address (rather than just using DHCP) so you can easily locate it on the network later – note that DHCP is still a requirement for the other VMs unless you use the Microsoft documented installer switches to allow use of a static addresses.
   * Make sure that the date/time and timezone are set correctly and match the VM BIOS setting (Can’t stress this enough, I had at least 3 failed installation attempts due to date/time problems).
@@ -76,7 +76,7 @@ NOTE: I hit an issue with installation failing at step 60.61.93 and thought this
 
 Best of luck trying this out for yourselves!
 
-Update 7th Oct 2016: If you&#8217;re having issues with guest (nested Hyper-V) VMs crashing, try using the E1000 network adapter for the host instead of VMXNET3, I&#8217;ve been doing some testing with this and E1000 may be a better option and prevent this occurring.
+Update 7th Oct 2016: If you're having issues with guest (nested Hyper-V) VMs crashing, try using the E1000 network adapter for the host instead of VMXNET3, I've been doing some testing with this and E1000 may be a better option and prevent this occurring.
 
 Jon
 

@@ -18,7 +18,7 @@ tags:
 ---
 One of the key changes in vCloud Director 8.20 and 8.20.1 from 8.10 is the Advanced Networking for Edge Gateways, this allows customer control of several advanced networking features of the Edge Gateways which previously could not be made available to tenant administrators. vCloud Director 8.20 and later also change the Roles to be per-tenant organisation (rather than globally shared between all tenants). However, in order for tenant administrators to be able to take advantage of the new features, the new Edge Gateway roles need to be added to their organisation. The only way currently to achieve this is by the vCloud REST API and must be performed separately for each organisation in the vCloud infrastructure.
 
-Here is what the available rights looks like prior to the change being made &#8211; note there is no &#8216;Gateway Advanced Services&#8217; section at all:
+Here is what the available rights looks like prior to the change being made - note there is no 'Gateway Advanced Services' section at all:
 
 <img loading="lazy" decoding="async" class="aligncenter size-full wp-image-170" src="https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-before.png" alt="" width="505" height="700" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-before.png 505w, https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-before-216x300.png 216w, https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-before-108x150.png 108w" sizes="(max-width: 505px) 100vw, 505px" /> 
 

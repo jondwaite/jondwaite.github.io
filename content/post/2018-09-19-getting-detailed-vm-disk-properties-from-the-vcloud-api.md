@@ -36,7 +36,7 @@ After a lot of mucking around trying to find an easy way to discover the informa
 
 The module takes VM objects or a VM name as input and returns details on each disk attached to the VM including which storage profile they use. Save the script (e.g. as ‘Get-CIVMStorageProfile.psm1’) and then use ‘Import-Module .\Get-CIVMStorageProfile.psm1’ to import the function.
 
-<pre class="lang:ps decode:true">&lt;#
+<pre class="lang:ps decode:true"><#
   .Synopsis
    Gets detailed storage information from a vCloud VM.
 
@@ -50,7 +50,7 @@ The module takes VM objects or a VM name as input and returns details on each di
 
 .Example
    Get-CIVM -Name 'test01' | Get-CIVMStorageDetail
-#&gt;
+#>
 
 Function Get-CIVMStorageDetail
 {

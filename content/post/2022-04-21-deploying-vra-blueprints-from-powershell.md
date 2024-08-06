@@ -18,7 +18,7 @@ tags:
   - vRA
 
 ---
-The [PowervRA][1] module is a great set of PowerShell cmdlets for managing a VMware vRealize Automation (vRA) environment, but I wanted to learn a bit more about the REST API available from vRA and also had a requirement &#8211; to script a deployment from an existing vRA blueprint (&#8216;Cloud Template&#8217;) which had no PowervRA cmdlet. So I set about writing my own script in PowerShell to do this and have documented this and the steps required in this post.
+The [PowervRA][1] module is a great set of PowerShell cmdlets for managing a VMware vRealize Automation (vRA) environment, but I wanted to learn a bit more about the REST API available from vRA and also had a requirement - to script a deployment from an existing vRA blueprint ('Cloud Template') which had no PowervRA cmdlet. So I set about writing my own script in PowerShell to do this and have documented this and the steps required in this post.
 
 The steps in this process are:
 
@@ -44,19 +44,19 @@ I also wanted to provide some basic error checking so that if the specified vRA 
 
 ### Gather the parameters and inputs for the deployment {#gather-params.has-medium-font-size.wp-block-heading}
 
-In the first code block, I simply configure variables for the environment &#8211; including prompting for the password which will be used to authenticate to vRA:
+In the first code block, I simply configure variables for the environment - including prompting for the password which will be used to authenticate to vRA:
 
 <div class="wp-block-syntaxhighlighter-code ">
   <pre class="brush: powershell; auto-links: false; gutter: false; title: ; quick-code: false; notranslate" title="">
 # Target vRealize Automation System
-$vrauri = 'https://&lt;vRealize Automation URL e.g. https://myvraserver.mydomain.local&gt;'
-$user = '&lt;user name to authenticate to vRA&gt;'
+$vrauri = 'https://<vRealize Automation URL e.g. https://myvraserver.mydomain.local>'
+$user = '<user name to authenticate to vRA>'
 $pass = (Get-Credential -UserName $user).GetNetworkCredential().password
 $header = @{'Content-Type'='application/json'}
 </pre>
 </div>
 
-The next block defines the parameters for the blueprint that will be deployed, including which vRA Project will be the deployment target, which blueprint will be used and the input parameters required for deploying this instance. The blueprint I&#8217;m using is a 3-tier application that I&#8217;ve been working on to provide a more realistic demonstration of vRA capabilities. Obviously these parameters will vary depending on the environment and template being deployed
+The next block defines the parameters for the blueprint that will be deployed, including which vRA Project will be the deployment target, which blueprint will be used and the input parameters required for deploying this instance. The blueprint I'm using is a 3-tier application that I've been working on to provide a more realistic demonstration of vRA capabilities. Obviously these parameters will vary depending on the environment and template being deployed
 
 <div class="wp-block-syntaxhighlighter-code ">
   <pre class="brush: powershell; auto-links: false; gutter: false; title: ; quick-code: false; notranslate" title="">
@@ -92,7 +92,7 @@ try {   # Get an API refresh token
 </pre>
 </div>
 
-I&#8217;ve included some basic error handling here so that if an error occurs (e.g. an incorrect user name or password is provided) this is caught and the script gracefully exits. ConvertTo-Json is used to ensure our parameters are correctly provided to the API.
+I've included some basic error handling here so that if an error occurs (e.g. an incorrect user name or password is provided) this is caught and the script gracefully exits. ConvertTo-Json is used to ensure our parameters are correctly provided to the API.
 
 ### Use the obtained refresh token to obtain an access token {#auth-2.has-medium-font-size.wp-block-heading}
 
@@ -114,7 +114,7 @@ try {   # Get an API access token
 
 ### Find the Project Id and Blueprint Id that we want to deploy from the API {#find-project.has-medium-font-size.wp-block-heading}
 
-If everything has gone ok up to this point, we now have a token (in `$access_token.token`) which can be used to authenticate our next requests. In order to be able to request deployment of our blueprint we need to provide both the Project Id and Blueprint Id to the API. As I didn&#8217;t want to have to keep looking up and coding these Id&#8217;s into scripts I&#8217;ve used 2 calls to search and match these by name (`$environment` is the &#8216;friendly&#8217; Project name and `$blueprintName` is the &#8216;friendly&#8217; blueprint name in this example). Since both API calls use the same headers, we can set up a single `$header` variable and use it for both calls containing our authorization token.
+If everything has gone ok up to this point, we now have a token (in `$access_token.token`) which can be used to authenticate our next requests. In order to be able to request deployment of our blueprint we need to provide both the Project Id and Blueprint Id to the API. As I didn't want to have to keep looking up and coding these Id's into scripts I've used 2 calls to search and match these by name (`$environment` is the 'friendly' Project name and `$blueprintName` is the 'friendly' blueprint name in this example). Since both API calls use the same headers, we can set up a single `$header` variable and use it for both calls containing our authorization token.
 
 <div class="wp-block-syntaxhighlighter-code ">
   <pre class="brush: powershell; auto-links: false; gutter: false; title: ; quick-code: false; notranslate" title="">
@@ -184,7 +184,7 @@ if ($res.status -eq 'CREATED' -or $res.status -eq 'STARTED') {
 
 ### Summary {.has-medium-font-size.wp-block-heading}
 
-Hopefully this post is detailed enough that it will be easy to adjust for your particular blueprints and requirements if needed. I&#8217;ve included the entire script in one block below for easier copying/pasting if you want to try this in your own environment.
+Hopefully this post is detailed enough that it will be easy to adjust for your particular blueprints and requirements if needed. I've included the entire script in one block below for easier copying/pasting if you want to try this in your own environment.
 
 As always, comments, feedback and suggestions for improvement are welcome.
 
@@ -195,8 +195,8 @@ Jon
 # Complete code listing - vRA automation to deploy a blueprint and supply input parameters
 
 # Target vRealize Automation System
-$vrauri = 'https://&lt;vRealize Automation URL e.g. https://myvraserver.mydomain.local&gt;'
-$user = '&lt;user name to authenticate to vRA&gt;'
+$vrauri = 'https://<vRealize Automation URL e.g. https://myvraserver.mydomain.local>'
+$user = '<user name to authenticate to vRA>'
 $pass = (Get-Credential -UserName $user).GetNetworkCredential().password
 $header = @{'Content-Type'='application/json'}
 

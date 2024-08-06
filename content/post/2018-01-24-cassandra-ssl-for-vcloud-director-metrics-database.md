@@ -21,11 +21,11 @@ In vCloud Director v9 the requirement for both [Apache Cassandra][1] and [Kairos
 
 As I found when researching this post, configuring SSL in Cassandra is a bit of a pain, since Cassandra runs as a Java application it has some issues with the types of CA certificates and trusts it can use, which is further complicated by the options of both node to node encryption as well as cluster to clients.
 
-I set out to produce an &#8216;easy&#8217; way to configure a Cassandra cluster with SSL for both node to node and node to client communication in a way which could be reasonably easily implemented and reproduced for future installs.
+I set out to produce an 'easy' way to configure a Cassandra cluster with SSL for both node to node and node to client communication in a way which could be reasonably easily implemented and reproduced for future installs.
 
-My test environment consists of the minimum supported configuration of 4 Cassandra nodes (of which 2 are &#8216;seed&#8217; nodes) running on CentOS Linux 7 (since that&#8217;s what we tend to use most for our backend infrastructure services). This configuration can almost certainly be adapted for other Linux distributions and I&#8217;ve tried to document the certificate generation process sufficiently that this will be straightforward.
+My test environment consists of the minimum supported configuration of 4 Cassandra nodes (of which 2 are 'seed' nodes) running on CentOS Linux 7 (since that's what we tend to use most for our backend infrastructure services). This configuration can almost certainly be adapted for other Linux distributions and I've tried to document the certificate generation process sufficiently that this will be straightforward.
 
-Inspiration for this post was from [Antoni Spiteri&#8217;s][3] blog and script to [configure a Cassandra cluster for vCloud Director metrics][4] which I found extremely useful background.
+Inspiration for this post was from [Antoni Spiteri's][3] blog and script to [configure a Cassandra cluster for vCloud Director metrics][4] which I found extremely useful background.
 
 Initial setup of my node servers used the following pattern to install and configure Cassandra:
 
@@ -37,7 +37,7 @@ Install Java (currently on my systems this installs java-1.8.0-openjdk.x86\_64 1
 
 `# yum install -y java`
 
-Create a file `/etc/yum.repos.d/cassandra.repo` (with vi or your favourite text editor) to include the Cassandra 3.0.x repository with the following contents. Note that I&#8217;m using the Cassandra 3.0.x repository (30X) and not the latest 311x release repository as this is not yet supported by VMware for vCloud Director:
+Create a file `/etc/yum.repos.d/cassandra.repo` (with vi or your favourite text editor) to include the Cassandra 3.0.x repository with the following contents. Note that I'm using the Cassandra 3.0.x repository (30X) and not the latest 311x release repository as this is not yet supported by VMware for vCloud Director:
 
 `[cassandra]`  
  `name=Apache Cassandra`  
@@ -71,15 +71,15 @@ At least the following options in this file will need to be changed before we ca
   
   <tr>
     <td>
-      cluster_name: &#8216;Test Cluster&#8217;
+      cluster_name: 'Test Cluster'
     </td>
     
     <td>
-      cluster_name: &#8216;My vCD Cluster&#8217;
+      cluster_name: 'My vCD Cluster'
     </td>
     
     <td>
-      Doesn&#8217;t absolutely have to be changed, but you probably should do. Note that this setting must exactly match on each of your node servers or they won&#8217;t be able to join the cluster.
+      Doesn't absolutely have to be changed, but you probably should do. Note that this setting must exactly match on each of your node servers or they won't be able to join the cluster.
     </td>
   </tr>
   
@@ -93,7 +93,7 @@ At least the following options in this file will need to be changed before we ca
     </td>
     
     <td>
-      We&#8217;ll want to use password security from vCloud Director to the cluster.
+      We'll want to use password security from vCloud Director to the cluster.
     </td>
   </tr>
   
@@ -113,11 +113,11 @@ At least the following options in this file will need to be changed before we ca
   
   <tr>
     <td>
-       &#8211; seeds: &#8220;127.0.0.1&#8221;
+       - seeds: &#8220;127.0.0.1&#8221;
     </td>
     
     <td>
-      &#8211; seeds: &#8220;Seed Node 1 IP address,Seed Node 2 IP address&#8221;
+      - seeds: &#8220;Seed Node 1 IP address,Seed Node 2 IP address&#8221;
     </td>
     
     <td>
@@ -154,14 +154,14 @@ At least the following options in this file will need to be changed before we ca
   </tr>
 </table>
 
-We&#8217;ll need to change some additional settings later to implement SSL security, but these settings should be enough to get the cluster functioning.
+We'll need to change some additional settings later to implement SSL security, but these settings should be enough to get the cluster functioning.
 
-You&#8217;ll also need to permit the Cassandra traffic through the default CentOS 7 firewall, the following commands will open the appropriate ports (as root):
+You'll also need to permit the Cassandra traffic through the default CentOS 7 firewall, the following commands will open the appropriate ports (as root):
 
 `# firewall-cmd --zone public --add-port 7000/tcp --add-port 7001/tcp --add-port 7199/tcp --add-port 9042/tcp --add-port 9160/tcp --add-port 9142/tcp --permanent`  
 `# firewall-cmd --reload`
 
-Once you&#8217;ve performed these steps on each of the 4 nodes, you should be able to bring up a (non-encrypted) cassandra cluster by running:
+Once you've performed these steps on each of the 4 nodes, you should be able to bring up a (non-encrypted) cassandra cluster by running:
 
 `# service cassandra start`
 
@@ -173,11 +173,11 @@ Note that you should start the nodes 1 by 1 and allow a minimum of 30 seconds be
 
 My test cluster has 4 nodes (named node01, node02, node03 and node04 imaginatively enough), and node01 and node02 are the seeds. The IP addresses are 10.0.0.101,102,103 and 104 (/24 netmask).
 
-If everything has worked ok running &#8216;nodetool status&#8217; on any node should show the cluster members all in a state of &#8216;UN&#8217; (Up/Normal):
+If everything has worked ok running 'nodetool status' on any node should show the cluster members all in a state of 'UN' (Up/Normal):
 
 [<img loading="lazy" decoding="async" class="aligncenter size-large wp-image-433" src="https://kiwicloud.ninja/wp-content/uploads/2018/01/nodetool_status-800x162.png" alt="" width="800" height="162" srcset="https://kiwicloud.ninja/wp-content/uploads/2018/01/nodetool_status-800x162.png 800w, https://kiwicloud.ninja/wp-content/uploads/2018/01/nodetool_status-300x61.png 300w, https://kiwicloud.ninja/wp-content/uploads/2018/01/nodetool_status-768x156.png 768w, https://kiwicloud.ninja/wp-content/uploads/2018/01/nodetool_status-150x30.png 150w, https://kiwicloud.ninja/wp-content/uploads/2018/01/nodetool_status-250x51.png 250w, https://kiwicloud.ninja/wp-content/uploads/2018/01/nodetool_status.png 818w" sizes="(max-width: 800px) 100vw, 800px" />][5]
 
-You should also be able to login to the cluster via any of the nodes using the cqlsh command (the default password is &#8216;cassandra&#8217; for the builtin cassandra user)
+You should also be able to login to the cluster via any of the nodes using the cqlsh command (the default password is 'cassandra' for the builtin cassandra user)
 
 `[root@node01 ~]# cqlsh 10.0.0.101 -u cassandra -p cassandra<br />
 Connected to My vCD Cluster at 10.0.0.101:9042.<br />
@@ -187,7 +187,7 @@ cassandra@cqlsh>`
 
 To reconfigure the cluster for SSL encrypted communication we need to complete a number of tasks:
 
-  * Create a new CA certificate authority (we could use an existing / external CA authority, but I&#8217;m trying to keep this simple).
+  * Create a new CA certificate authority (we could use an existing / external CA authority, but I'm trying to keep this simple).
   * Export the public key for our new CA so we can tell vCloud Director later to trust certificates it has issued.
   * Create a new truststore for Cassandra so Cassandra trusts our CA.
   * Create a new keystore for Cassandra for each node which includes the public key of our CA.
@@ -196,7 +196,7 @@ To reconfigure the cluster for SSL encrypted communication we need to complete a
   * Move the generated truststore and keystore into appropriate locations and configure security on the files.
   * Reconfigure Cassandra to enable encryption and use our certificates.
 
-That&#8217;s a lot of steps to go through and extremely tedious to get right, so I wrote a script to do most of these steps, create a file (I called my &#8216;gencasscerts.sh&#8217; on one of the node servers and copy/paste the script contents from below):
+That's a lot of steps to go through and extremely tedious to get right, so I wrote a script to do most of these steps, create a file (I called my 'gencasscerts.sh' on one of the node servers and copy/paste the script contents from below):
 
 <pre class="theme:github lang:sh decode:true">#!/bin/bash
 
@@ -223,7 +223,7 @@ CERTOPTS="OU=MyDept,O=MyOrg,L=MyCity,S=MyState,C=US"
 /usr/bin/keytool -importcert -keystore .truststore -storepass ${CASTOREPASS} -storetype ${STORETYPE} -file myca.pem -noprompt
 
 ((n_elements=${#NODENAMES[@]}, max_index=n_elements-1))
-for ((i = 0; i &lt;= max_index; i++)); do
+for ((i = 0; i <= max_index; i++)); do
 curnode=${NODENAMES[i]}
 echo "Processing node $i: ${curnode}"
 
@@ -257,13 +257,13 @@ cp ${curnode}.crt ${curnode}/client.pem
 done
 </pre>
 
-**Update 2018/01/26: I realised shortly after publishing that the original version of this script included both the public and private keys for the CA in the .truststore keystore. While this isn&#8217;t a huge issue in a private environment it&#8217;s definitely not &#8216;best practice&#8217; to distribute the private key of the CA to each node so I&#8217;ve refined the script and removed the private keys from the generated .truststore files in this version. If you need to regenerate your environment keys remember that if you re-run the script both the .truststore and .keystore files will need to be updated on each node.**
+**Update 2018/01/26: I realised shortly after publishing that the original version of this script included both the public and private keys for the CA in the .truststore keystore. While this isn't a huge issue in a private environment it's definitely not 'best practice' to distribute the private key of the CA to each node so I've refined the script and removed the private keys from the generated .truststore files in this version. If you need to regenerate your environment keys remember that if you re-run the script both the .truststore and .keystore files will need to be updated on each node.**
 
 Make the script executable using:
 
 `chmod u+x gencasscerts.sh`
 
-Edit the settings and passwords for the certificates (we&#8217;ll need these later) in the variables at the top of the file to be appropriate for your environment (in particular the node names in the 3rd line) and any other options you want to change. The default validity period of the generated certificates is set to 10 years (3650 days). Obviously you should also change the passwords in your copy of the script for the CASTOREPASS and NODESTOREPASS variables.
+Edit the settings and passwords for the certificates (we'll need these later) in the variables at the top of the file to be appropriate for your environment (in particular the node names in the 3rd line) and any other options you want to change. The default validity period of the generated certificates is set to 10 years (3650 days). Obviously you should also change the passwords in your copy of the script for the CASTOREPASS and NODESTOREPASS variables.
 
 When you run the script you should get output similar to the following:  
 `[root@node01 ~]# ./gencasscerts.sh<br />
@@ -304,7 +304,7 @@ In each node directory there will be 3 files (.keystore, .truststore and chain.p
 
 The .truststore files will all be identical between the node directories, the .keystore and client.pem files will be unique.
 
-Next we need to move the generated certificate stores to an appropriate location, easiest way to do this is to use scp from the directory where the script was run. We&#8217;ll place the files in the Cassandra configuration directory (/etc/cassandra/conf).
+Next we need to move the generated certificate stores to an appropriate location, easiest way to do this is to use scp from the directory where the script was run. We'll place the files in the Cassandra configuration directory (/etc/cassandra/conf).
 
 On the node where the files have been generated we can just copy them (node01 in our case):
 
@@ -443,18 +443,18 @@ Now we need to stop the cassandra service on ALL nodes:
 
 `service cassandra stop`
 
-Starting the cassandra service back up (`service cassandra start` &#8211; remember to wait between each node to give the cluster time to settle) you should now see the following in the `/var/log/cassandra/system.log` file:
+Starting the cassandra service back up (`service cassandra start` - remember to wait between each node to give the cluster time to settle) you should now see the following in the `/var/log/cassandra/system.log` file:
 
 `INFO [main] 2018-01-25 20:52:38,290 MessagingService.java:541 - Starting Encrypted Messaging Service on SSL port 7001`
 
-Once the nodes are all back up and running `nodetool status` should show them all as status of &#8216;UN&#8217; (Up/Normal).
+Once the nodes are all back up and running `nodetool status` should show them all as status of 'UN' (Up/Normal).
 
-If we attempt to use cqlsh to connect to the cluster now, we should get an error as we&#8217;re not using an encrypted connection:
+If we attempt to use cqlsh to connect to the cluster now, we should get an error as we're not using an encrypted connection:
 
 `cqlsh 10.0.0.101 -u cassandra -p cassandra<br />
 Connection error: ('Unable to connect to any servers', {'10.0.0.101': ConnectionShutdown('Connection <AsyncoreConnection(24713424) 10.0.0.101:9042 (closed)> is already closed',)})`
 
-If we specify the &#8216;`--ssl`&#8216; flag to cqlsh, we still get an error as we haven&#8217;t provided a client certificate for the connection:
+If we specify the '`--ssl`' flag to cqlsh, we still get an error as we haven't provided a client certificate for the connection:
 
 `cqlsh 10.0.0.101 -u cassandra -p cassandra --ssl<br />
 Validation is enabled; SSL transport factory requires a valid certfile to be specified. Please provide path to the certfile in [ssl] section as 'certfile' option in /root/.cassandra/cqlshrc (or use [certfiles] section) or set SSL_CERTFILE environment variable.`
@@ -475,13 +475,13 @@ Connected to My vCD Cluster at 10.0.0.101:9042.<br />
 Use HELP for help.<br />
 cassandra@cqlsh>`
 
-When configuring vCloud Director to use our new metrics cluster, we must first tell vCloud Director that it can trust the CA we&#8217;ve created for our Cassandra cluster by importing the public key of our CA (the myca.pem file generated by the script) into the vCloud Director cell server cacerts repository. Ludovic Rivallain has a great post written up at <https://vuptime.io/2017/08/30/VMware-Patch-vCloudDirector-cacerts-file/> showing how to do this. Note that this must be performed on each vCloud Director cell server as the cacerts repository is not shared between them.
+When configuring vCloud Director to use our new metrics cluster, we must first tell vCloud Director that it can trust the CA we've created for our Cassandra cluster by importing the public key of our CA (the myca.pem file generated by the script) into the vCloud Director cell server cacerts repository. Ludovic Rivallain has a great post written up at <https://vuptime.io/2017/08/30/VMware-Patch-vCloudDirector-cacerts-file/> showing how to do this. Note that this must be performed on each vCloud Director cell server as the cacerts repository is not shared between them.
 
-You should also add a new admin user to Cassandra with a complex password and disable the builtin &#8216;cassandra&#8217; user account before using the cluster.
+You should also add a new admin user to Cassandra with a complex password and disable the builtin 'cassandra' user account before using the cluster.
 
 Finally, you can follow the VMware documentation ([link][8]) to configure your vCloud Director cell to use this Cassandra cluster for metrics storage.
 
-It&#8217;s reasonably easy to adjust this process to use an external CA rather than generating a new self-signing one, but this post is long enough already so let me know in the comments if you&#8217;d like to see this and I&#8217;ll write up a separate post detailing the changes to do this.
+It's reasonably easy to adjust this process to use an external CA rather than generating a new self-signing one, but this post is long enough already so let me know in the comments if you'd like to see this and I'll write up a separate post detailing the changes to do this.
 
 As always, comments/corrections/feedback welcome.
 

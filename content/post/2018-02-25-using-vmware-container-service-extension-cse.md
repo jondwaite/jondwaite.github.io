@@ -49,7 +49,7 @@ To retrieve a list of available cluster deployment templates that the Service Pr
 
 [<img loading="lazy" decoding="async" style="display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2018/02/image4_thumb-1.png" alt="image" width="722" height="119" border="0" />][4]
 
-In this example only the Photon OS template is available and is also the default template. CSE actually comes with 2 profiles (Photon OS v2 and Ubuntu Linux 16-04, but I’ve only installed the Photon OS v2 template in my lab environment). The default template will be used if you do not specify the ‘&#8211;template’ switch when creating a cluster.
+In this example only the Photon OS template is available and is also the default template. CSE actually comes with 2 profiles (Photon OS v2 and Ubuntu Linux 16-04, but I’ve only installed the Photon OS v2 template in my lab environment). The default template will be used if you do not specify the ‘-template’ switch when creating a cluster.
 
 The cluster create command takes a number of parameters which are documented in the CSE page:
 
@@ -57,7 +57,7 @@ The cluster create command takes a number of parameters which are documented in 
 
 Be careful with the memory specification is it is in MB and not GB.
 
-I chose to generate a public/private key to access the cluster nodes without needing a password, but this is optional. If you want to use key authentication you will need to generate a key pair and specify the public key filename in the cluster creation command using the &#8211;ssh-key switch.
+I chose to generate a public/private key to access the cluster nodes without needing a password, but this is optional. If you want to use key authentication you will need to generate a key pair and specify the public key filename in the cluster creation command using the -ssh-key switch.
 
 To deploy a cluster with 3 worker nodes into our VDC where each node has 4GB of RAM and 2 CPUs using my public key and the network and storage profile identified above:
 
@@ -77,9 +77,9 @@ To manage the cluster with kubectl, we need a configuration file for Kubernetes 
 
 [<img loading="lazy" decoding="async" style="display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2018/02/image15_thumb.png" alt="image" width="493" height="61" border="0" />][9]
 
-If you have multiple deployed clusters you can create separate config files for each one (with different file names) and use the &#8211;kubeconfig= switch to kubectl to select which one to use.
+If you have multiple deployed clusters you can create separate config files for each one (with different file names) and use the -kubeconfig= switch to kubectl to select which one to use.
 
-To test kubectl we can ask for a list of all containers (‘pods’ in Kubernetes) from the cluster, the ‘&#8211;all-namespaces’ switch shows system pods as well as any user created pods (which we don’t have yet). This must be run from a machine that has network connectivity with the deployed nodes (the ‘Tyrell-Servers’ network in this example):
+To test kubectl we can ask for a list of all containers (‘pods’ in Kubernetes) from the cluster, the ‘-all-namespaces’ switch shows system pods as well as any user created pods (which we don’t have yet). This must be run from a machine that has network connectivity with the deployed nodes (the ‘Tyrell-Servers’ network in this example):
 
 [<img loading="lazy" decoding="async" style="display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2018/02/image20_thumb.png" alt="image" width="689" height="253" border="0" />][10]
 

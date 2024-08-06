@@ -5,6 +5,7 @@ type: post
 date: -001-11-30T00:00:00+00:00
 draft: true
 url: /?p=69306
+series: from-zero-to-kubernetes
 categories:
   - Containers
   - Kubernetes
@@ -21,7 +22,7 @@ tags:
   - PowerShell
 
 ---
-Part 1 &#8211; Build the VM template (this post)
+Part 1 - Build the VM template (this post)
 
 This post is part of a series to deploying and configuring Kubernetes using the latest component versions on VMware Photon OS v5, as I write up additional parts they will be linked in the table above.
 
@@ -66,13 +67,13 @@ My main goals for this project were to:
 
 ## Design {#design.wp-block-heading}
 
-I wanted to keep the deployment size as minimal as possible while still being &#8216;large&#8217; enough to be useful, I settled on a sizing of 3 control-plane and 3 worker nodes for kubernetes each with 2 vCPU cores, 8GB RAM and 16 GB local storage each, the number and sizing of nodes can be easily adjusted as required.
+I wanted to keep the deployment size as minimal as possible while still being 'large' enough to be useful, I settled on a sizing of 3 control-plane and 3 worker nodes for kubernetes each with 2 vCPU cores, 8GB RAM and 16 GB local storage each, the number and sizing of nodes can be easily adjusted as required.
 
-In addition I provisioned a NFS share to act as persistent storage. This entire deployment fits comfortably on a small form-factor PC which I&#8217;ve upgraded to 64 GB RAM and 1 TB NVMe drive The PC is running VMware ESXi as the hypervisor host, but this process could be easily followed using any hypervisor. Performance so far seems extremely good even though the PC only has a 4-core i5-6500T CPU.
+In addition I provisioned a NFS share to act as persistent storage. This entire deployment fits comfortably on a small form-factor PC which I've upgraded to 64 GB RAM and 1 TB NVMe drive The PC is running VMware ESXi as the hypervisor host, but this process could be easily followed using any hypervisor. Performance so far seems extremely good even though the PC only has a 4-core i5-6500T CPU.
 
 ### Network Design {#network-design.wp-block-heading}
 
-I defined the following networks to be used for the deployment (using [RFC 1918][2] private IP ranges). The ranges were chosen to provide plenty of address space for my use case and to allow 2nd (and subsequent) clusters to live within a reasonably contained address space (This layout gives me the ability to create up to 32 complete clusters in a single /15 network subnet &#8211; 172.30.0.0/15 in my case).<figure class="wp-block-table is-style-stripes has-small-font-size">
+I defined the following networks to be used for the deployment (using [RFC 1918][2] private IP ranges). The ranges were chosen to provide plenty of address space for my use case and to allow 2nd (and subsequent) clusters to live within a reasonably contained address space (This layout gives me the ability to create up to 32 complete clusters in a single /15 network subnet - 172.30.0.0/15 in my case).<figure class="wp-block-table is-style-stripes has-small-font-size">
 
 | Function         | CIDR          | Start of range | End of range  | Addresses | Notes                                                  |
 | ---------------- | ------------- | -------------- | ------------- | --------- | ------------------------------------------------------ |
@@ -84,12 +85,12 @@ I defined the following networks to be used for the deployment (using [RFC 1918]
 
 ### Host Design {#host-design.wp-block-heading}
 
-Three control-plane nodes and three worker nodes will be deployed in the cluster as in the table below, also shown are the &#8216;cluster&#8217; IP address for `kube-vip` and the NFS server used to provide persistent storage:<figure class="wp-block-table is-style-stripes has-small-font-size">
+Three control-plane nodes and three worker nodes will be deployed in the cluster as in the table below, also shown are the 'cluster' IP address for `kube-vip` and the NFS server used to provide persistent storage:<figure class="wp-block-table is-style-stripes has-small-font-size">
 
 | Hostname    | IP Address  | Subnet mask       | Gateway    | Notes                                               |
 | ----------- | ----------- | ----------------- | ---------- | --------------------------------------------------- |
 | k8s01-nfs01 | 172.30.0.5  | 255.254.0.0 (/15) | 172.30.0.1 | NFS Server for persistent storage                   |
-| k8s01       | 172.30.0.10 | 255.254.0.0 (/15) | 172.30.0.1 | &#8216;Floating&#8217; HA IP address for `kube-vip` |
+| k8s01       | 172.30.0.10 | 255.254.0.0 (/15) | 172.30.0.1 | 'Floating' HA IP address for `kube-vip` |
 | k8s01-c01   | 172.30.0.11 | 255.254.0.0 (/15) | 172.30.0.1 | Control plane node #1                               |
 | k8s01-c02   | 172.30.0.12 | 255.254.0.0 (/15) | 172.30.0.1 | Control plane node #2                               |
 | k8s01-c03   | 172.30.0.13 | 255.254.0.0 (/15) | 172.30.0.1 | Control plane node #3                               |
@@ -97,7 +98,7 @@ Three control-plane nodes and three worker nodes will be deployed in the cluster
 | k8s01-w02   | 172.30.0.15 | 255.254.0.0 (/15) | 172.30.0.1 | Worker node #2                                      |
 | k8s01-w03   | 172.30.0.16 | 255.254.0.0 (/15) | 172.30.0.1 | Worker node #3                                      |</figure> 
 
-I have a local DNS environment so just added all of the host details here to my primary DNS domain as &#8216;A&#8217; records (including the `k8s01` and `k8s01-nfs01` names). The same effect can probably be achieved by creating `/etc/hosts` entries for each address on each deployed server (ideally in the template VM so these are automatically present).
+I have a local DNS environment so just added all of the host details here to my primary DNS domain as 'A' records (including the `k8s01` and `k8s01-nfs01` names). The same effect can probably be achieved by creating `/etc/hosts` entries for each address on each deployed server (ideally in the template VM so these are automatically present).
 
 ## Automation {.wp-block-heading}
 
@@ -111,17 +112,17 @@ For those wanting to build or customise the template image themselves, the steps
 
 ### Pre-requisites: {#pre-requisites.wp-block-heading}
 
-Build a new VM to act as the template for deploying the cluster &#8211; this VM will not be used directly but will be cloned to each of the require control-plane and worker nodes later. Specs are based on my experience and work fine &#8211; you will probably be able to get away with smaller sizing if CPU and/or RAM are limited:
+Build a new VM to act as the template for deploying the cluster - this VM will not be used directly but will be cloned to each of the require control-plane and worker nodes later. Specs are based on my experience and work fine - you will probably be able to get away with smaller sizing if CPU and/or RAM are limited:
 
 <ul class="wp-block-list">
   <li>
-    Install a new VM from photon 5 minimal ISO image (2 vCPU/8 GB vRAM/16 GB Disk using &#8216;Thin&#8217; provisioning)
+    Install a new VM from photon 5 minimal ISO image (2 vCPU/8 GB vRAM/16 GB Disk using 'Thin' provisioning)
   </li>
   <li>
-    &#8216;template&#8217; name (e.g. k8s-tmpl) for hostname
+    'template' name (e.g. k8s-tmpl) for hostname
   </li>
   <li>
-    Use DHCP networking (for now) &#8211; use a network supporting DHCP clients that can reach the internet
+    Use DHCP networking (for now) - use a network supporting DHCP clients that can reach the internet
   </li>
   <li>
     Set initial root password during install and complete initial Photon OS install / remove ISO attachment & reboot after install
@@ -133,7 +134,7 @@ Build a new VM to act as the template for deploying the cluster &#8211; this VM 
 
 ### Enable SSH for root {#enable-ssh-for-root.wp-block-heading}
 
-Many of the steps below are easier to copy/paste to a terminal session rather than retyping on the VM console &#8211; to allow external SSH session (e.g. from your desktop), the following allows SSH connections to the &#8216;root&#8217; user.
+Many of the steps below are easier to copy/paste to a terminal session rather than retyping on the VM console - to allow external SSH session (e.g. from your desktop), the following allows SSH connections to the 'root' user.
 
 <pre class="EnlighterJSRAW" data-enlighter-language="bash" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">sed -i 's/PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
 systemctl restart sshd</pre>
@@ -456,7 +457,7 @@ Kubernetes and addon services need to be able to communicate between the deploye
 
 <blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
   <p>
-    <strong>NOTE:</strong> *This is the default port range used by NodePort services (it can be changed) and if the control-plane servers are &#8216;untainted&#8217; (to allow them to run workloads) will also be required on control-plane nodes. In our deployment we&#8217;re not planning on using NodePort services so this could safely be omitted.
+    <strong>NOTE:</strong> *This is the default port range used by NodePort services (it can be changed) and if the control-plane servers are 'untainted' (to allow them to run workloads) will also be required on control-plane nodes. In our deployment we're not planning on using NodePort services so this could safely be omitted.
   </p>
 </blockquote>
 
@@ -482,13 +483,13 @@ iptables-save > /etc/systemd/scripts/ip4save</pre>
 
 <blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
   <p>
-    <strong>!!WARNING!!</strong> Setting up ssh keys in the template in the way described here will allow all deployed VMs from the template to ssh (to each other) without passwords. Obviously this is a huge security risk and combined with enabling the ssh service for &#8216;root&#8217; shouldn&#8217;t be used anywhere near a public network.
+    <strong>!!WARNING!!</strong> Setting up ssh keys in the template in the way described here will allow all deployed VMs from the template to ssh (to each other) without passwords. Obviously this is a huge security risk and combined with enabling the ssh service for 'root' shouldn't be used anywhere near a public network.
   </p>
 </blockquote>
 
 Generate public/private key pair:
 
-<pre class="EnlighterJSRAW" data-enlighter-language="bash" data-enlighter-theme="atomic" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">ssh-keygen -t rsa -b 4096 -N '' &lt;&lt;&lt; $'\ny' >/dev/null 2>&1</pre>
+<pre class="EnlighterJSRAW" data-enlighter-language="bash" data-enlighter-theme="atomic" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">ssh-keygen -t rsa -b 4096 -N '' <<< $'\ny' >/dev/null 2>&1</pre>
 
 Add public key to athorized_keys file (so that each deployed server will trust the others automatically)
 
@@ -542,7 +543,7 @@ systemctl enable --now containerd
 
 ### Install updated runc {#install-updated-runc.wp-block-heading}
 
-Not sure if this is necessary &#8211; but figured can&#8217;t hurt to have latest release from [here][5] then install (this is needed if original runc was removed earlier):
+Not sure if this is necessary - but figured can't hurt to have latest release from [here][5] then install (this is needed if original runc was removed earlier):
 
 <pre class="EnlighterJSRAW" data-enlighter-language="bash" data-enlighter-theme="atomic" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">wget https://github.com/opencontainers/runc/releases/download/v1.1.13/runc.amd64
 install runc.amd64 -o root -g root -m 0755 /usr/bin/runc
@@ -568,7 +569,7 @@ sed -i 's/pause\:3.8/pause\:3.9/' /etc/containerd/config.toml
 
 ### Install nerdctl (Optional) {#install-nerdctl-optional.wp-block-heading}
 
-Check releases [here][7] and grab &#8216;latest&#8217; and install:
+Check releases [here][7] and grab 'latest' and install:
 
 <pre class="EnlighterJSRAW" data-enlighter-language="bash" data-enlighter-theme="atomic" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">wget https://github.com/containerd/nerdctl/releases/download/v1.7.6/nerdctl-1.7.6-linux-amd64.tar.gz
 tar Cxzvf /usr/local/bin nerdctl-1.7.6-linux-amd64.tar.gz
@@ -581,7 +582,7 @@ Provides nerdctl which can be useful to troubleshoot kubernetes containers:
 
 ### Install kubernetes binaries: {#install-kubernetes-binaries.wp-block-heading}
 
-Pre-stage all of the binaries and service definitions in the template so they&#8217;re ready to go:
+Pre-stage all of the binaries and service definitions in the template so they're ready to go:
 
 <pre class="EnlighterJSRAW" data-enlighter-language="bash" data-enlighter-theme="atomic" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group=""># kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -615,14 +616,14 @@ kubeadm config images pull
 
 This setups up bash completion for `kubectl` and also allows `k` to be used (instead of `kubectl`) as an alias:
 
-<pre class="EnlighterJSRAW" data-enlighter-language="bash" data-enlighter-theme="atomic" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">cat &lt;&lt;EOF >> $HOME/.profile
+<pre class="EnlighterJSRAW" data-enlighter-language="bash" data-enlighter-theme="atomic" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">cat <<EOF >> $HOME/.profile
 if [ -n "$BASH_VERSION" ]; then
     if [ -f "$HOME/.bashrc" ]; then
         . "$HOME/.bashrc"
     fi
 fi
 EOF
-echo 'source &lt;(kubectl completion bash)' >>~/.bashrc
+echo 'source <(kubectl completion bash)' >>~/.bashrc
 echo 'alias k=kubectl' >>~/.bashrc
 echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
 source $HOME/.bashrc

@@ -21,27 +21,27 @@ tags:
   - vSphere 6
 
 ---
-In this 5th part of my look into vCloud Director Extender (CX), I deal with the extension of a customer vCenter network into a cloud provider network using the L2VPN network extension functionality. Apologies that this post has been a bit delayed, turned out that I needed a VMware support request and a code update to vCloud Director 9.0.0.1 before I could get this functionality working. (I also had an issue with my lab environment which runs as a nested platform inside a vCloud Director environment and it turned out that the networking environment I had wasn&#8217;t quite flexible enough to get this working).
+In this 5th part of my look into vCloud Director Extender (CX), I deal with the extension of a customer vCenter network into a cloud provider network using the L2VPN network extension functionality. Apologies that this post has been a bit delayed, turned out that I needed a VMware support request and a code update to vCloud Director 9.0.0.1 before I could get this functionality working. (I also had an issue with my lab environment which runs as a nested platform inside a vCloud Director environment and it turned out that the networking environment I had wasn't quite flexible enough to get this working).
 
-**Update:** an earlier version of this article didn&#8217;t include the steps to configure the L2 appliance settings in the vCloud Director Extender web interface &#8211; I&#8217;ve now added these to provide a more complete guide.
+**Update:** an earlier version of this article didn't include the steps to configure the L2 appliance settings in the vCloud Director Extender web interface - I've now added these to provide a more complete guide.
 
 Links to the other parts of this series:  
-[Part 1 &#8211; Overview][1]  
-[Part 2 &#8211; Cloud Provider / Service Provider installation and configuration (MyCloud)][2]  
-[Part 3 &#8211; Customer / Tenant installation and configuration (Tyrell)][3]  
-[Part 4 &#8211; Customer / Tenant connecting to a Cloud Provider and Virtual Machine migration (Tyrell)][4]
+[Part 1 - Overview][1]  
+[Part 2 - Cloud Provider / Service Provider installation and configuration (MyCloud)][2]  
+[Part 3 - Customer / Tenant installation and configuration (Tyrell)][3]  
+[Part 4 - Customer / Tenant connecting to a Cloud Provider and Virtual Machine migration (Tyrell)][4]
 
-I won&#8217;t deal with the use-case here that the customer already has NSX networking installed and configured, since in most cases you can simply create L2VPN networks directly between the customer and provider NSX Edge appliances and don&#8217;t really need to use the CX L2VPN functionality.
+I won't deal with the use-case here that the customer already has NSX networking installed and configured, since in most cases you can simply create L2VPN networks directly between the customer and provider NSX Edge appliances and don't really need to use the CX L2VPN functionality.
 
 In order to be able to use the standalone L2VPN connectivity, the following pre-requisites are required:
 
   * A tenant vSphere environment with the vCloud Director Extender appliance deployed (it does not appear to be necessary to deploy the replication appliance if you only wish to use the L2VPN functionality, but obviously if you are intending to migrate VMs too you will need this deployed and configured as described in [Part 3][3] of this series. In either case you will still need to register the cloud provider in the CX interface.
-  * A configured vCloud Director VDC for the tenant to connect to. This environment must also have an Advanced Edge Gateway deployed with at least one uplink having a publicly accessible (internet) IP address. Note that you do not need to configure the L2VPN service on this gateway &#8211; the CX wizard completes this for you.
+  * A configured vCloud Director VDC for the tenant to connect to. This environment must also have an Advanced Edge Gateway deployed with at least one uplink having a publicly accessible (internet) IP address. Note that you do not need to configure the L2VPN service on this gateway - the CX wizard completes this for you.
   * At least one OrgVDC network created as a subinterface on this edge gateway. The steps to create a suitable new OrgVDC network are detailed below.
-  * Outbound internet connectivity to allow the standalone edge deployed in the tenant vCenter to communicate with the cloud-hosted edge gateway &#8211; only port 443/tcp is required for this.
+  * Outbound internet connectivity to allow the standalone edge deployed in the tenant vCenter to communicate with the cloud-hosted edge gateway - only port 443/tcp is required for this.
   * Administrative credentials to connect to both the tenant vCenter and the cloud tenancy/VDC (Organization Administrator role is required).
 
-Opening the tenant vCenter environment and selecting the &#8216;Home&#8217; page shows the following:
+Opening the tenant vCenter environment and selecting the 'Home' page shows the following:
 
 [<img loading="lazy" decoding="async" class="aligncenter size-large wp-image-416" src="https://kiwicloud.ninja/wp-content/uploads/2017/11/0501-vSphere-Web-Client-Start-800x472.png" alt="" width="800" height="472" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/11/0501-vSphere-Web-Client-Start-800x472.png 800w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0501-vSphere-Web-Client-Start-300x177.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0501-vSphere-Web-Client-Start-768x453.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0501-vSphere-Web-Client-Start-250x147.png 250w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0501-vSphere-Web-Client-Start-150x88.png 150w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0501-vSphere-Web-Client-Start.png 1145w" sizes="(max-width: 800px) 100vw, 800px" />][5]
 
@@ -49,29 +49,29 @@ Selecting the vCloud Director Extender icon opens the CX interface:
 
 [<img loading="lazy" decoding="async" class="aligncenter size-large wp-image-417" src="https://kiwicloud.ninja/wp-content/uploads/2017/11/0502-Provider-Clouds-registered-800x225.png" alt="" width="800" height="225" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/11/0502-Provider-Clouds-registered-800x225.png 800w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0502-Provider-Clouds-registered-300x84.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0502-Provider-Clouds-registered-768x216.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0502-Provider-Clouds-registered-250x70.png 250w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0502-Provider-Clouds-registered-150x42.png 150w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0502-Provider-Clouds-registered.png 1303w" sizes="(max-width: 800px) 100vw, 800px" />][6]
 
-If you have not yet configured the L2 appliance settings, selecting the &#8216;DC Extensions&#8217; tab will show the following error:  
+If you have not yet configured the L2 appliance settings, selecting the 'DC Extensions' tab will show the following error:  
 [  
 <img loading="lazy" decoding="async" class="aligncenter size-full wp-image-418" src="https://kiwicloud.ninja/wp-content/uploads/2017/11/0503-Error-DC-Extension.png" alt="" width="579" height="207" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/11/0503-Error-DC-Extension.png 579w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0503-Error-DC-Extension-300x107.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0503-Error-DC-Extension-250x89.png 250w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0503-Error-DC-Extension-150x54.png 150w" sizes="(max-width: 579px) 100vw, 579px" />][7] 
 
-To fix this, open the vCloud Director Extender web interface in a browser by opening https://<ip address of deployed cx appliance>/ and log in, select the &#8216;DC Extensions&#8217; tab:
+To fix this, open the vCloud Director Extender web interface in a browser by opening https://<ip address of deployed cx appliance>/ and log in, select the 'DC Extensions' tab:
 
 [<img loading="lazy" decoding="async" class="aligncenter size-large wp-image-419" src="https://kiwicloud.ninja/wp-content/uploads/2017/11/0504-Adding-L2-appliance-config-01-800x349.png" alt="" width="800" height="349" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/11/0504-Adding-L2-appliance-config-01-800x349.png 800w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0504-Adding-L2-appliance-config-01-300x131.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0504-Adding-L2-appliance-config-01-768x335.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0504-Adding-L2-appliance-config-01-250x109.png 250w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0504-Adding-L2-appliance-config-01-150x65.png 150w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0504-Adding-L2-appliance-config-01.png 1352w" sizes="(max-width: 800px) 100vw, 800px" />][8]
 
-Select the &#8216;Add Appliance Configuration&#8217; option and complete the form to provide the deployment parameters where the standalone NSX edge appliance will be deployed:
+Select the 'Add Appliance Configuration' option and complete the form to provide the deployment parameters where the standalone NSX edge appliance will be deployed:
 
 [<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-421" src="https://kiwicloud.ninja/wp-content/uploads/2017/11/0506-Adding-L2-appliance-config-03.png" alt="" width="580" height="604" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/11/0506-Adding-L2-appliance-config-03.png 580w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0506-Adding-L2-appliance-config-03-288x300.png 288w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0506-Adding-L2-appliance-config-03-144x150.png 144w" sizes="(max-width: 580px) 100vw, 580px" />][9]
 
-The &#8216;Uplink Network Pool IP&#8217; setting is a bit strange &#8211; it appears to be asking for a network pool or IP range, but the &#8216;help text&#8217; in the field is asking for a single IP address. I found that the validation on this field is a bit odd &#8211; it will basically accept any input at all (even random strings) without complaining, but obviously deployment won&#8217;t work. What you need to do is add individual IPv4 addresses and click the &#8216;Add&#8217; button for each. You will need 1 address for each stretched network you will be extending to your cloud platform. In this example I am only extending a single network so have added a single IPv4 address (192.168.0.201).
+The 'Uplink Network Pool IP' setting is a bit strange - it appears to be asking for a network pool or IP range, but the 'help text' in the field is asking for a single IP address. I found that the validation on this field is a bit odd - it will basically accept any input at all (even random strings) without complaining, but obviously deployment won't work. What you need to do is add individual IPv4 addresses and click the 'Add' button for each. You will need 1 address for each stretched network you will be extending to your cloud platform. In this example I am only extending a single network so have added a single IPv4 address (192.168.0.201).
 
-Once you click the &#8216;Create&#8217; button you will be returned to the &#8216;DC Extensions&#8217; tab and shown a summary of the L2 appliance configuration:
+Once you click the 'Create' button you will be returned to the 'DC Extensions' tab and shown a summary of the L2 appliance configuration:
 
 [<img loading="lazy" decoding="async" class="aligncenter size-large wp-image-422" src="https://kiwicloud.ninja/wp-content/uploads/2017/11/0507-Added-L2-appliance-config-04-800x518.png" alt="" width="800" height="518" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/11/0507-Added-L2-appliance-config-04-800x518.png 800w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0507-Added-L2-appliance-config-04-300x194.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0507-Added-L2-appliance-config-04-768x498.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0507-Added-L2-appliance-config-04-232x150.png 232w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0507-Added-L2-appliance-config-04-150x97.png 150w, https://kiwicloud.ninja/wp-content/uploads/2017/11/0507-Added-L2-appliance-config-04.png 1201w" sizes="(max-width: 800px) 100vw, 800px" />][10]
 
-Note that there doesn&#8217;t appear to be any way to edit an existing L2 Appliance configuration, so if you need to change settings (e.g. to add additional uplink IP pool addresses) you will likely need to delete and recreate the entire entry.
+Note that there doesn't appear to be any way to edit an existing L2 Appliance configuration, so if you need to change settings (e.g. to add additional uplink IP pool addresses) you will likely need to delete and recreate the entire entry.
 
 &nbsp;
 
-Next we need to add a new &#8216;subinterface&#8217; network to our hosted Edge gateway appliance, logging in to our cloud provider portal we can select the &#8216;Administration&#8217; tab and the &#8216;Org VDC Networks&#8217; sub-option, clicking the &#8216;Add&#8217; button shows the dialog to create a new Org VDC Network. We need to select &#8216;Create a routed network by connecting to an existing edge gateway&#8217; and then check the &#8216;Create as subinterface&#8217; check box:
+Next we need to add a new 'subinterface' network to our hosted Edge gateway appliance, logging in to our cloud provider portal we can select the 'Administration' tab and the 'Org VDC Networks' sub-option, clicking the 'Add' button shows the dialog to create a new Org VDC Network. We need to select 'Create a routed network by connecting to an existing edge gateway' and then check the 'Create as subinterface' check box:
 
 <div id='gallery-55' class='gallery galleryid-399 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -83,7 +83,7 @@ Next we need to add a new &#8216;subinterface&#8217; network to our hosted Edge 
   <br style="clear: both" />
 </div>
 
-Next we configure the standard network information (Gateway, Network mask, DNS etc.) Since this network will be bridged to our on-premises network we can use the same details. Optionally a new Static IP pool can also be created so that new VMs provisioned in the cloud service can use this pool for their IP addresses. This won&#8217;t be an issue for VMs being migrated as they will carry across whatever IP addresses are already assigned to them. Note that the gateway address is set to be the same address as the existing (on-premises) gateway &#8211; this means that re-configuring the default gateway setting in the guest OS isn&#8217;t required either:
+Next we configure the standard network information (Gateway, Network mask, DNS etc.) Since this network will be bridged to our on-premises network we can use the same details. Optionally a new Static IP pool can also be created so that new VMs provisioned in the cloud service can use this pool for their IP addresses. This won't be an issue for VMs being migrated as they will carry across whatever IP addresses are already assigned to them. Note that the gateway address is set to be the same address as the existing (on-premises) gateway - this means that re-configuring the default gateway setting in the guest OS isn't required either:
 
 <div id='gallery-56' class='gallery galleryid-399 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -119,7 +119,7 @@ Finally the summary screen allows us to check the information provided and go ba
   <br style="clear: both" />
 </div>
 
-Once finished creating, the Org VDC network will be shown in the list with a type of &#8216;Routed&#8217; and an interface type of &#8216;Subinterface&#8217;:
+Once finished creating, the Org VDC network will be shown in the list with a type of 'Routed' and an interface type of 'Subinterface':
 
 <div id='gallery-59' class='gallery galleryid-399 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -131,7 +131,7 @@ Once finished creating, the Org VDC network will be shown in the list with a typ
   <br style="clear: both" />
 </div>
 
-Next we access the vCloud Extender interface from within the customer vCenter plugin, selecting the &#8216;DC Extensions&#8217; tab takes us to the following dialog:
+Next we access the vCloud Extender interface from within the customer vCenter plugin, selecting the 'DC Extensions' tab takes us to the following dialog:
 
 <div id='gallery-60' class='gallery galleryid-399 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -143,7 +143,7 @@ Next we access the vCloud Extender interface from within the customer vCenter pl
   <br style="clear: both" />
 </div>
 
-Selecting &#8216;New Extension&#8217; shows the dialog to create a new L2 extension, the fields are mostly populated for you. The &#8216;Enable egress&#8217; allows you to select which gateway(s) will be allowed to forward traffic outside of the extended network. In this example I&#8217;ve only configured egress on the Source (on-premises) side through the existing gateway:
+Selecting 'New Extension' shows the dialog to create a new L2 extension, the fields are mostly populated for you. The 'Enable egress' allows you to select which gateway(s) will be allowed to forward traffic outside of the extended network. In this example I've only configured egress on the Source (on-premises) side through the existing gateway:
 
 <div id='gallery-61' class='gallery galleryid-399 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -155,7 +155,7 @@ Selecting &#8216;New Extension&#8217; shows the dialog to create a new L2 extens
   <br style="clear: both" />
 </div>
 
-When you click &#8216;Start&#8217;, the status will go to &#8216;Connecting&#8217; and a number of activities will take place in the customer vCenter:
+When you click 'Start', the status will go to 'Connecting' and a number of activities will take place in the customer vCenter:
 
 <div id='gallery-62' class='gallery galleryid-399 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -167,7 +167,7 @@ When you click &#8216;Start&#8217;, the status will go to &#8216;Connecting&#821
   <br style="clear: both" />
 </div>
 
-Reading from the bottom (oldest) upwards, a new port group is created, an NSX Edge Standalone appliance is deployed and powered-on and the new port group is reconfigured once this has completed (ignore the VM migration task, that just happened to occur during the same time window in my lab). In this case the new NSX standalone edge was named &#8216;mcloudext-edge-4&#8217; and the port group &#8216;mcxt-tpg-l2vpn-vlan-Tyrell-VDC15&#8217;.
+Reading from the bottom (oldest) upwards, a new port group is created, an NSX Edge Standalone appliance is deployed and powered-on and the new port group is reconfigured once this has completed (ignore the VM migration task, that just happened to occur during the same time window in my lab). In this case the new NSX standalone edge was named 'mcloudext-edge-4' and the port group 'mcxt-tpg-l2vpn-vlan-Tyrell-VDC15'.
 
 <div id='gallery-63' class='gallery galleryid-399 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -179,7 +179,7 @@ Reading from the bottom (oldest) upwards, a new port group is created, an NSX Ed
   <br style="clear: both" />
 </div>
 
-Once deployment has completed (takes a few minutes) the vCloud Extender client interface shows the new DC extension network with a status of &#8216;Connected&#8217;:
+Once deployment has completed (takes a few minutes) the vCloud Extender client interface shows the new DC extension network with a status of 'Connected':
 
 <div id='gallery-64' class='gallery galleryid-399 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -191,7 +191,7 @@ Once deployment has completed (takes a few minutes) the vCloud Extender client i
   <br style="clear: both" />
 </div>
 
-In the tenant vCloud Director portal you can also see the status of the tunnel under &#8216;Statistics&#8217; and &#8216;L2 VPN&#8217; within the edge gateway interface:
+In the tenant vCloud Director portal you can also see the status of the tunnel under 'Statistics' and 'L2 VPN' within the edge gateway interface:
 
 <div id='gallery-65' class='gallery galleryid-399 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -203,11 +203,11 @@ In the tenant vCloud Director portal you can also see the status of the tunnel u
   <br style="clear: both" />
 </div>
 
-You will now find that any VMs connected to the stretched network (OrgVDC network) in your cloud environment have L2 connectivity with the on-premises network and will continue to function as if they were still located in the customer&#8217;s own datacenter.
+You will now find that any VMs connected to the stretched network (OrgVDC network) in your cloud environment have L2 connectivity with the on-premises network and will continue to function as if they were still located in the customer's own datacenter.
 
-As I mentioned at the start of this post, I hit a number of issues when configuring this environment and getting it working took several attempts and a couple of rebuilds of my lab. The main issue was that in the initial release of vCloud Director v9.0.0.0 there is an issue that prevents the details required for the standalone NSX edge being deployed from being returned by the API. This prevents the deployment of the customer edge at all and resulted in my VMware support call. The specific issue is referenced in the vCloud Director 9.0.0.1 [release notes][11]{.broken_link}  as &#8216;Resolves an issue where the vCloud Director API does not return a tunnelID parameter in response to a GET /vdcnetworks request sent against a routed Organization VCD network that has a subinterface enabled.&#8217; As far as I can work out, it will be impossible to successfully use L2VPN in CX without upgrading the provider to vCloud Director 9.0.0.1 to resolve this issue.
+As I mentioned at the start of this post, I hit a number of issues when configuring this environment and getting it working took several attempts and a couple of rebuilds of my lab. The main issue was that in the initial release of vCloud Director v9.0.0.0 there is an issue that prevents the details required for the standalone NSX edge being deployed from being returned by the API. This prevents the deployment of the customer edge at all and resulted in my VMware support call. The specific issue is referenced in the vCloud Director 9.0.0.1 [release notes][11]{.broken_link}  as 'Resolves an issue where the vCloud Director API does not return a tunnelID parameter in response to a GET /vdcnetworks request sent against a routed Organization VCD network that has a subinterface enabled.' As far as I can work out, it will be impossible to successfully use L2VPN in CX without upgrading the provider to vCloud Director 9.0.0.1 to resolve this issue.
 
-The other issue I hit in my lab was that my hosted &#8216;Tenant Edge&#8217; was NAT&#8217;d behind another NSX Edge gateway which was also performing NAT translation (Double-NAT). This was due to the way my lab is built in a nested environment inside vCloud Director. Unfortunately this meant the external interface of my hosted &#8216;Tenant Edge&#8217; was actually an internal network address, so when the customer/on-premise edge tried to establish contact it was using an internal network address which obviously wasn&#8217;t going to work. I solved this by connecting a &#8216;real&#8217; external internet network to my hosted Tenant Edge.
+The other issue I hit in my lab was that my hosted 'Tenant Edge' was NAT'd behind another NSX Edge gateway which was also performing NAT translation (Double-NAT). This was due to the way my lab is built in a nested environment inside vCloud Director. Unfortunately this meant the external interface of my hosted 'Tenant Edge' was actually an internal network address, so when the customer/on-premise edge tried to establish contact it was using an internal network address which obviously wasn't going to work. I solved this by connecting a 'real' external internet network to my hosted Tenant Edge.
 
 As always, comments and feedback always appreciated.
 

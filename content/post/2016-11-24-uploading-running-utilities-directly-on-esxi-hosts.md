@@ -16,7 +16,7 @@ tags:
   - vSphere 6
 
 ---
-As part of planning our upgrade from VMware NSX-V from v6.2.2 to v6.2.4 we became aware of the VMware issue KB2146171 ([link][1]) which can cause VMs to lose network connectivity when vMotioned to other hosts following the upgrade. Obviously wishing to avoid this for our own (and customer) VMs, we raised a support case to obtain the VMware script to determine how many of our VMs (if any) were going to be affected. Unfortunately the VMware script we were supplied was configured to run \*after\* the upgrade had already been completed. Fortunately the VMware utility supplied (vsipioctl &#8211; a binary to be run directly on ESXi hosts) could tell us which VMs were affected prior to upgrading.
+As part of planning our upgrade from VMware NSX-V from v6.2.2 to v6.2.4 we became aware of the VMware issue KB2146171 ([link][1]) which can cause VMs to lose network connectivity when vMotioned to other hosts following the upgrade. Obviously wishing to avoid this for our own (and customer) VMs, we raised a support case to obtain the VMware script to determine how many of our VMs (if any) were going to be affected. Unfortunately the VMware script we were supplied was configured to run \*after\* the upgrade had already been completed. Fortunately the VMware utility supplied (vsipioctl - a binary to be run directly on ESXi hosts) could tell us which VMs were affected prior to upgrading.
 
 Since we have a reasonably large number of hosts and hosted VMs I set about writing some PowerShell to perform the following actions:
 
@@ -29,11 +29,11 @@ Since we have a reasonably large number of hosts and hosted VMs I set about writ
 
 At first I tried using PuTTY plink.exe and pscp.exe from PowerShell to perform the SSH and SCP file copy to the hosts, but had serious problems passing the right password & command line options due to the way PowerShell escapes quoted strings. In the end I found it easier to use the PoshSSH PowerShell library (<https://github.com/darkoperator/Posh-SSH>) for these functions rather than shelling out to PuTTY executables.
 
-Note that we usually leave SSH access disabled on our ESXi hosts, so the script shown enables this and then re-disables SSH after running &#8211; adjust if necessary when using in your own environments.
+Note that we usually leave SSH access disabled on our ESXi hosts, so the script shown enables this and then re-disables SSH after running - adjust if necessary when using in your own environments.
 
-If you need to run this check for your own environment you will still need to open a VMware support call to obtain the vsipioctl binary as far as I am aware as I don&#8217;t believe this is available any other way.
+If you need to run this check for your own environment you will still need to open a VMware support call to obtain the vsipioctl binary as far as I am aware as I don't believe this is available any other way.
 
-The script is shown below &#8211; hopefully this will be useful for some of you, just make sure you test properly before running against a production environment. Luckily in our case the script proved that none of our VMs are impacted by this issue and we can safely proceed with our NSX-V upgrade.
+The script is shown below - hopefully this will be useful for some of you, just make sure you test properly before running against a production environment. Luckily in our case the script proved that none of our VMs are impacted by this issue and we can safely proceed with our NSX-V upgrade.
 
 Jon.
 
@@ -44,7 +44,7 @@ Jon.
 # iex (New-Object Net.WebClient).DownloadString("https://gist.github.com/darkoperator/6152630/raw/c67de4f7cd780ba367cccbc2593f38d18ce6df89/instposhsshdev")
 
 # Specify our vCenter instance FQDN or IP:
-$vCenter = "&lt;vcenter FQDN or IP address&gt;"
+$vCenter = "<vcenter FQDN or IP address>"
 
 # Prompt user for vCenter credentials if not known:
 if ($credVCenter -eq $null) {
@@ -117,17 +117,17 @@ Get-VMHost | Foreach {
         ForEach ($item in $dvflist.Output) {
 
             # If we see a new VM identifier, update our current VMName setting:
-            if ($item -match '(?&lt;=vmm0:)(.*)(?= vcUuid:)') {
+            if ($item -match '(?<=vmm0:)(.*)(?= vcUuid:)') {
                 $VMName = $matches[0]
             }
             # If we see a line that looks like a fw export, grab that and run vsipioctl on it:
-            if ($item -match '(?&lt;=name: )(.*sfw.2)') {
+            if ($item -match '(?<=name: )(.*sfw.2)') {
                 $VMNic = $matches[0]
                 
                 $fwexport = Invoke-SSHCommand -SSHSession $ssh -Command "/tmp/vsipioctl getexportversion -f $VMnic"
             
                 # Parse the returned 'Current Export Version' from vsipioctl:
-                $exmatch = $fwexport.Output[0] -match '(?&lt;=version: )(.*)'
+                $exmatch = $fwexport.Output[0] -match '(?<=version: )(.*)'
                 $exportVersion = $matches[0]
 
                 # Add a table row that includes the VM name, NIC ID and exportversion:

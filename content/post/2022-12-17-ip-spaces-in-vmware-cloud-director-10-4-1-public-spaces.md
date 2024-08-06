@@ -13,25 +13,25 @@ tags:
   - VMware
 
 ---
-VMware recently <a rel="noreferrer noopener" href="https://docs.vmware.com/en/VMware-Cloud-Director/10.4.1/rn/vmware-cloud-director-1041-release-notes/index.html" target="_blank">released</a> version 10.4.1 of VMware Cloud Director (VCD) &#8211; VMware add a new feature known as IP Spaces. IP Spaces allow providers and tenant customers to manage IP address allocations within VCD.
+VMware recently <a rel="noreferrer noopener" href="https://docs.vmware.com/en/VMware-Cloud-Director/10.4.1/rn/vmware-cloud-director-1041-release-notes/index.html" target="_blank">released</a> version 10.4.1 of VMware Cloud Director (VCD) - VMware add a new feature known as IP Spaces. IP Spaces allow providers and tenant customers to manage IP address allocations within VCD.
 
-What was originally meant to be a &#8216;quick look&#8217; at IP Spaces and the capabilities they add has somehow turned into a 3-part series, so please follow the links below to the bit that interests you most.
+What was originally meant to be a 'quick look' at IP Spaces and the capabilities they add has somehow turned into a 3-part series, so please follow the links below to the bit that interests you most.
 
 <ul class="wp-block-list">
   <li>
-    Part 1 &#8211; Introduction & Public IP Spaces (this post)
+    Part 1 - Introduction & Public IP Spaces (this post)
   </li>
   <li>
-    <a href="https://kiwicloud.ninja/?p=69028" data-type="post" data-id="69028">Part 2 &#8211; Private IP Spaces</a>
+    <a href="https://kiwicloud.ninja/?p=69028" data-type="post" data-id="69028">Part 2 - Private IP Spaces</a>
   </li>
   <li>
-    <a href="https://kiwicloud.ninja/?p=69044" data-type="post" data-id="69044">Part 3 &#8211; IP Spaces Tenant Experience, Compatibility and Summary</a>
+    <a href="https://kiwicloud.ninja/?p=69044" data-type="post" data-id="69044">Part 3 - IP Spaces Tenant Experience, Compatibility and Summary</a>
   </li>
 </ul>
 
-In this first post we&#8217;ll look at the first of three possible types of IP Spaces, &#8216;Public&#8217; IP Spaces and see how these can be configured by the Service Provider to provide extra capability and features not previously available in Cloud Director. In particular, Service Providers can now create a shared pool of IP addresses which can be &#8216;drawn down&#8217; on by tenant organisations (within a quota limit which can be assigned both globally, and overridden for individual tenants).
+In this first post we'll look at the first of three possible types of IP Spaces, 'Public' IP Spaces and see how these can be configured by the Service Provider to provide extra capability and features not previously available in Cloud Director. In particular, Service Providers can now create a shared pool of IP addresses which can be 'drawn down' on by tenant organisations (within a quota limit which can be assigned both globally, and overridden for individual tenants).
 
-This ability to have a &#8216;floating pool&#8217; of available addressing which can be shared and reused by multiple tenants (rather than having to statically assign and manage each individual address to a specific tenant) is a welcome improvement, and in partular with the scarcity of IPv4 address space will make it much easier for Service Providers to manage and provide flexible public IP address space allocations to their customers.
+This ability to have a 'floating pool' of available addressing which can be shared and reused by multiple tenants (rather than having to statically assign and manage each individual address to a specific tenant) is a welcome improvement, and in partular with the scarcity of IPv4 address space will make it much easier for Service Providers to manage and provide flexible public IP address space allocations to their customers.
 
 IP Spaces can be found in the VCD provider UI under the Resources / Cloud Resources tabs:<figure class="wp-block-image size-large">
 
@@ -39,9 +39,9 @@ IP Spaces can be found in the VCD provider UI under the Resources / Cloud Resour
 
 To create a new public IP Space (for example to provide internet addresses), click the NEW text which opens the IP Space creation workflow:<figure class="wp-block-image size-large">
 
-<img loading="lazy" decoding="async" width="800" height="485" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-800x485.png" alt="" class="wp-image-69008" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-800x485.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-300x182.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-768x466.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-150x91.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-247x150.png 247w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1.png 1157w" sizes="(max-width: 800px) 100vw, 800px" /> <figcaption class="wp-element-caption">In the next step you name your new IP Space and (optionally) provide a description:</figcaption></figure> <figure class="wp-block-image size-large"><img loading="lazy" decoding="async" width="800" height="485" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-800x485.png" alt="" class="wp-image-69009" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-800x485.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-300x182.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-768x466.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-150x91.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-247x150.png 247w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2.png 1157w" sizes="(max-width: 800px) 100vw, 800px" /><figcaption class="wp-element-caption">Next you decide whether to enable route advertisement for allocations of blocks of IP addresses (referred to as &#8216;Prefixes&#8217; in the UI), for this example we won&#8217;t:</figcaption></figure> <figure class="wp-block-image size-large"><img loading="lazy" decoding="async" width="800" height="485" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-800x485.png" alt="" class="wp-image-69010" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-800x485.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-300x182.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-768x466.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-150x91.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-247x150.png 247w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3.png 1157w" sizes="(max-width: 800px) 100vw, 800px" /></figure> 
+<img loading="lazy" decoding="async" width="800" height="485" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-800x485.png" alt="" class="wp-image-69008" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-800x485.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-300x182.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-768x466.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-150x91.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1-247x150.png 247w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-1.png 1157w" sizes="(max-width: 800px) 100vw, 800px" /> <figcaption class="wp-element-caption">In the next step you name your new IP Space and (optionally) provide a description:</figcaption></figure> <figure class="wp-block-image size-large"><img loading="lazy" decoding="async" width="800" height="485" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-800x485.png" alt="" class="wp-image-69009" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-800x485.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-300x182.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-768x466.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-150x91.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2-247x150.png 247w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-2.png 1157w" sizes="(max-width: 800px) 100vw, 800px" /><figcaption class="wp-element-caption">Next you decide whether to enable route advertisement for allocations of blocks of IP addresses (referred to as 'Prefixes' in the UI), for this example we won't:</figcaption></figure> <figure class="wp-block-image size-large"><img loading="lazy" decoding="async" width="800" height="485" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-800x485.png" alt="" class="wp-image-69010" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-800x485.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-300x182.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-768x466.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-150x91.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3-247x150.png 247w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-3.png 1157w" sizes="(max-width: 800px) 100vw, 800px" /></figure> 
 
-In this example, we&#8217;re going to assume that our &#8216;public&#8217; assigned internet address block is 10.10.10.0/24 (255 addresses from 10.10.10.1 through 10.10.10.255), and:
+In this example, we're going to assume that our 'public' assigned internet address block is 10.10.10.0/24 (255 addresses from 10.10.10.1 through 10.10.10.255), and:
 
 <ul class="wp-block-list">
   <li>
@@ -58,7 +58,7 @@ In this example, we&#8217;re going to assume that our &#8216;public&#8217; assig
   </li>
 </ul>
 
-Here&#8217;s how we can configure these settings in the VCD UI, first we define our Scope (including the &#8216;superscope&#8217; from which the /26 we want is derived:<figure class="wp-block-image size-large">
+Here's how we can configure these settings in the VCD UI, first we define our Scope (including the 'superscope' from which the /26 we want is derived:<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="485" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-4-800x485.png" alt="" class="wp-image-69012" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-4-800x485.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-4-300x182.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-4-768x466.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-4-150x91.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-4-247x150.png 247w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-4.png 1157w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
@@ -70,7 +70,7 @@ Next we add the IP Prefix blocks that we want to be able to issue, we can use th
 
 <img loading="lazy" decoding="async" width="800" height="485" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-6-800x485.png" alt="" class="wp-image-69014" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-6-800x485.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-6-300x182.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-6-768x466.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-6-150x91.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-6-247x150.png 247w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-6.png 1157w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-Next we can set the default quota limits which will apply to all tenant Organizations that we don&#8217;t explicity set alternative limits for (or leave these as &#8216;Unlimited&#8217;):<figure class="wp-block-image size-large">
+Next we can set the default quota limits which will apply to all tenant Organizations that we don't explicity set alternative limits for (or leave these as 'Unlimited'):<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="485" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-7-800x485.png" alt="" class="wp-image-69015" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-7-800x485.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-7-300x182.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-7-768x466.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-7-150x91.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-7-247x150.png 247w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-7.png 1157w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
@@ -98,7 +98,7 @@ Clicking next shows a summary page from which the details can be confirmed with 
 
 <img loading="lazy" decoding="async" width="800" height="486" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-13-800x486.png" alt="" class="wp-image-69022" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-13-800x486.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-13-300x182.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-13-768x466.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-13-150x91.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-13-247x150.png 247w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-13.png 1156w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-And that&#8217;s it! The IP Space is now fully configured and can be used by tenants to request public IP addresses (or Prefix blocks of addresses if allowed) for use in their environments. Organizational overrides can be added to limit or extend the range of addresses that can be requested by each tenant.
+And that's it! The IP Space is now fully configured and can be used by tenants to request public IP addresses (or Prefix blocks of addresses if allowed) for use in their environments. Organizational overrides can be added to limit or extend the range of addresses that can be requested by each tenant.
 
 <a href="https://kiwicloud.ninja/?p=69028" data-type="post" data-id="69028">Part 2</a> of this series considers using Private IP Spaces as a tenant to manage local IP address space used within VCD.
 

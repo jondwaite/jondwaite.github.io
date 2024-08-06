@@ -84,18 +84,18 @@ var tenantOrgId = myCX.getParameter("_vcd_orgId");
 var tenantUser = myCX.getParameter("_vdc_userName");
 
 emailSubject = "Additional VDC Resource Request from " + tenantUser + " at " + tenantOrg;
-emailContent = "&lt;p&gt;The following resource request was made by " + tenantUser + " from Organization " + tenantOrg;
-emailContent += " (Org ID: " + tenantOrgId + ")&lt;/p&gt;"
-emailContent += "&lt;table&gt;&lt;tr&gt;&lt;th&gt;Item&lt;/th&gt;&lt;th&gt;Value&lt;/th&gt;&lt;th&gt;Units&lt;/th&gt;&lt;/tr&gt;"
-if (addCPU &gt; 0) { emailContent += "&lt;tr&gt;&lt;td&gt;Additional CPU Resource&lt;/td&gt;&lt;td&gt;" + addCPU + "&lt;/td&gt;&lt;td&gt;GHz&lt;/td&gt;&lt;/tr&gt;"; }
-if (addRAM &gt; 0) { emailContent += "&lt;tr&gt;&lt;td&gt;Additional RAM Resource&lt;/td&gt;&lt;td&gt;" + addRAM + "&lt;/td&gt;&lt;td&gt;GB&lt;/td&gt;&lt;/tr&gt;"; }
-if (addStoragePerf &gt; 0) {
-     emailContent += "&lt;tr&gt;&lt;td&gt;Additional Performance Storage&lt;/td&gt;&lt;td&gt;" + addStoragePerf + "&lt;/td&gt;&lt;td&gt;GB&lt;/td&gt;&lt;/tr&gt;";
+emailContent = "<p>The following resource request was made by " + tenantUser + " from Organization " + tenantOrg;
+emailContent += " (Org ID: " + tenantOrgId + ")</p>"
+emailContent += "<table><tr><th>Item</th><th>Value</th><th>Units</th></tr>"
+if (addCPU > 0) { emailContent += "<tr><td>Additional CPU Resource</td><td>" + addCPU + "</td><td>GHz</td></tr>"; }
+if (addRAM > 0) { emailContent += "<tr><td>Additional RAM Resource</td><td>" + addRAM + "</td><td>GB</td></tr>"; }
+if (addStoragePerf > 0) {
+     emailContent += "<tr><td>Additional Performance Storage</td><td>" + addStoragePerf + "</td><td>GB</td></tr>";
 }
-if (addStorageCap &gt; 0) {
-     emailContent += "&lt;tr&gt;&lt;td&gt;Additional Capacity Storage&lt;/td&gt;&lt;td&gt;" + addStorageCap + "&lt;/td&gt;&lt;td&gt;GB&lt;/td&gt;&lt;/tr&gt;";
+if (addStorageCap > 0) {
+     emailContent += "<tr><td>Additional Capacity Storage</td><td>" + addStorageCap + "</td><td>GB</td></tr>";
 }
-emailContent += "&lt;/table&gt;"</pre>
+emailContent += "</table>"</pre>
 
 There’s nothing too complicated going on in the script, just building some HTML strings based on the input values we’ve received from the workflow. We query the \_vdc\_orgName, \_vdc\_orgId and \_vdc\_userName from our script environment to retrieve these values which are provided by the vCloud Director Service Library so we know which user in which tenant organisation has initiated the workflow.
 

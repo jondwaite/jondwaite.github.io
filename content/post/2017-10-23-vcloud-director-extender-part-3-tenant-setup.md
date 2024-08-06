@@ -21,9 +21,9 @@ In [part 1][1] and [part 2][2] of this series I detailed an overview of VMware v
 
 This third article in the series details the configuration steps required for a tenant/customer environment to deploy and configure CX into their environment.
 
-Once a service provider configuration is complete, any customers of that provider with sufficient allocated resources in a Virtual Datacenter (VDC) can configure the tenant CX environment and connect this to their vCenter environment. Once complete they will be able to migrate and replicate vSphere VMs between their own vCenter and the service provider datacenter extremely easily. Optionally they can use L2VPN functionality to stretch their networks into the Cloud Provider&#8217;s datacenter removing the requirement to have a pre-configured network in place. Of course many customers will wish to move to dedicated networking later, but having the initial ability to quickly provision their networks into a Cloud provider can dramatically shorten migration timeframes.
+Once a service provider configuration is complete, any customers of that provider with sufficient allocated resources in a Virtual Datacenter (VDC) can configure the tenant CX environment and connect this to their vCenter environment. Once complete they will be able to migrate and replicate vSphere VMs between their own vCenter and the service provider datacenter extremely easily. Optionally they can use L2VPN functionality to stretch their networks into the Cloud Provider's datacenter removing the requirement to have a pre-configured network in place. Of course many customers will wish to move to dedicated networking later, but having the initial ability to quickly provision their networks into a Cloud provider can dramatically shorten migration timeframes.
 
-The initial deployment steps for customers deploying CX are exactly the same as for a Service Provider &#8211; download (or have provided to them by their Cloud Provider) the ova appliance for vCloud Director Extender and deploy this into their vCenter environment.
+The initial deployment steps for customers deploying CX are exactly the same as for a Service Provider - download (or have provided to them by their Cloud Provider) the ova appliance for vCloud Director Extender and deploy this into their vCenter environment.
 
 <div id='gallery-32' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -35,7 +35,7 @@ The initial deployment steps for customers deploying CX are exactly the same as 
   <br style="clear: both" />
 </div>
 
-Right-clicking on the desired location and selecting &#8216;Deploy OVF Template&#8230;&#8217; allows the local CX .ova file to be selected
+Right-clicking on the desired location and selecting 'Deploy OVF Template&#8230;' allows the local CX .ova file to be selected
 
 <div id='gallery-33' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -71,7 +71,7 @@ Followed by the vCenter Cluster which will run the deployed appliance:
   <br style="clear: both" />
 </div>
 
-Check the template details and then click &#8216;Next&#8217; to continue:
+Check the template details and then click 'Next' to continue:
 
 <div id='gallery-36' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -119,7 +119,7 @@ Select the required network for the appliance:
   <br style="clear: both" />
 </div>
 
-Make sure that &#8216;cx-connector&#8217; (default) is selected for the &#8216;Deployment Type&#8217; and fill out the IP addressing information for the appliance:
+Make sure that 'cx-connector' (default) is selected for the 'Deployment Type' and fill out the IP addressing information for the appliance:
 
 <div id='gallery-40' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -131,7 +131,7 @@ Make sure that &#8216;cx-connector&#8217; (default) is selected for the &#8216;D
   <br style="clear: both" />
 </div>
 
-Check the summary information carefully and click &#8216;Finish&#8217; to begin the deployment operation:
+Check the summary information carefully and click 'Finish' to begin the deployment operation:
 
 <div id='gallery-41' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -143,7 +143,7 @@ Check the summary information carefully and click &#8216;Finish&#8217; to begin 
   <br style="clear: both" />
 </div>
 
-Once the appliance deployment task has configured, power-on the deployed VM in vCenter and wait for it to initialise. When it is running you can open a web browser to the IP address you configured for the appliance and login using the password configured. Note that you have to add &#8216;/ui/mgmt&#8217; to the login URL for the appliance, so the full URL will be &#8216;https://<IP address of appliance>/ui/mgmt&#8217;:
+Once the appliance deployment task has configured, power-on the deployed VM in vCenter and wait for it to initialise. When it is running you can open a web browser to the IP address you configured for the appliance and login using the password configured. Note that you have to add '/ui/mgmt' to the login URL for the appliance, so the full URL will be 'https://<IP address of appliance>/ui/mgmt':
 
 <div id='gallery-42' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -155,7 +155,7 @@ Once the appliance deployment task has configured, power-on the deployed VM in v
   <br style="clear: both" />
 </div>
 
-The initial CX dialog when logged in allows you to start the Setup Wizard, note that in contrast to the Service Provider UI, there is no &#8216;Replication Managers&#8217; tab in the cx-connector configuration:
+The initial CX dialog when logged in allows you to start the Setup Wizard, note that in contrast to the Service Provider UI, there is no 'Replication Managers' tab in the cx-connector configuration:
 
 <div id='gallery-43' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -179,7 +179,7 @@ The first step of the wizard is to link to the existing on-premise vCenter envir
   <br style="clear: both" />
 </div>
 
-Once the vCenter details and credentials are accepted, CX will provide a success notification, click &#8216;Next&#8217; to continue:
+Once the vCenter details and credentials are accepted, CX will provide a success notification, click 'Next' to continue:
 
 <div id='gallery-45' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -191,7 +191,7 @@ Once the vCenter details and credentials are accepted, CX will provide a success
   <br style="clear: both" />
 </div>
 
-The next page asks you to register the CX plugin with vCenter, this will likely become important in future as CX is updated, but for now leave the Version as 1.0.0 and click &#8216;Next&#8217;:
+The next page asks you to register the CX plugin with vCenter, this will likely become important in future as CX is updated, but for now leave the Version as 1.0.0 and click 'Next':
 
 <div id='gallery-46' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -215,7 +215,7 @@ Once the plugin has registered into vCenter you will see a success notification.
   <br style="clear: both" />
 </div>
 
-Next you need to provide the configuration for the &#8216;Replicator&#8217; appliance that will be deployed into the on-premise vCenter. The VMware documentation advises not to use DHCP for this and to manually specify a static IP configuration:
+Next you need to provide the configuration for the 'Replicator' appliance that will be deployed into the on-premise vCenter. The VMware documentation advises not to use DHCP for this and to manually specify a static IP configuration:
 
 <div id='gallery-48' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -227,7 +227,7 @@ Next you need to provide the configuration for the &#8216;Replicator&#8217; appl
   <br style="clear: both" />
 </div>
 
-The &#8216;Replicator&#8217; appliance is now deployed into vCenter and powered on. Once it has established network communication with the CX environment you will see a success notification:
+The 'Replicator' appliance is now deployed into vCenter and powered on. Once it has established network communication with the CX environment you will see a success notification:
 
 <div id='gallery-49' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -253,7 +253,7 @@ In my lab setup I configured the replicator public URL to be on port 443 on the 
   <br style="clear: both" />
 </div>
 
-If everything is accepted you&#8217;ll receive a success notification in the wizard (note that I blanked the Public Endpoint URL field in this capture which is why it doesn&#8217;t show in the grab below):
+If everything is accepted you'll receive a success notification in the wizard (note that I blanked the Public Endpoint URL field in this capture which is why it doesn't show in the grab below):
 
 <div id='gallery-51' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -265,7 +265,7 @@ If everything is accepted you&#8217;ll receive a success notification in the wiz
   <br style="clear: both" />
 </div>
 
-The wizard is now complete, click &#8216;Finish&#8217; to return to the UX interface:
+The wizard is now complete, click 'Finish' to return to the UX interface:
 
 <div id='gallery-52' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -277,7 +277,7 @@ The wizard is now complete, click &#8216;Finish&#8217; to return to the UX inter
   <br style="clear: both" />
 </div>
 
-The &#8216;vCenter Management&#8217; tab should now show the on-premise vCenter details
+The 'vCenter Management' tab should now show the on-premise vCenter details
 
 <div id='gallery-53' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -289,7 +289,7 @@ The &#8216;vCenter Management&#8217; tab should now show the on-premise vCenter 
   <br style="clear: both" />
 </div>
 
-The &#8216;Replicators&#8217; tab should show the details for the replicator appliance deployed in the wizard:
+The 'Replicators' tab should show the details for the replicator appliance deployed in the wizard:
 
 <div id='gallery-54' class='gallery galleryid-303 gallery-columns-1 gallery-size-large'>
   <dl class='gallery-item'>
@@ -301,13 +301,13 @@ The &#8216;Replicators&#8217; tab should show the details for the replicator app
   <br style="clear: both" />
 </div>
 
-Once vCenter has been closed and restarted you should now see a new &#8216;vCloud Director Extender&#8217; item in the UI:
+Once vCenter has been closed and restarted you should now see a new 'vCloud Director Extender' item in the UI:
 
 [<img loading="lazy" decoding="async" class="aligncenter wp-image-305 size-large" src="https://kiwicloud.ninja/wp-content/uploads/2017/10/27-vCenter-with-new-vCDE-option-800x463.png" alt="" width="800" height="463" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/10/27-vCenter-with-new-vCDE-option-800x463.png 800w, https://kiwicloud.ninja/wp-content/uploads/2017/10/27-vCenter-with-new-vCDE-option-300x174.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/10/27-vCenter-with-new-vCDE-option-768x444.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/10/27-vCenter-with-new-vCDE-option-250x145.png 250w, https://kiwicloud.ninja/wp-content/uploads/2017/10/27-vCenter-with-new-vCDE-option-150x87.png 150w, https://kiwicloud.ninja/wp-content/uploads/2017/10/27-vCenter-with-new-vCDE-option.png 1317w" sizes="(max-width: 800px) 100vw, 800px" />][3]
 
-The networking configuration for a customer environment is a little simpler than for the cloud provider side, you will need to permit 2 inbound ports through the firewall, both of which need to communicate directly with the &#8216;Replicator&#8217; appliance.
+The networking configuration for a customer environment is a little simpler than for the cloud provider side, you will need to permit 2 inbound ports through the firewall, both of which need to communicate directly with the 'Replicator' appliance.
 
-Assuming that you configured the &#8216;Public Endpoint URL&#8217; with port 443, you will need to use NAT translation to divert this to port 8043 on the appliance:
+Assuming that you configured the 'Public Endpoint URL' with port 443, you will need to use NAT translation to divert this to port 8043 on the appliance:
 
 <table>
   <tr>
@@ -377,7 +377,7 @@ Assuming that you configured the &#8216;Public Endpoint URL&#8217; with port 443
   </tr>
 </table>
 
-You can (and should) limit the public/external addresses permitted to communicate with your Replicator appliance to just those public IP addresses used by your Cloud Provider &#8211; they should be able to provide you with this information.
+You can (and should) limit the public/external addresses permitted to communicate with your Replicator appliance to just those public IP addresses used by your Cloud Provider - they should be able to provide you with this information.
 
 Also note that if you restrict outbound internet traffic from your CX network you will also need to permit the following traffic in an Outbound direction:
 
@@ -473,7 +473,7 @@ Also note that if you restrict outbound internet traffic from your CX network yo
 
 Of course if your provider has configured different ports for these components you will need to allow access to these instead of the defaults listed.
 
-In the next part of this series I&#8217;ll continue with configuring the customer environment to connect to a cloud provider CX environment and to migrate some VMs.
+In the next part of this series I'll continue with configuring the customer environment to connect to a cloud provider CX environment and to migrate some VMs.
 
 [Link back to Part 2][2] || [Link to Part 4][4]
 

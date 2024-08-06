@@ -21,17 +21,17 @@ In <a href="https://kiwicloud.ninja/?p=69028" data-type="post" data-id="69028">p
 
 This 3rd part will show how this all appears from the tenant perspective within VCD and how they can request and assign addressing from IP Spaces in their environment.
 
-I&#8217;ll be using a single VCD tenant &#8216;Tyrell Corporation&#8217; in this example who has previously had both a public IP space assigned to them and a private IP space created. I&#8217;ll cover the following in this post:
+I'll be using a single VCD tenant 'Tyrell Corporation' in this example who has previously had both a public IP space assigned to them and a private IP space created. I'll cover the following in this post:
 
 <ul class="wp-block-list">
   <li>
-    <a href="#float-public" data-type="URL">Requesting and using a new &#8216;floating&#8217; public IP address</a>
+    <a href="#float-public" data-type="URL">Requesting and using a new 'floating' public IP address</a>
   </li>
   <li>
-    <a href="#float-private" data-type="internal" data-id="#float-private">Requesting and using a new &#8216;floating&#8217; private IP address</a>
+    <a href="#float-private" data-type="internal" data-id="#float-private">Requesting and using a new 'floating' private IP address</a>
   </li>
   <li>
-    <a href="#prefix-private" data-type="internal" data-id="#prefix-private">Requesting and using a new &#8216;prefix&#8217; private IP address range</a>
+    <a href="#prefix-private" data-type="internal" data-id="#prefix-private">Requesting and using a new 'prefix' private IP address range</a>
   </li>
   <li>
     <a href="#ipspaces-compat">Notes on IP Spaces Compatibility (as of December 2022)</a>
@@ -41,17 +41,17 @@ I&#8217;ll be using a single VCD tenant &#8216;Tyrell Corporation&#8217; in this
   </li>
 </ul>
 
-### Requesting and using a new &#8216;floating&#8217; public IP Address {#float-public.wp-block-heading}
+### Requesting and using a new 'floating' public IP Address {#float-public.wp-block-heading}
 
-Logged in to VCD as our tenant administrator and going to Networking / IP Spaces, we can see that two IP Spaces are available to us &#8211; a &#8216;Public IP Pool&#8217; and &#8216;Tyrell Internal&#8217; private pool:<figure class="wp-block-image size-large">
+Logged in to VCD as our tenant administrator and going to Networking / IP Spaces, we can see that two IP Spaces are available to us - a 'Public IP Pool' and 'Tyrell Internal' private pool:<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="222" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-22-800x222.png" alt="" class="wp-image-69050" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-22-800x222.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-22-300x83.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-22-768x213.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-22-150x42.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-22-250x69.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-22.png 1285w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-Selecting the &#8216;Public IP Pool&#8217; we get a summary that shows we already have 1 Floating IP allocated which is in use (in this case this is the &#8216;outside&#8217; address used on our Orgs Edge Gateway):<figure class="wp-block-image size-large">
+Selecting the 'Public IP Pool' we get a summary that shows we already have 1 Floating IP allocated which is in use (in this case this is the 'outside' address used on our Orgs Edge Gateway):<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="451" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-23-800x451.png" alt="" class="wp-image-69051" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-23-800x451.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-23-300x169.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-23-768x433.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-23-150x85.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-23-250x141.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-23.png 1285w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-To allocate an additional Floating &#8216;Public&#8217; IP address we go to &#8216;Floating IPs&#8217; and click the REQUEST button:<figure class="wp-block-image size-large">
+To allocate an additional Floating 'Public' IP address we go to 'Floating IPs' and click the REQUEST button:<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="205" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-24-800x205.png" alt="" class="wp-image-69052" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-24-800x205.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-24-300x77.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-24-768x197.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-24-150x39.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-24-250x64.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-24.png 1285w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
@@ -65,21 +65,21 @@ Once the request is made, we may be told we have reached our quota and that no m
 
 <img loading="lazy" decoding="async" width="800" height="220" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-26-800x220.png" alt="" class="wp-image-69054" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-26-800x220.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-26-300x82.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-26-768x211.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-26-150x41.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-26-250x69.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-26.png 1284w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-Selecting the newly allocated address allows us to flag the address as &#8216;Manual&#8217; if we wish to use it for something outside of what our VCD environment is aware of, as well as release the IP back to the provider if we no longer need it:<figure class="wp-block-image size-large">
+Selecting the newly allocated address allows us to flag the address as 'Manual' if we wish to use it for something outside of what our VCD environment is aware of, as well as release the IP back to the provider if we no longer need it:<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="220" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-27-800x220.png" alt="" class="wp-image-69055" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-27-800x220.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-27-300x82.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-27-768x211.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-27-150x41.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-27-250x69.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-27.png 1284w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
 Once we have the IP allocated, we can assign it to services on our Edge Gateway (for example, as a new DNAT external address for a service we wish to publish to the Internet), or assign to a NSX Advanced Load Balancer as the Load Balancer address.
 
-Note that VCD won&#8217;t let IP addresses flagged as &#8216;Used&#8217; be released back to the provider pool so the services referencing an address must be reconfigured first.
+Note that VCD won't let IP addresses flagged as 'Used' be released back to the provider pool so the services referencing an address must be reconfigured first.
 
-### Requesting and using a new &#8216;floating&#8217; private IP Address {#float-private.wp-block-heading}
+### Requesting and using a new 'floating' private IP Address {#float-private.wp-block-heading}
 
-The process to request a new private floating IP address is similar to the process for a public IP address, although typically there won&#8217;t be any quota on available private addresses. We first select our private IP space and can see the summary for this:<figure class="wp-block-image size-large">
+The process to request a new private floating IP address is similar to the process for a public IP address, although typically there won't be any quota on available private addresses. We first select our private IP space and can see the summary for this:<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="645" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-28-800x645.png" alt="" class="wp-image-69056" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-28-800x645.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-28-300x242.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-28-768x619.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-28-150x121.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-28-186x150.png 186w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-28.png 1285w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-In this case we&#8217;ve defined our range as 192.168.0.0/16 from which 192.168.0.0/20 will be used within our VCD environment. We&#8217;ve then further subdivided 192.168.0.0/20 into a lower block of 8 prefix ranges (192.168.0.0/24, 192.168.1.0/24 etc.) and a pool of floating addresses from 192.168.8.1 to 192.168.15.22.
+In this case we've defined our range as 192.168.0.0/16 from which 192.168.0.0/20 will be used within our VCD environment. We've then further subdivided 192.168.0.0/20 into a lower block of 8 prefix ranges (192.168.0.0/24, 192.168.1.0/24 etc.) and a pool of floating addresses from 192.168.8.1 to 192.168.15.22.
 
 To request a new Floating IP address we select the Floating IPs item from the left panel:<figure class="wp-block-image size-large">
 
@@ -91,15 +91,15 @@ We can see that a single IP address has already been allocated and is in use by 
   <figure class="aligncenter size-full"><img loading="lazy" decoding="async" width="580" height="214" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-30.png" alt="" class="wp-image-69058" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-30.png 580w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-30-300x111.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-30-150x55.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-30-250x92.png 250w" sizes="(max-width: 580px) 100vw, 580px" /></figure>
 </div>
 
-Our new Floating IP address is allocated and shown to us with a type of &#8216;Unused&#8217;, as with public addresses we have the option to flag this address as being &#8216;Manual Use&#8217; (outside of VCDs awareness):<figure class="wp-block-image size-large">
+Our new Floating IP address is allocated and shown to us with a type of 'Unused', as with public addresses we have the option to flag this address as being 'Manual Use' (outside of VCDs awareness):<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="228" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-31-800x228.png" alt="" class="wp-image-69059" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-31-800x228.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-31-300x86.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-31-768x219.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-31-150x43.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-31-250x71.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-31.png 1282w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-We also have the option to release the IP address back to the pool if no longer required (and not currently in use). Once obtained we can now use the floating IP that has been allocated to us &#8211; typically this would be assigned to an NSX Advanced Load Balancer for use to internally load balance a service which our internal users consume (as can be seen for the existing 192.168.8.1 IP address).
+We also have the option to release the IP address back to the pool if no longer required (and not currently in use). Once obtained we can now use the floating IP that has been allocated to us - typically this would be assigned to an NSX Advanced Load Balancer for use to internally load balance a service which our internal users consume (as can be seen for the existing 192.168.8.1 IP address).
 
-### Requesting and using a new &#8216;prefix&#8217; private IP Address Range {#prefix-private.wp-block-heading}
+### Requesting and using a new 'prefix' private IP Address Range {#prefix-private.wp-block-heading}
 
-When requesting a new &#8216;prefix&#8217; IP address block, this can be done either by first allocating the block in IP Spaces and then assigning this to a new network, or directly at the time the new network is created. We&#8217;ll look at the 2nd option here as the first behaves very similarly to requesting a floating private IP address.
+When requesting a new 'prefix' IP address block, this can be done either by first allocating the block in IP Spaces and then assigning this to a new network, or directly at the time the new network is created. We'll look at the 2nd option here as the first behaves very similarly to requesting a floating private IP address.
 
 From the tenant Networking / Networks tab, select NEW to create a new network for the OrgVDC:<figure class="wp-block-image size-large">
 
@@ -109,42 +109,42 @@ This opens the New Organization VDC Network workflow, where we select our VDC an
 
 <img loading="lazy" decoding="async" width="800" height="471" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-33-800x471.png" alt="" class="wp-image-69062" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-33-800x471.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-33-300x176.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-33-768x452.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-33-150x88.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-33-250x147.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-33.png 1156w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-We can chose whether this new network will be Routed via our Edge gateway or Isolated, in this example I&#8217;ll just create an Isolated network:<figure class="wp-block-image size-large">
+We can chose whether this new network will be Routed via our Edge gateway or Isolated, in this example I'll just create an Isolated network:<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="471" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-34-800x471.png" alt="" class="wp-image-69063" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-34-800x471.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-34-300x176.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-34-768x452.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-34-150x88.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-34-250x147.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-34.png 1156w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-In the General step, we give the network a name and network details &#8211; if we select the dropdown arrow next to the Gateway CIDR field we see any accessible private networks available to us and can then chose a pre-allocated prefix network (if available), or ask to request a new one if not:<figure class="wp-block-image size-large">
+In the General step, we give the network a name and network details - if we select the dropdown arrow next to the Gateway CIDR field we see any accessible private networks available to us and can then chose a pre-allocated prefix network (if available), or ask to request a new one if not:<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="471" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-35-800x471.png" alt="" class="wp-image-69064" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-35-800x471.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-35-300x176.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-35-768x452.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-35-150x88.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-35-250x147.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-35.png 1156w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-As we have no pre-allocated range available (&#8216;None&#8217;) in this example, we&#8217;ll use &#8216;request&#8217;, after a short request phase, we get assigned a new prefix network from our IP Spaces definition and are told what this will be:<figure class="wp-block-image size-large">
+As we have no pre-allocated range available ('None') in this example, we'll use 'request', after a short request phase, we get assigned a new prefix network from our IP Spaces definition and are told what this will be:<figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="471" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-37-800x471.png" alt="" class="wp-image-69066" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-37-800x471.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-37-300x176.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-37-768x452.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-37-150x88.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-37-250x147.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-37.png 1156w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-The rest of the network creation workflow functions as previously using the &#8216;legacy&#8217; network model so there is no need to go through the rest of these steps.
+The rest of the network creation workflow functions as previously using the 'legacy' network model so there is no need to go through the rest of these steps.
 
 Note that IP Spaces will not permit the same network allocation (IP addresses or prefixes) to be used more than once within an OrgVDC. This can potentially break some use-cases.
 
-For example, as a tenant I may want to allocate a network to do DR testing which shares the same IP address space as my Production server network (although being disconnected from it &#8211; possibly in an isolated network). IP Spaces will not currently allow me to define a network for DR which conflicts/overlaps with my production address space. I&#8217;m not sure what VMware are intending to be used in this situation, but since VCD 10.4.1 is the first release of this capability I&#8217;m sure we will see consideration of these types of requirements in future revisions.
+For example, as a tenant I may want to allocate a network to do DR testing which shares the same IP address space as my Production server network (although being disconnected from it - possibly in an isolated network). IP Spaces will not currently allow me to define a network for DR which conflicts/overlaps with my production address space. I'm not sure what VMware are intending to be used in this situation, but since VCD 10.4.1 is the first release of this capability I'm sure we will see consideration of these types of requirements in future revisions.
 
 ### IP Spaces Compatibility (as at Dec 2022) {#ipspaces-compat.wp-block-heading}
 
-While testing out IP Spaces I also noticed incompatibilities with VMware Container Services Extension (CSE) 4.0 for Cloud Director. The core of the issue appears to be that CSE doesn&#8217;t know how to request IP address allocations from IP Spaces. Annoyingly right now this means that any CSE cluster deployment will fail in an IP Spaces environment unless:
+While testing out IP Spaces I also noticed incompatibilities with VMware Container Services Extension (CSE) 4.0 for Cloud Director. The core of the issue appears to be that CSE doesn't know how to request IP address allocations from IP Spaces. Annoyingly right now this means that any CSE cluster deployment will fail in an IP Spaces environment unless:
 
 <ul class="wp-block-list">
   <li>
     An IP address has been requested (but not allocated) from an accessible IP Space (private or public)
   </li>
   <li>
-    The obtained IP address is manually specified in the &#8216;Control Plan IP (Optional)&#8217; field when deploying a cluster:
+    The obtained IP address is manually specified in the 'Control Plan IP (Optional)' field when deploying a cluster:
   </li>
 </ul><figure class="wp-block-image size-large">
 
 <img loading="lazy" decoding="async" width="800" height="469" src="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-38-800x469.png" alt="" class="wp-image-69068" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/12/image-38-800x469.png 800w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-38-300x176.png 300w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-38-768x451.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-38-150x88.png 150w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-38-250x147.png 250w, https://kiwicloud.ninja/wp-content/uploads/2022/12/image-38.png 1154w" sizes="(max-width: 800px) 100vw, 800px" /> </figure> 
 
-This will allow the CSE cluster to deploy successfully, but attempts to provision new Kubernetes resources that use the LoadBalancer ingress type into the cluster will fail as CSE&#8217;s Cloud Director integration doesn&#8217;t understand how to request additional service IP addresses from IP Spaces.
+This will allow the CSE cluster to deploy successfully, but attempts to provision new Kubernetes resources that use the LoadBalancer ingress type into the cluster will fail as CSE's Cloud Director integration doesn't understand how to request additional service IP addresses from IP Spaces.
 
-This can probably be worked around by manually specifying ingress addresses for each deployed service, but is not really a graceful tenant experience. I&#8217;m sure that the VMware teams involved with CSE and VCD will come up with a way to fix this in subsequent versions.
+This can probably be worked around by manually specifying ingress addresses for each deployed service, but is not really a graceful tenant experience. I'm sure that the VMware teams involved with CSE and VCD will come up with a way to fix this in subsequent versions.
 
 ### Summary {#summary.wp-block-heading}
 
@@ -154,11 +154,11 @@ I also like the move to provide tenants with more capability over requesting (an
 
 If the wrinkles around how overlapping ranges can be handled more gracefully, and the interactions for other services such as Container Service Extension improved then I can see IP Spaces as being useful for most Service Providers in future.
 
-One other question remains about how VMware will help Service Providers migrate existing environments using the &#8216;legacy&#8217; IP allocation methods to and from IP Spaces as this is a significant task to perform manually and automation could really help to make this easier.
+One other question remains about how VMware will help Service Providers migrate existing environments using the 'legacy' IP allocation methods to and from IP Spaces as this is a significant task to perform manually and automation could really help to make this easier.
 
-In short &#8211; IP Spaces looks really promising and has a lot of capability in its first release with VCD 10.4.1, if VMware can keep developing it and iron out the wrinkles that current exist it will become a very welcome enhacement to VCD capabilities for both Service Providers and tenants.
+In short - IP Spaces looks really promising and has a lot of capability in its first release with VCD 10.4.1, if VMware can keep developing it and iron out the wrinkles that current exist it will become a very welcome enhacement to VCD capabilities for both Service Providers and tenants.
 
-As always, I hope you&#8217;ve found this series of posts useful and comments/feedback welcome in here or [@jondwaite][1] on Twitter.
+As always, I hope you've found this series of posts useful and comments/feedback welcome in here or [@jondwaite][1] on Twitter.
 
 Jon.
 

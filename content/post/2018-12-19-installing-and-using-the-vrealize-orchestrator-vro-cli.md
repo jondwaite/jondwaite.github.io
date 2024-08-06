@@ -81,11 +81,11 @@ The ‘Session name’ can be anything you like and can be used to reconnect to 
 
 Also note that the ‘Quit Session’ button will terminate your current session and you will not be able to reconnect to it, but closing the window using the close (X) icon in the top-left will keep the session running and allow re-attachment to the same session later.
 
-To use the CLI version, you can start the vcocli.bat file from a Windows command prompt and specify the &#8211;vco and &#8211;username switches to specify the vRO server:
+To use the CLI version, you can start the vcocli.bat file from a Windows command prompt and specify the -vco and -username switches to specify the vRO server:
 
 [<img loading="lazy" decoding="async" style="display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2018/12/image_thumb-10.png" alt="image" width="1019" height="156" border="0" />][13]
 
-If you want to see what sessions already exist and can be reconnected, you can open vRO client and browse under the ‘vCO CLI / Start Session’ in the tree, each running ‘Start Session’ token will show in the ‘Variables’ tab the session name for sessions which can be reconnected (using ‘Attach’ in the GUI or the &#8211;resume switch on the command line):
+If you want to see what sessions already exist and can be reconnected, you can open vRO client and browse under the ‘vCO CLI / Start Session’ in the tree, each running ‘Start Session’ token will show in the ‘Variables’ tab the session name for sessions which can be reconnected (using ‘Attach’ in the GUI or the -resume switch on the command line):
 
 [<img loading="lazy" decoding="async" style="display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2018/12/image_thumb-11.png" alt="image" width="644" height="396" border="0" />][14]
 
@@ -101,7 +101,7 @@ Now the Server.findForType function can be used when supplied with an object typ
 
 `var myTest03VM = Server.findForType('vCloud:VM','602d4ed77a4d20e9f854214a808ffcc2e878185e973d38446ad2bac2a623081////https://<my vCD server>/api/vApp/vm-98ae8d30-1090-4958-9061-f1a86590dc7b');`
 
-You can copy the value of the object by highlighting the &#8216;dunesId’ line in the object properties window and copy (Ctrl + C) and pasting (Ctrl + V) this into your command. (Note that this will also include the ‘dunesId’ text which will need to be removed).
+You can copy the value of the object by highlighting the 'dunesId’ line in the object properties window and copy (Ctrl + C) and pasting (Ctrl + V) this into your command. (Note that this will also include the ‘dunesId’ text which will need to be removed).
 
 This allows us to extract the output of the ‘toXml()’ method for our VM as follows:
 

@@ -16,13 +16,13 @@ tags:
   - VMware
 
 ---
-One of the issues I come up against every now and again is when a customer asks how they can automate some functionality in our VMware Cloud Director (VCD) cloud platform and I think &#8216;that should be easy in PowerShell / PowerCLI&#8217; only to find out that the necessary cmdlets to accomplish the activity aren&#8217;t present.
+One of the issues I come up against every now and again is when a customer asks how they can automate some functionality in our VMware Cloud Director (VCD) cloud platform and I think 'that should be easy in PowerShell / PowerCLI' only to find out that the necessary cmdlets to accomplish the activity aren't present.
 
 Such was this case where a customer needed a way to manage the internal hard disks attached to some of their virtual machines from code. While I typically use the awesome [Terraform provider for VCD][1] these days which can easily cope with this scenario, in this case there was a requirement to manage VM hard disks from within existing PowerShell scripts.
 
-So, as usual, I set about writing an extension module for PowerCLI to add this functionality. I also wanted to challenge myself to write some &#8216;better&#8217; PowerShell code that would do automatic detection of VCD API versions (and so work with future releases and API versions without having to be updated each time). I also wanted to handle XML from the VCD API &#8216;properly&#8217; &#8211; using the PowerShell XML methods, namespaces and properties and avoid simply &#8216;string bashing&#8217; XML fragments together.
+So, as usual, I set about writing an extension module for PowerCLI to add this functionality. I also wanted to challenge myself to write some 'better' PowerShell code that would do automatic detection of VCD API versions (and so work with future releases and API versions without having to be updated each time). I also wanted to handle XML from the VCD API 'properly' - using the PowerShell XML methods, namespaces and properties and avoid simply 'string bashing' XML fragments together.
 
-The result of all of this is a module I&#8217;ve published today on Github and in [PowerShell Gallery][2] &#8216;CIVMDisks&#8217;. I&#8217;ve written up reasonably comprehensive details and examples in the Github repository so rather than repeat all of that here I&#8217;ll just include a [link][3].
+The result of all of this is a module I've published today on Github and in [PowerShell Gallery][2] 'CIVMDisks'. I've written up reasonably comprehensive details and examples in the Github repository so rather than repeat all of that here I'll just include a [link][3].
 
 The module contains 4 cmdlets:
 

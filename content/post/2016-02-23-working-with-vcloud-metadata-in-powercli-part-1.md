@@ -11,16 +11,16 @@ tags:
   - VMware
 
 ---
-Way back in 2012 Alan Renouf created a PowerCLI module to deal with manipulation of metadata entries for vCloud Director objects &#8211; this can be incredibly useful to track related information for these objects. The vCD metadata functionality was enhanced in v5.1 (and then later in 5.5, 5.6 and 8.0) &#8211; in particular typed values were added with functionality to use date/time, boolean and numeric values (as well as free-form string text). Also added were security levels so that metadata could be made read-only or hidden (from a tenant perspective) but still accessible/visible to system owners. I&#8217;ve taken the PowerShell module that Alan published <a href="https://blogs.vmware.com/PowerCLI/2012/03/working-with-vcloud-metadata-in-powercli.html" target="_blank">here</a> and updated it to cope with these enhancements. I&#8217;ve also updated the returned fields/views to include the extra attributes (where present) such as security levels of metadata entries.
+Way back in 2012 Alan Renouf created a PowerCLI module to deal with manipulation of metadata entries for vCloud Director objects - this can be incredibly useful to track related information for these objects. The vCD metadata functionality was enhanced in v5.1 (and then later in 5.5, 5.6 and 8.0) - in particular typed values were added with functionality to use date/time, boolean and numeric values (as well as free-form string text). Also added were security levels so that metadata could be made read-only or hidden (from a tenant perspective) but still accessible/visible to system owners. I've taken the PowerShell module that Alan published <a href="https://blogs.vmware.com/PowerCLI/2012/03/working-with-vcloud-metadata-in-powercli.html" target="_blank">here</a> and updated it to cope with these enhancements. I've also updated the returned fields/views to include the extra attributes (where present) such as security levels of metadata entries.
 
-Note that I am definitely not a professional developer (and most of my PowerShell knowledge comes from Google) so there&#8217;s probably significant room for improvement in the code &#8211; comment back if you have suggestions for improvement and I&#8217;ll update this post.
+Note that I am definitely not a professional developer (and most of my PowerShell knowledge comes from Google) so there's probably significant room for improvement in the code - comment back if you have suggestions for improvement and I'll update this post.
 
-Use of the module requires a valid connection to a vCloud instance (using Connect-CIServer). This won&#8217;t work for versions prior to v5.1 (most of my testing has been with PowerCLI 6 against a v8 vCD deployment) so please use at your own risk and make sure you thoroughly test your own scenarios. I&#8217;ll write a follow-up post detailing some example code and usage scenarios which people may find useful in the next few days.
+Use of the module requires a valid connection to a vCloud instance (using Connect-CIServer). This won't work for versions prior to v5.1 (most of my testing has been with PowerCLI 6 against a v8 vCD deployment) so please use at your own risk and make sure you thoroughly test your own scenarios. I'll write a follow-up post detailing some example code and usage scenarios which people may find useful in the next few days.
 
-I&#8217;d suggest copy/pasting the code (below) into a PowerShell module (.psm1) file and including the module in your scripts as needed.
+I'd suggest copy/pasting the code (below) into a PowerShell module (.psm1) file and including the module in your scripts as needed.
 
 <pre class="lang:ps decode:true " title="vCloud PowerShell Module">Function New-CIMetaData { 
-    &lt;# 
+    <# 
     .SYNOPSIS 
         Creates a Metadata Key/Value pair. 
     .DESCRIPTION 
@@ -54,7 +54,7 @@ I&#8217;d suggest copy/pasting the code (below) into a PowerShell module (.psm1)
         LASTEDIT: 2016-02-23
         KEYWORDS: metadata set vcloud director
     #Requires -Version 2.0
-    #&gt; 
+    #> 
      [CmdletBinding( 
          SupportsShouldProcess=$true, 
         ConfirmImpact="High" 
@@ -114,7 +114,7 @@ I&#8217;d suggest copy/pasting the code (below) into a PowerShell module (.psm1)
     } 
 } 
 Function Get-CIMetaData {
-    &lt;#
+    <#
     .SYNOPSIS
         Retrieves all Metadata Key/Value pairs.
     .DESCRIPTION
@@ -125,7 +125,7 @@ Function Get-CIMetaData {
         The key to retrieve.
     .EXAMPLE
         Get-CIMetadata -CIObject (Get-Org Org1)
-    #&gt;
+    #>
     param(
         [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
             [PSObject[]]$CIObject,
@@ -148,7 +148,7 @@ Function Get-CIMetaData {
     }
 }
 Function Remove-CIMetaData {
-    &lt;#
+    <#
     .SYNOPSIS
         Removes a Metadata Key/Value pair.
     .DESCRIPTION
@@ -159,7 +159,7 @@ Function Remove-CIMetaData {
         The object on which to remove the Metadata.
     .EXAMPLE
         Remove-CIMetaData -CIObject (Get-Org Org1) -Key "Owner"
-    #&gt;
+    #>
      [CmdletBinding(
          SupportsShouldProcess=$true,
         ConfirmImpact="High"
