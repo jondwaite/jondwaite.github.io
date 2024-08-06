@@ -4,28 +4,29 @@
   weight = -110
 
 [[main]]
-  name = "Archives"
-  url = "post/rich-content/"
-  weight = -109
+  name = "vCloud Director"
+  url = "categories/vcloud-director"
+  weight = -100
 
-# Submenus are done this way: parent -> identifier
 [[main]]
-  name = "Links"
-  identifier = "Links"
-  weight = -108
+  name = "PowerShell"
+  url = "categories/powershell"
+  weight = -90
+
 [[main]]
-  parent = "Links"
-  name = "LinkedIn"
-  url = "https://www.linkedin.com/"
+  name = "PowerCLI"
+  url = "categories/powercli"
+  weight = -80
+
 [[main]]
-  parent = "Links"
-  name = "Twitter"
-  url = "https://twitter.com/"
+  name = "vCloud Availability"
+  url = "categories/vcloud-availability"
+  weight = -70
 
 [[main]]
   name = "About"
   url = "about/"
-  weight = -107
+  weight = -50
 
 # social menu links
 
@@ -33,30 +34,16 @@
   name = "github"
   type = "social"
   weight = 1
-  url = "https://github.com/#"
+  url = "https://github.com/jondwaite"
 [[social]]
   name = "twitter"
   weight = 2
-  url = "https://twitter.com/#"
+  url = "https://twitter.com/jondwaite"
 [[social]]
   name = "linkedin"
   weight = 3
-  url = "https://www.linkedin.com/in/#"
+  url = "https://www.linkedin.com/in/jondwaite"
 [[social]]
   name = "rss"
   weight = 4
   url = "index.xml"
-
-# other supported social links
-# name = "youtube"
-# url = "https://www.youtube.com/#"
-# name = "facebook"
-# url = "https://facebook.com/#"
-# name = "instagram"
-# url = "https://instagram.com/#"
-# name = "stackoverflow"
-# url = "https://stackoverflow.com/#"
-# name = "gitlab"
-# url = "https://gitlab.com/#"
-# name = "discord"
-# url = "https://discord.gg/#"
