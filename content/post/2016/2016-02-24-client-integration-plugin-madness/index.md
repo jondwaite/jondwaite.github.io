@@ -21,76 +21,12 @@ Meanwhile in this world, although the package names are identical, the functiona
 
 So how do you tell the two packages apart? In the current releases of vSphere 6.0Update1 and vCloud Director v8.0 the packages are significantly different sizes:
 
-<table>
-  <tr>
-    <td>
-    </td>
-    
-    <td>
-      <strong>vCloud Director 8</strong>
-    </td>
-    
-    <td>
-      <strong>vSphere 6.0 Update 1</strong>
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      Package Filename
-    </td>
-    
-    <td>
-      VMware-ClientIntegrationPlugin-6.0.0.exe
-    </td>
-    
-    <td>
-      VMware-ClientIntegrationPlugin-6.0.0.exe
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      File Version
-    </td>
-    
-    <td>
-      11.0.0.2826
-    </td>
-    
-    <td>
-      10.0.0.3637
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      Product Version
-    </td>
-    
-    <td>
-      6.0.0.2826
-    </td>
-    
-    <td>
-      6.0.0.3637
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      File Size
-    </td>
-    
-    <td>
-      48.8 MB
-    </td>
-    
-    <td>
-      94.9 MB
-    </td>
-  </tr>
-</table>
+|    |vCloud Director 8|vSphere 6.0 Update 1|
+|---|---|---|
+|Package Filename|VMware-ClientIntegrationPlugin-6.0.0.exe|VMware-ClientIntegrationPlugin-6.0.0.exe|
+|File Version|11.0.0.2826|10.0.0.3637|
+|Product Version|6.0.0.2826|6.0.0.3637|
+|File Size|48.8 MB|94.9 MB|
 
 So the easiest way to tell is the smaller 48.8 MB file is vCD and the larger 94.9 MB one is vSphere.
 
@@ -98,5 +34,6 @@ If (as I do) you often need to use both versions then maybe consider setting up 
 
 Hopefully VMware will fix this in a future release and provide a single integration plugin that works across both products.
 
-**Update - 18th March 2016  
-** VMware have just released vCloud Director for Service Providers v8.0.1 (<a href="http://pubs.vmware.com/Release_Notes/en/vcd/801/rel_notes_vcloud_director_801.html" target="_blank">http://pubs.vmware.com/Release_Notes/en/vcd/801/rel_notes_vcloud_director_801.html</a>) which appears to have reverted the vCD Client Integration product to version 5.6.0 - there is also mention in the release notes on the possible clashes between vSphere and vCD client integration toolsets so it appears that VMware are at least aware of the issue.
+**Update - 18th March 2016**
+
+VMware have just released vCloud Director for Service Providers v8.0.1 (<a href="http://pubs.vmware.com/Release_Notes/en/vcd/801/rel_notes_vcloud_director_801.html" target="_blank">http://pubs.vmware.com/Release_Notes/en/vcd/801/rel_notes_vcloud_director_801.html</a>) which appears to have reverted the vCD Client Integration product to version 5.6.0 - there is also mention in the release notes on the possible clashes between vSphere and vCD client integration toolsets so it appears that VMware are at least aware of the issue.

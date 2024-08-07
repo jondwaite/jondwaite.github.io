@@ -37,7 +37,10 @@ The script is shown below - hopefully this will be useful for some of you, just 
 
 Jon.
 
-<pre class="lang:default decode:true " title="Upload and run ESXi CLI against each host in a vCenter"># Script to run VMware vsipioctl utility against all VMs / all hosts
+Upload and run ESXi CLI against each host in a vCenter
+
+```powershell
+# Script to run VMware vsipioctl utility against all VMs / all hosts
 # NOTE: Requires darkoperator PoshSSH for PowerShell
 #
 # To install PoshSSH:
@@ -153,14 +156,7 @@ Get-VMHost | Foreach {
 } # Foreach VMHost
 
 $table | Format-Table -AutoSize
-$table | Export-Csv $csvOut</pre>
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
+$table | Export-Csv $csvOut
+```
 
  [1]: https://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=2146171

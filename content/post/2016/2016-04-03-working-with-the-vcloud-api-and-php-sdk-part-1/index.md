@@ -91,9 +91,11 @@ To install the 'HTTP_Request2' and 'Log' modules from a Windows Command prompt t
 
 The mbstring (multibyte) extension is usually present (in the 'ext' subdirectory of your PHP installation) as 'php_mbstring.dll' on Windows, but not enabled by default. The same is true for the openssl extension. To enable these extensions edit your php.ini file and find the lines:
 
-`;extension=php_mbstring.dll<br />
-:::<br />
-;extension=php_openssl.dll`
+```ini
+;extension=php_mbstring.dll
+:::
+;extension=php_openssl.dll
+```
 
 And remove the leading semi-colons (;) then save the file. You can test whether the modules are loaded correctly by typing 'php -m' and checking that 'mbstring' and 'openssl' are listed in the output in the [PHP Modules] section.
 
@@ -103,44 +105,52 @@ The PHP SDK itself can be extracted to any convenient folder - on Linux I'd sugg
 
 # Configuration.ini (pear/Log configuration file)
 
-The Vmware documentation makes no mention of it, but the 'ServiceAbstract.php' file included in the library file (/library/VMware/VCloud/ServiceAbstract.php) relies on both the Pear Log module (which we installed) and a text file 'Configuration.ini' which is read at various points in the file to determine logging options for API interactions.
+The Vmware documentation makes no mention of it, but the 'ServiceAbstract.php' file included in the library file (/library/VMware/VCloud/ServiceAbstract.php) relies on both the Pear Log module (which we installed) and a text file `Configuration.ini` which is read at various points in the file to determine logging options for API interactions.
 
-This is very useful (once you know about it), but the file itself is not supplied with the PHP SDK download and must be manually created. To do this, create a new text file in the folder where you will be working with the SDK (e.g. C:\PHPSDK) named 'Configuration.ini' and specify the contents as:
+This is very useful (once you know about it), but the file itself is not supplied with the PHP SDK download and must be manually created. To do this, create a new text file in the folder where you will be working with the SDK (e.g. `C:\PHPSDK`) named `Configuration.ini` and specify the contents as:
 
-`[log_section]<br />
-` `log_handler_name=file<br />
-` `log_file_location=phpsdk.log<br />
-` `log_level=PEAR_LOG_DEBUG`
+```ini
+[log_section]
+log_handler_name=file
+log_file_location=phpsdk.log
+log_level=PEAR_LOG_DEBUG
+```
 
 This will log all API interactions to a text file (phpsdk.log) in the current directory and is incredibly useful for troubleshooting - you can control the verbosity of the logging by changing the log_level parameter (as well as the log filename and type using the other options). For full documentation on available options and values see the <a href="http://pear.github.io/Log/" target="_blank">Pear Log documentation</a>.
 
 # config.ini (VMware PHP SDK configuration file)
 
-The last piece of configuration required is to copy the file 'config.ini' from the PHP SDK 'samples' folder into the location where you will be developing your PHP code. You should edit the copied file and ensure that the section that reads:
+The last piece of configuration required is to copy the file `config.ini` from the PHP SDK `samples` folder into the location where you will be developing your PHP code. You should edit the copied file and ensure that the section that reads:
 
-`set_include_path(implode(PATH_SEPARATOR, array('.','../library',get_include_path(),)));`
+```ini
+set_include_path(implode(PATH_SEPARATOR, array('.','../library',get_include_path(),)));
+```
 
 Is updated to refer to the location where your PHP SDK 'library' folder exists. For example, on Windows if the PHP SDK is extracted to C:\PHPSDK then this line should be updated to read:
 
-`set_include_path(implode(PATH_SEPARATOR, array('.','C:\PHPSDK\library',get_include_path(),)));`
+```ini
+set_include_path(implode(PATH_SEPARATOR, array('.','C:\PHPSDK\library',get_include_path(),)));
+```
 
 To check whether everything is working, try creating a file 'test.php' in the root of your working directory (where you've edited config.php and saved Configuration.ini)
 
-`<?php<br />
-` `  include './config.php';<br />
-` `?>`
+```php
+<?php
+include './config.php';
+?>
+```
 
 If you've configured everything correctly then running this from a command prompt `php test.php` should return with no output or errors.
 
-**Note:** If you are using PHP 7 on Windows you may get a warning from the Log.php file included by the SDK which looks similar to:
+> **Note:** If you are using PHP 7 on Windows you may get a warning from the Log.php file included by the SDK which looks similar to:
 
 `PHP Deprecated: Methods with the same name as their class will not be constructors in a future version of PHP; Log has a deprecated constructor in C:\PHP\pear\Log.php on line 38`
 
-This is harmless and safe to ignore, but if it annoys you and you want to prevent it being displayed you can add a new line to the Log.php file specified in the warning message as below just prior to the 'public static function factory($handler, $name = &#8221;, $ident = &#8221;,&#8230;) line:
+This is harmless and safe to ignore, but if it annoys you and you want to prevent it being displayed you can add a new line to the Log.php file specified in the warning message as below just prior to the `public static function factory($handler, $name = '', $ident = '',...)` line:
 
 `public function __construct(){}`
 
-You will proabbly also need to add this line after the 'class' definition in the pear/Log/file.php file.
+You will proabbly also need to add this line after the `class` definition in the `pear/Log/file.php` file.
 
 In the next parts of this series I'll be using this environment to show you how to achieve some useful interactions with a vCloud platform using the Perl SDK, I'll update this post with links once these are posted. As always, please leave any feedback in the comments, I try to answer as much as I can.
 

@@ -36,7 +36,8 @@ Jon.
 
 Example Session Transcript:
 
-<pre class="font-size:12 plain:true lang:ps decode:true ">PowerCLI C:\> liveimport.ps1
+```
+PowerCLI C:\> liveimport.ps1
 Connected to vCloud Director OK
 vCenter(s) Found:
 -----------------
@@ -64,10 +65,10 @@ URI for POST operation:
 https://vcd01.dev.local/api/admin/extension/vimServer/158f73ec-a999-4332-8250-f4dd5e6c4971/importVmAsVApp
 
 XML Document Body:
-<?xml version="1.0" encoding="UTF-8"?>
+<xml version="1.0" encoding="UTF-8">
 <ImportVmAsVAppParams xmlns="http://www.vmware.com/vcloud/extension/v1.5" name="testvm01" sourceMove="true">
- <VmMoRef>vm-111</VmMoRef>
- <Vdc href="https://vcd01.dev.local/api/admin/vdc/b21c92fa-1a6f-42a9-8c1e-ef0947c7be76" />
+  <VmMoRef>vm-111</VmMoRef>
+  <Vdc href="https://vcd01.dev.local/api/admin/vdc/b21c92fa-1a6f-42a9-8c1e-ef0947c7be76" />
 </ImportVmAsVAppParams>
 
 Content-Type: application/vnd.vmware.admin.importVmAsVAppParams+xml
@@ -75,7 +76,7 @@ Content-Type: application/vnd.vmware.admin.importVmAsVAppParams+xml
 Would you like to submit this API request to live import this VM? (y or n) (or quit to exit): y
 Making request to live import VM testvm01...
 Response was:
-<?xml version="1.0" encoding="UTF-8"?>
+<xml version="1.0" encoding="UTF-8">
 <VApp xmlns="http://www.vmware.com/vcloud/v1.5" ovfDescriptorUploaded="true" deployed="false" status="0" name="testvm01" id="urn:vcloud:vapp:ff1a9021-2c21-4378-99c7-b77bdaf3e9e6" href="https://vcd01.ndev.local/api/vApp/vapp-ff1a9021-2c21-4378-99c7-b77bdaf3e9e6" type="application/vnd.vmware.vcloud.vApp+xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vmware.com/vcloud/v1.5 http://vcd01.dev.local/api/v1.5/schema/master.xsd">
  <Link rel="down" href="https://vcd01.dev.local/api/network/251f72a8-19b5-4e7d-94ba-0523ee919cd9" name="VM Network" type="application/vnd.vmware.vcloud.vAppNetwork+xml" />
  <Link rel="down" href="https://vcd01.dev.local/api/vApp/vapp-ff1a9021-2c21-4378-99c7-b77bdaf3e9e6/controlAccess/" type="application/vnd.vmware.vcloud.controlAccess+xml" />
@@ -99,8 +100,7 @@ operationName="importSingletonVapp" serviceNamespace="com.vmware.vcloud" startTi
  <User href="https://vcd01.dev.local/api/admin/user/1545cb33-9151-43e2-a156-9d20e3b966c0" name="system" type="application/vnd.vmware.admin.user+xml" />
  </Owner>
  <InMaintenanceMode>false</InMaintenanceMode>
-</VApp></pre>
-
-&nbsp;
+</VApp>
+```
 
  [1]: https://fojta.wordpress.com/2016/05/27/import-running-vm-to-vcloud-director/

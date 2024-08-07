@@ -56,15 +56,17 @@ Once the VM is up and running from the TP2 CloudBuilder vhdx image, make the fol
 
 Line 376:  
 Change:  
-<span class="lang:default decode:true crayon-inline ">$physicalMachine.IsVirtualMachine | Should Be $false</span>  
+`$physicalMachine.IsVirtualMachine | Should Be $false`
+
 To:  
-<span class="lang:default decode:true crayon-inline ">$false | Should Be $false</span>
+`$false | Should Be $false`
 
 Line 453:  
 Change:  
-<span class="lang:default decode:true crayon-inline">($physicalMachine.Processors.NumberOfEnabledCores | Measure-Object -Sum).Sum | Should Not BeLessThan $minimumNumberOfCoresPerMachine</span>  
+`($physicalMachine.Processors.NumberOfEnabledCores | Measure-Object -Sum).Sum | Should Not BeLessThan $minimumNumberOfCoresPerMachine`
+
 To:  
-<span class="lang:default decode:true crayon-inline">12 | Should Not BeLessThan $minimumNumberOfCoresPerMachine</span>
+`12 | Should Not BeLessThan $minimumNumberOfCoresPerMachine`
 
 Then save the file. (The second change should not be necessary if you’ve built the VM with at least 12 cores, but the installation script appears to detect the number of physical cores as ‘0’ in a VM so this is required).
 

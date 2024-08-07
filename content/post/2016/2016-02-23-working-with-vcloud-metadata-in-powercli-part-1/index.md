@@ -4,6 +4,7 @@ author: Jon Waite
 type: post
 date: 2016-02-23T10:43:57+00:00
 url: /2016/02/working-with-vcloud-metadata-in-powercli-part-1/
+series: Working with vCloud Metadata in PowerCLI
 categories:
   - PowerShell
 tags:
@@ -19,7 +20,8 @@ Use of the module requires a valid connection to a vCloud instance (using Connec
 
 I'd suggest copy/pasting the code (below) into a PowerShell module (.psm1) file and including the module in your scripts as needed.
 
-<pre class="lang:ps decode:true " title="vCloud PowerShell Module">Function New-CIMetaData { 
+```powershell
+Function New-CIMetaData { 
     <# 
     .SYNOPSIS 
         Creates a Metadata Key/Value pair. 
@@ -175,6 +177,5 @@ Function Remove-CIMetaData {
             If($metadataValue) { $metadataValue.Delete() }
         }
     }
-}</pre>
-
-&nbsp;
+}
+```
