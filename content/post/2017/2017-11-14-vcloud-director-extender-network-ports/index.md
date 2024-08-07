@@ -4,6 +4,7 @@ author: Jon Waite
 type: post
 date: 2017-11-14T01:08:14+00:00
 url: /2017/11/vcloud-director-extender-network-ports/
+series: vCloud Director Extender
 categories:
   - Firewall
   - Networking

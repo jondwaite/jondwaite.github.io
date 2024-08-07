@@ -4,6 +4,7 @@ author: Jon Waite
 type: post
 date: 2017-10-22T23:29:08+00:00
 url: /2017/10/vcloud-director-extender-part-1-overview/
+series: vCloud Director Extender
 categories:
   - vCloud Director
   - vCloud Director Extender
@@ -33,7 +34,7 @@ The environment that I will be describing and building through this series is sh
 
 Since I built this environment using 'real' public Internet addresses and VMware NSX edge gateways as the firewalls for both Tyrell and MyCloud, I have stripped the public IP addresses from the configurations shown in these articles, but it should be easy to see where these are substituted.
 
-<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-248" src="https://kiwicloud.ninja/wp-content/uploads/2017/10/CX-Overview.png" alt="" width="1068" height="366" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/10/CX-Overview.png 1068w, https://kiwicloud.ninja/wp-content/uploads/2017/10/CX-Overview-300x103.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/10/CX-Overview-768x263.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/10/CX-Overview-1024x351.png 1024w, https://kiwicloud.ninja/wp-content/uploads/2017/10/CX-Overview-250x86.png 250w, https://kiwicloud.ninja/wp-content/uploads/2017/10/CX-Overview-150x51.png 150w" sizes="(max-width: 1068px) 100vw, 1068px" /> 
+![](CX-Overview.png)
 
 I'm expecting this series to consist of 6 parts eventually including this introduction:
 
@@ -42,7 +43,6 @@ Part 1 - This overview
 [Part 3 - Customer / Tenant installation and configuration (Tyrell)][3]  
 [Part 4 - Customer / Tenant connecting to a Cloud Provider and Virtual Machine migration (Tyrell)][4]  
 [Part 5 - Stretched networking (L2VPN) configurations][5]  
-Part 6 - Troubleshooting
 
 I'm still working on the later parts of this series so check back if I haven't published all of them yet.
 
@@ -53,7 +53,7 @@ As always, corrections, comments and feedback are always appreciated.
 Jon.
 
  [1]: https://docs.vmware.com/en/vCloud-Director-Extender/index.html
- [2]: http://152.67.105.113/2017/10/vcloud-director-extender-part-2-cloud-provider-setup/
- [3]: http://152.67.105.113/2017/10/vcloud-director-extender-part-3-tenant-setup/
- [4]: http://152.67.105.113/2017/10/vcloud-director-extender-part-4-connect-to-provider-vm-migration/
- [5]: http://152.67.105.113/2017/11/vcloud-director-extender-part-5-stretch-networking-l2vpn/
+ [2]: /2017/10/vcloud-director-extender-part-2-cloud-provider-setup/
+ [3]: /2017/10/vcloud-director-extender-part-3-tenant-setup/
+ [4]: /2017/10/vcloud-director-extender-part-4-connect-to-provider-vm-migration/
+ [5]: /2017/11/vcloud-director-extender-part-5-stretch-networking-l2vpn/

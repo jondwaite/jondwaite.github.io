@@ -20,19 +20,20 @@ One of the key changes in vCloud Director 8.20 and 8.20.1 from 8.10 is the Advan
 
 Here is what the available rights looks like prior to the change being made - note there is no 'Gateway Advanced Services' section at all:
 
-<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-170" src="https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-before.png" alt="" width="505" height="700" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-before.png 505w, https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-before-216x300.png 216w, https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-before-108x150.png 108w" sizes="(max-width: 505px) 100vw, 505px" /> 
+![Edge Gateway rights prior to change](edgerights-before.png)
 
 Since manually modifying the OrgRights XML is time-consuming and a bit prone to error, I set about writing a PowerCLI script to make the change automatically for a given organisation. Note that this change does not alter the defined roles for an organisation, it simply adds the new Edge Gateway permissions as available entities which can then be selectively added to roles.
 
 Once the script has been run for an organisation, editing the properties of a role allows the new Gateway Advanced Services entities to be selected for that role:
 
-<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-169" src="https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-after.png" alt="" width="503" height="699" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-after.png 503w, https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-after-216x300.png 216w, https://kiwicloud.ninja/wp-content/uploads/2017/08/edgerights-after-108x150.png 108w" sizes="(max-width: 503px) 100vw, 503px" /> 
+![Edge Gateway rights after the change](edgerights-after.png)
 
 The script is included below, as always I welcome any thoughts/comments/feedback.
 
 Jon
 
-<pre class="lang:ps font-size:10 decode:true width-mode:1 width:1024 " title="Update Edge Role Permissions for an Organization"># Script to add new OrgRights options for administering advanced Edge Gateway to a vCloud Director organisation.
+```powershell
+# Script to add new OrgRights options for administering advanced Edge Gateway to a vCloud Director organisation.
 # Note that Organisation roles (e.g. Organizational Administrator) still need to be edited to add these rights once
 # this script has been run against their org.
 # NOTE: You must be connected to the vCloud API (Connect-CIServer) with a System administrative user prior to running the script for this to work.
@@ -121,4 +122,5 @@ $rights.OrgRights.AppendChild($newright)
 }
 
 # Update the Organization with the ammended rights:
-vCloud-REST -URI $rightsuri -ContentType 'application/vnd.vmware.admin.org.rights+xml' -Body $rights.InnerXml -Method 'Put' -ApiVersion '27.0'</pre>
+vCloud-REST -URI $rightsuri -ContentType 'application/vnd.vmware.admin.org.rights+xml' -Body $rights.InnerXml -Method 'Put' -ApiVersion '27.0'
+```

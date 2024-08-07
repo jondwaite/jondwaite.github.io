@@ -24,77 +24,15 @@ PowerShell has a built-in 'Invoke-RestMethod' call which submits a REST request 
 
 Typically to call the API we need to provide the following:
 
-<table>
-  <tr>
-    <td>
-      URI
-    </td>
-    
-    <td>
-      The URI (Uniform Resource Identifier) for the API call (typically of the form https://my.cloud.com/api/requestpath).
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      Method
-    </td>
-    
-    <td>
-      This is simply which HTML method we are invoking from the common HTML verbs ('GET','PUT','POST','DELETE') - the fifth verb ('PATCH') doesn't appear to be used much (if at all) in the vCloud API, but could be specified if required. We can also assume a sensible/safe default value of 'GET' since that will only read from the API and not change anything.
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      Authorization
-    </td>
-    
-    <td>
-      Provided as an HTML Header using the x-vcloud-authorization tag and a previously existing session ID. We could supply the session ID as part of the call, but it's usually much more convenient to attempt to match the request URI against PowerShell's existing global view of connected vCD API endpoints and use the existing session ID available from here.
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      Accept
-    </td>
-    
-    <td>
-      Provided as part of the HTML header, this tag specifies the type of information we are prepared to accept back from the API, this will usually be set to 'application/*+xml' but we also need to specify which version of the API we wish to use - in vCloud Director 8.20 this is version 27.0 so the complete Accept token will be 'application/*+xml;version=27.0'. We can provide a sensible default value for this in our module so that if it is ommitted we still get a sensible version specification.
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      ContentType
-    </td>
-    
-    <td>
-      When we are sending data to the API with a PUT or POST request, we need to specify the type of document we are sending using the ContentType header, for GET requests this isn't required.
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      Body
-    </td>
-    
-    <td>
-      When sending data to the API, this will be the (usually XML formatted) document body.
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      Timeout
-    </td>
-    
-    <td>
-      Some API operations can take a while to complete, specifying a timeout value allows our script to carry on or raise an error if an API call is taking an excessively long time.
-    </td>
-  </tr>
-</table>
+|Item|Description|
+|---|---|
+|URI|The URI (Uniform Resource Identifier) for the API call (typically of the form https://my.cloud.com/api/requestpath).|
+|Method|This is simply which HTML method we are invoking from the common HTML verbs ('GET','PUT','POST','DELETE') - the fifth verb ('PATCH') doesn't appear to be used much (if at all) in the vCloud API, but could be specified if required. We can also assume a sensible/safe default value of 'GET' since that will only read from the API and not change anything.|
+|Authorization|Provided as an HTML Header using the x-vcloud-authorization tag and a previously existing session ID. We could supply the session ID as part of the call, but it's usually much more convenient to attempt to match the request URI against PowerShell's existing global view of connected vCD API endpoints and use the existing session ID available from here.|
+|Accept|Provided as part of the HTML header, this tag specifies the type of information we are prepared to accept back from the API, this will usually be set to 'application/*+xml' but we also need to specify which version of the API we wish to use - in vCloud Director 8.20 this is version 27.0 so the complete Accept token will be 'application/\*+xml;version=27.0'. We can provide a sensible default value for this in our module so that if it is ommitted we still get a sensible version specification.|
+|ContentType|When we are sending data to the API with a PUT or POST request, we need to specify the type of document we are sending using the ContentType header, for GET requests this isn't required.|
+|Body|When sending data to the API, this will be the (usually XML formatted) document body.|
+|Timeout|Some API operations can take a while to complete, specifying a timeout value allows our script to carry on or raise an error if an API call is taking an excessively long time.|
 
 In addition to these, I've also included a flag 'WaitforTask' which can either be true or false. If set to 'true' and if the result of the API call is a 'Task' object reference then the script will monitor the task and wait until it has completed (or timeout exceeded) and then return the task status to our script. This can be useful for operations that can take considerable time when it doesn't make sense for your script to continue until the previous action has been completed - e.g. cloning a new vApp and then modifying it's network settings.
 
@@ -102,29 +40,38 @@ I was keen to explore using [Microsoft's PowerShell Gallery][2] as a mechanism t
 
 So I'm pleased to announce that the initial release version of my [Invoke-vCloud][3] module is now available from the PowerShell Gallery and can be included in any scripts using:
 
-`Install-Module -Name Invoke-vCloud -Scope CurrentUser`
+```
+Install-Module -Name Invoke-vCloud -Scope CurrentUser
+```
 
 It can also be downloaded/inspected using:
 
-`Save-Module -Name Invoke-vCloud -Path <path>`
+```
+Save-Module -Name Invoke-vCloud -Path <path>
+```
 
 Of course if running an administrative PowerShell instance it can also be installed for all users on the system using:
 
-`Install-Module -Name Invoke-vCloud`
+```
+Install-Module -Name Invoke-vCloud
+```
 
 Once installed, it can be used in your scripts by specifying the required URI parameter and any optional specifications:
 
-<pre class="font-size-enable:false lang:ps highlight:0 decode:true">PS C:\> Invoke-vCloud -URI https://my.cloud.com/api/org
+```
+PS C:\> Invoke-vCloud -URI https://my.cloud.com/api/org
 
 xml OrgList
 --- -------
-version="1.0" encoding="UTF-8" OrgList</pre>
+version="1.0" encoding="UTF-8" OrgList
+```
 
 You will either need to have an existing PowerCLI vCloud session (Connect-CIServer), or have an x-vcloud-authorization token for a valid/authenticated session which you can pass to Invoke-vCloud using the -vCloudToken parameter.
 
 I've included parameter descriptions in the module to assist which can be viewed using the Get-Help cmdlet:
 
-<pre class="font-size-enable:false lang:ps highlight:0 decode:true">PS C:\> Get-Help Invoke-vCloud -detailed
+```
+PS C:\> Get-Help Invoke-vCloud -detailed
 
 NAME
     Invoke-vCloud
@@ -176,7 +123,9 @@ PARAMETERS
         An alternative method of passing a session token to Invoke-vCloud if there is
         no current PowerCLI session established to a vCloud endpoint. The session must
         have already been established and be still valid (not timed-out). The value
-        supplied is copied to the 'x-vcloud-authorization' header value in API calls.</pre>
+        supplied is copied to the 'x-vcloud-authorization' header value in API calls.
+```
+
 
 I have some new scripts in development against some of the new features in the recently announced [vCloud Director v9][4] which I'm intending to use this module for and will post as soon as v9 is released.
 
@@ -184,7 +133,7 @@ As always I welcome any comments and suggestions for improving this module.
 
 Jon.
 
- [1]: http://152.67.105.113/2017/02/independent-disks-in-vcloud-via-powercli/
+ [1]: /2017/02/independent-disks-in-vcloud-via-powercli/
  [2]: https://www.powershellgallery.com/
  [3]: https://www.powershellgallery.com/packages/Invoke-vCloud/1.0.0
  [4]: https://blogs.vmware.com/vcloud/2017/08/vmware-announces-new-vcloud-director-9-0.html

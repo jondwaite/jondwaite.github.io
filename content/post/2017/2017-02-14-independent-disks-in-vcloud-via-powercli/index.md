@@ -15,13 +15,13 @@ tags:
   - vCloud Director
 
 ---
-Another day, another customer requirement which I figured 'this will be easy' and turned out not to be quite so easy&#8230;
+Another day, another customer requirement which I figured 'this will be easy' and turned out not to be quite so easy...
 
 The customer in question is a tenant on our cloud platform and has built a VM to be their offline root Certificate Authority (CA). In line with their security practice, this VM has no network connectivity and is usually powered-off in their environment unless specifically required to issue or renew certificates.
 
 They asked if there was an easy way to transfer certificate files issued by this VM to other servers in their infrastructure. In their (old) vSphere environment they would simply attach a new temporary virtual disk to the VM, copy the certificate files over and then attach the disk to the destination VM. Surely there had to be some similar functionality in vCloud Director?
 
-Well, there's a bit of good and bad news on that&#8230;
+Well, there's a bit of good and bad news on that...
 
 By default disks in vCloud Director are assigned (permanently) to a VM, they can't be moved to different VMs. (That's the bad news). The good news is that vCD supports 'independent disks' which can be moved between VMs. The bad news is that this is an API-only operation (nothing in the web UI allows creation or manipulation of Independent disks, although you can see them if they exist). The worst news is that VMware PowerCLI even in the latest 6.5R1 version doesn't have any cmdlets to manipulate independent disks attached to vCloud VMs either.
 
@@ -37,4 +37,4 @@ As always I appreciate any/all feedback and hope someone else finds these useful
 
 Jon
 
- [1]: http://152.67.105.113/2017/02/using-independent-disks-in-vcloud/
+ [1]: /2017/02/using-independent-disks-in-vcloud/

@@ -4,6 +4,7 @@ author: Jon Waite
 type: post
 date: 2017-11-25T04:16:12+00:00
 url: /2017/11/vcloud-director-extender-part-5-stretch-networking-l2vpn/
+series: vCloud Director Extender
 categories:
   - Networking
   - vCloud Director

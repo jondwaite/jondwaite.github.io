@@ -45,51 +45,17 @@ Once you've downloaded the vCDSitePair.psm1 file from github you can add it to y
 
 There are a total of 4 functions provided by the module, and they are documented on the github repository but basically:
 
-<table>
-  <tr>
-    <td>
-      Get-vCloudSiteName
-    </td>
-    
-    <td>
-      Allows a service provider to check/confirm the 'Site Name' assigned to a vCloud Director instance.
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      Set-vCloudSiteName
-    </td>
-    
-    <td>
-      Allows a service provider to set/update the 'Site Name' assigned to a vCloud Director instance.
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      Get-vCloudSiteAssociations
-    </td>
-    
-    <td>
-      Shows the existing associations (if any) from a vCloud Director instance.
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      Invoke-vCDPairSites
-    </td>
-    
-    <td>
-      Performs the 2-way exchange of localAssociationData documents to pair two vCloud Director instances.
-    </td>
-  </tr>
-</table>
+|Commandlet|Description|
+|---|---|
+|Get-vCloudSiteName|Allows a service provider to check/confirm the 'Site Name' assigned to a vCloud Director instance.|
+|Set-vCloudSiteName|Allows a service provider to set/update the 'Site Name' assigned to a vCloud Director instance.|
+|Get-vCloudSiteAssociations|Shows the existing associations (if any) from a vCloud Director instance.|
+|Invoke-vCDPairSites|Performs the 2-way exchange of localAssociationData documents to pair two vCloud Director instances.|
 
-So to confirm/set the names of our 'Auckland' (akl.mycloud.local) and 'Christchurch' (chc.mycloud.local) sites we can use Get-vCloudSiteName and Set-vCloudSiteName:
+So to confirm/set the names of our 'Auckland' (akl.mycloud.local) and 'Christchurch' (chc.mycloud.local) sites we can use `Get-vCloudSiteName` and `Set-vCloudSiteName`:
 
-<pre class="lang:ps decode:true">PS C:\> Get-vCloudSiteName -siteDomain akl.mycloud.local
+```
+PS C:\> Get-vCloudSiteName -siteDomain akl.mycloud.local
 847f4785-f8a5-4e59-b0d7-5608723247dd
 
 PS C:\> Set-vCloudSiteName -siteDomain akl.mycloud.local -siteName 'A03 - Auckland DC'
@@ -115,33 +81,37 @@ Task completed successfully
 True
 
 PS C:\> Get-vCloudSiteName -siteDomain chc.mycloud.local
-C00 - Christchurch DC</pre>
+C00 - Christchurch DC
+```
 
 Now we have set the site names, we can check if they are already associated:
 
-&nbsp;
-
-<pre class="lang:ps decode:true ">PS C:\> Get-vCloudSiteAssociations -siteDomain akl.mycloud.local
+```
+PS C:\> Get-vCloudSiteAssociations -siteDomain akl.mycloud.local
 Displaying site associations for site Id: urn:vcloud:site:847f4785-f8a5-4e59-b0d7-5608723247dd with site Name: A03 - Auckland DC
 No site associations found
 
 PS C:\> Get-vCloudSiteAssociations -siteDomain chc.mycloud.local
 Displaying site associations for site Id: urn:vcloud:site:b34798aa-f722-4c06-a8a2-392f591cf450 with site Name: C00 - Christchurch DC
-No site associations found</pre>
+No site associations found
+```
 
 Ok, so they're not already associated, so we can run Invoke-vCDPairSites without the 'WhatIf $false' to see what would happen:
 
-<pre class="lang:ps decode:true ">PS C:\> Invoke-vCDPairSites -siteAuri akl.mycloud.local -siteBuri chc.mycloud.local
+```
+PS C:\> Invoke-vCDPairSites -siteAuri akl.mycloud.local -siteBuri chc.mycloud.local
 Running in information mode only - no API changes will be made unless you run with -WhatIf $false
 Site A returned site ID as: urn:vcloud:site:847f4785-f8a5-4e59-b0d7-5608723247dd
 Site A returned site name as: A03 - Auckland DC
 Site B returned site ID as: urn:vcloud:site:b34798aa-f722-4c06-a8a2-392f591cf450
 Site B returned site name as: C00 - Christchurch DC
-Not performing site association as running in information mode</pre>
+Not performing site association as running in information mode
+```
 
-That all looks good so now we can attempt the action pairing operation:
+That all looks good so now we can attempt the actual pairing operation:
 
-<pre class="lang:ps decode:true ">PS C:\> Invoke-vCDPairSites -siteAuri akl.mycloud.local -siteBuri chc.mycloud.local -WhatIf $false
+```
+PS C:\> Invoke-vCDPairSites -siteAuri akl.mycloud.local -siteBuri chc.mycloud.local -WhatIf $false
 Running in implementation mode, API changes will be committed
 Site A returned site ID as: urn:vcloud:site:847f4785-f8a5-4e59-b0d7-5608723247dd
 Site A returned site name as: A03 - Auckland DC
@@ -158,11 +128,13 @@ Task submitted successfully, waiting for result
 q=queued, P=pre-running, .=Task Running:
 q 
 Task completed successfully
-Returned Result = True</pre>
+Returned Result = True
+```
 
 And confirm the associations using Get-vCloudSiteAssociation again:
 
-<pre class="lang:ps decode:true ">PS C:\> Get-vCloudSiteAssociations -siteDomain akl.mycloud.local
+```
+PS C:\> Get-vCloudSiteAssociations -siteDomain akl.mycloud.local
 Displaying site associations for site Id: urn:vcloud:site:847f4785-f8a5-4e59-b0d7-5608723247dd with site Name: A03 - Auckland DC
 Associated sites:
 https://chc.mycloud.local/api
@@ -180,7 +152,8 @@ SiteId                  : urn:vcloud:site:b34798aa-f722-4c06-a8a2-392f591cf450
 SiteName                : C00 - Christchurch DC
 PublicKey               : -----BEGIN PUBLIC KEY-----
                           MII...
-                          -----END PUBLIC KEY-----</pre>
+                          -----END PUBLIC KEY-----
+```
 
 (I've cut out the certificate dumps for brevity).
 
@@ -190,31 +163,31 @@ So now that our Auckland and Christchurch sites are paired we can move on with a
 
 Originally I was intending to write PowerShell functions for this too, and while this is certainly possible, VMware have been nice to us and created the capability in the new vCloud Director tenant UI. Logging in as a user with 'Organizational Administrator' access shows an 'Administration' tab:
 
-<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-193" src="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair01-1.png" alt="" width="1183" height="708" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair01-1.png 1183w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair01-1-300x180.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair01-1-768x460.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair01-1-1024x613.png 1024w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair01-1-250x150.png 250w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair01-1-150x90.png 150w" sizes="(max-width: 1183px) 100vw, 1183px" /> 
+![](orgpair01-1.png)
 
 Selecting the 'Administration' tab reveals the site pairing options:
 
-<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-194" src="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair02.png" alt="" width="1182" height="706" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair02.png 1182w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair02-300x179.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair02-768x459.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair02-1024x612.png 1024w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair02-250x150.png 250w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair02-150x90.png 150w" sizes="(max-width: 1182px) 100vw, 1182px" /> 
+![](orgpair02.png)
 
 When we select 'Export Local Association Data' a file is downloaded (named 'Download' weirdly enough) and this file can be uploaded to the 'partner' site using the other 'Create New Organization Association' button. Once completed, the association is shown in the panel - here is the Auckland site for 'Tenant X' once the Christchurch Local Association Data has been uploaded to it:
 
-<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-195" src="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair03.png" alt="" width="1287" height="689" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair03.png 1287w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair03-300x161.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair03-768x411.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair03-1024x548.png 1024w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair03-250x134.png 250w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair03-150x80.png 150w" sizes="(max-width: 1287px) 100vw, 1287px" /> 
+![](orgpair03.png)
 
 You can click on this panel to see the association details and even remove a site association if no longer required:
 
-<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-196" src="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair04.png" alt="" width="1289" height="691" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair04.png 1289w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair04-300x161.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair04-768x412.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair04-1024x549.png 1024w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair04-250x134.png 250w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair04-150x80.png 150w" sizes="(max-width: 1289px) 100vw, 1289px" /> 
+![](orgpair04.png)
 
 Here's the view of the 'Christchurch' environment once I've paired the 'other' 3 sites to it for this Organization:
 
-<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-197" src="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair05.png" alt="" width="962" height="791" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair05.png 962w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair05-300x247.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair05-768x631.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair05-182x150.png 182w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair05-150x123.png 150w" sizes="(max-width: 962px) 100vw, 962px" /> 
+![](orgpair05.png)
 
 Once we've added all our associations (and logged out and back in) we can see the new multi-site drop-down menu item which allows us to select from any of our datacenter locations:
 
-<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-198" src="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair06.png" alt="" width="965" height="792" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair06.png 965w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair06-300x246.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair06-768x630.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair06-183x150.png 183w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair06-150x123.png 150w" sizes="(max-width: 965px) 100vw, 965px" /> 
+![](orgpair06.png)
 
 And selecting one ('Auckland' in this case) takes us to the Auckland resource view:
 
-<img loading="lazy" decoding="async" class="aligncenter size-full wp-image-199" src="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair07.png" alt="" width="965" height="795" srcset="https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair07.png 965w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair07-300x247.png 300w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair07-768x633.png 768w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair07-182x150.png 182w, https://kiwicloud.ninja/wp-content/uploads/2017/10/orgpair07-150x124.png 150w" sizes="(max-width: 965px) 100vw, 965px" /> 
+![](orgpair07.png)
 
 All in all, a little bit of a convoluted process, but at least it should only need to be done once and can then be left alone. Very excited to see what VMware do with this functionality in future - can definitely see a time when all of an Organization's VMs are displayed / summarised in a single view regardless of which vCloud instance supports them.
 

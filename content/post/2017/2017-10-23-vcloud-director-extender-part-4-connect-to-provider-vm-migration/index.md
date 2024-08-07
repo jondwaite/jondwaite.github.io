@@ -4,6 +4,7 @@ author: Jon Waite
 type: post
 date: 2017-10-23T03:51:45+00:00
 url: /2017/10/vcloud-director-extender-part-4-connect-to-provider-vm-migration/
+series: vCloud Director Extender
 categories:
   - vCloud Director
   - vCloud Director Extender

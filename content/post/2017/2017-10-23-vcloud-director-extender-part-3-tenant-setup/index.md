@@ -4,6 +4,7 @@ author: Jon Waite
 type: post
 date: 2017-10-22T23:30:57+00:00
 url: /2017/10/vcloud-director-extender-part-3-tenant-setup/
+series: vCloud Director Extender
 categories:
   - vCloud Director
   - vCloud Director Extender
