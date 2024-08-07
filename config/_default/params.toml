@@ -52,13 +52,13 @@ fontsDir = "fonts/" # without a leading forward slash
 fallBackOgImage = "images/thumbnail.png"
 
 # Logo image
-logo = "logos/logo.png"
+logo = "logos/kiwicloud-404x60.png"
 
 # center logo on navbar
 centerLogo = false # Set to "true" for centering or "false" for left aligned.
 
 # sets the maximum number of lines per codeblock. The codeblock will however be scrollable and expandable.
-codeMaxLines = 15
+codeMaxLines = 25
 
 # disable showing line numbers by default. Switch to `true` if you'd rather have them on.
 codeLineNumbers = false
@@ -87,7 +87,7 @@ enforceLightMode = true
 # enforceDarkMode = false
 
 # customize footer icon. see issue https://github.com/chipzoller/hugo-clarity/issues/77
-# footerLogo = "icons/copy.svg"
+footerLogo = "logos/kiwicloudninja-favicon-color.png"
 
 # Customize Sidebar Disclaimer Text
 sidebardisclaimer = true
@@ -100,11 +100,11 @@ languageMenuName = "🌐"
 # titleSeparator = "|"
 
 # Enable or disable comments globally. Default to true.
-# comments = false
+comments = true
 
 # Enable or disable Utterances (https://github.com/utterance/utterances) Github Issue-Based Commenting
-# utterances = true  # Run the utterances script in the single.html layout to load https://utteranc.es comments
-# utterancesRepo = "GHUsername/Repository.Name" # Utterances is enabled when this param is set
+utterances = false  # Run the utterances script in the single.html layout to load https://utteranc.es comments
+# utterancesRepo = "jondwaite/jondwaite.github.io" # Utterances is enabled when this param is set
 # utterancesLabel = "blog comments ✨💬✨" # The label needs to be manually added to your Github repository issues before configuring here
 # utterancesTheme = "github-light" # Default: github-dark
 # utterancesIssueTerm = "pathname" # Default: pathname
