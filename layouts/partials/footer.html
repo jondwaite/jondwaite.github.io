@@ -1,5 +1,6 @@
 {{- $s := .Site.Params }}
 {{- $c := default .Site.Title .Site.Copyright  }}
+{{- $t := "| Made with :heart: by Jon Waite using [Hugo](https://gohugo.io) and [Hugo Clarity Theme](https://github.com/chipzoller/hugo-clarity)" }}
 {{- if or .Params.enableMathNotation $s.enableMathNotation }}
   {{ partialCached "math" . }}
 {{- end }}
@@ -8,7 +9,7 @@
 <footer class="footer">
   <div class="footer_inner wrap pale">
     <img src='{{ absURL (default $defaultFooterLogo $s.footerLogo) }}' class="icon icon_2 transparent" alt="{{ $c }}">
-    <p>{{ T "copyright" | markdownify }}{{ with $s.since }}&nbsp;{{ . }}-{{ end }}<span class="year"></span>&nbsp;{{ upper $c }}. {{ T "all_rights" | markdownify }}</p>
+    <p>{{ T "copyright" | markdownify }}{{ with $s.since }}&nbsp;{{ . }}-{{ end }}<span class="year"></span>&nbsp;{{ upper $c }}. {{ T "all_rights" | markdownify }} {{ $t | markdownify}}</p>
     {{- partialCached "top" .}}
   </div>
 </footer>
