@@ -10,11 +10,7 @@ theme = ["github.com/chipzoller/hugo-clarity"]
 # disqusShortname = ""
 
 DefaultContentLanguage = "en"
-# [languages]
-# config/_default/languages.toml
 
-# [menus]
-# config/_default/menus/menu.xx.toml
 enableEmoji = true
 
 [taxonomies]
