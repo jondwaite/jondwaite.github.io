@@ -22,15 +22,15 @@ I got asked recently if there was an easy way to set Guest Customization options
 
 The Guest Customization settings are available as one of the ‘Section’ entries returned by accessing the ExtensionData properties on a CIVM object. Once connected (Connect-CIServer) you can see this from PowerCLI:
 
-<img loading="lazy" decoding="async" class="aligncenter" src="https://kiwicloud.ninja/wp-content/uploads/2018/09/image-4.png" alt="" width="765" height="453" /> 
+![](image-4.png)
 
 The ‘trick’ is that there are typically 5 sections (one each for OvfVSSD, OvfMsg, network connections, guest Customization and VMware tools). I’ve seen some approaches that rely on the ‘guest Customization’ setting always being found at the Section[3] index in the ExtensionData collection, but this could easily change in future and break any functionality relying on this. A much more reliable way of finding the guest Customization section values is:
 
-<img decoding="async" class="aligncenter" src="https://kiwicloud.ninja/wp-content/uploads/2018/09/image-5.png" alt="" /> 
+![](image-5.png)
 
 But how about if you need to change/update a setting, luckily there is a method provided (UpdateServerData) which does exactly this. So if we want to (for example) change the ‘CustomizationScript’ setting to “echo “Hello World!” we can:
 
-<img decoding="async" class="aligncenter" src="https://kiwicloud.ninja/wp-content/uploads/2018/09/image-6.png" /> 
+![](image-6.png)
 
 You can change other settings using the same method (e.g. ComputerName or Domain join settings).
 

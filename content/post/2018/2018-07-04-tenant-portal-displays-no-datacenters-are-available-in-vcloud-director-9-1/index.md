@@ -22,9 +22,7 @@ Eventually an offhand remark in a slack channel by <a href="https://fojta.wordpr
 
 In our environment we have 3 vCloud Director cell servers behind a load balancer, we also load-balance internally so that our management environment can talk to the vCD API and we can conduct testing of the environment without necessarily having it open to the public internet. The arrangement looks logically like this:
 
-&nbsp;
-
-[<img loading="lazy" decoding="async" style="margin: 5px auto; float: none; display: block;" title="vCD Load Balancing" src="https://kiwicloud.ninja/wp-content/uploads/2018/07/vcd-load-balancing_thumb.png" alt="vCloud Director Load Balancing" width="800" height="400" />][1]
+![](vcd-load-balancing_thumb.png)
 
 Users from the internet accessing ‘portal.cloud.com’ get redirected to one of the vCD cell servers (and if one of them is unavailable the monitoring on the Load Balancer doesn’t direct requests there). The same happens for internal users, but in this case the ‘portal.cloud.com’ DNS entry has been overridden to point at the internal (192.168.0.10) address to allow connectivity to the cells even if the external LB or internet link is unavailable.
 
@@ -51,5 +49,3 @@ What I assume is happening is that when the internal load balancer responds the 
 Just posting this here in the hope it will save someone else any frustration caused by this issue.
 
 Jon.
-
- [1]: https://kiwicloud.ninja/wp-content/uploads/2018/07/vcd-load-balancing.png

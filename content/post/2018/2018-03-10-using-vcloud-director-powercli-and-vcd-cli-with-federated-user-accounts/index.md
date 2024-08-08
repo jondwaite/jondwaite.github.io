@@ -25,25 +25,33 @@ It can sometimes be easier to use a browser plugin or extension to help find the
 
 In Google Chrome for example, use <ctrl + shift + I> (or Menu / More Tools / Developer Tools) to open the developer interface. Next click on the ‘Network’ heading at the top of the developer panel and refresh the vCloud Director portal. Scroll down to one of the ‘amfsecure’ document lines and select the ‘Headers’ tab, you should see a panel similar to this:
 
-[<img loading="lazy" decoding="async" class="aligncenter" style="display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2018/03/image_thumb.png" alt="image" width="560" height="952" border="0" />][1]
+![](image_thumb.png)
 
 You can simply copy the value from the highlighted entry (87489f6a17044d66bc36704ce5c4e45c in this example) and use that to establish a vcd-cli or PowerCLI session:
 
 For vcd-cli:
 
-`vcd login <cloud endpoint> <org name> <user name> –d <session ID string>`
+```
+vcd login <cloud endpoint> <org name> <user name> –d <session ID string>
+```
 
 e.g.
 
-`vcd login mycloudprovider.com myorg joebloggs –d 87489f6a17044d66bc36704ce5c4e45c`
+```
+vcd login mycloudprovider.com myorg joebloggs –d 87489f6a17044d66bc36704ce5c4e45c
+```
 
 For PowerCLI:
 
-`Connect-CIServer –Server <cloud endpoint> –SessionID <session ID string>`
+```
+Connect-CIServer –Server <cloud endpoint> –SessionID <session ID string>
+```
 
 e.g.
 
-`Connect-CIServer –Server mycloudprovider.com –SessionID 87489f6a17044d66bc36704ce5c4e45c`
+```
+Connect-CIServer –Server mycloudprovider.com –SessionID 87489f6a17044d66bc36704ce5c4e45c
+```
 
 You will then be connected as the same user from your browser session and able to run all the PowerCLI or vcd-cli commands with that user account.
 
@@ -51,7 +59,9 @@ You will then be connected as the same user from your browser session and able t
 
 Rather than digging around for HTTP headers and cookies in a browser, vcd-cli has a built-in module which is meant to retrieve the sessionID from a browser session automatically and use this to authenticate, the syntax is:
 
-`vcd login session list chrome`
+```
+vcd login session list chrome
+```
 
 Which should return the session ID from an instance of Chrome, but in my initial testing this was not returning any output at all.
 
@@ -69,7 +79,7 @@ On both lines 126 and 148: Change:
 
 Once these changes are complete the ‘vcd login session list chrome’ command can be used to obtain the current session ID from Chrome automatically:
 
-[<img loading="lazy" decoding="async" class="aligncenter" style="display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2018/03/image_thumb-1.png" alt="image" width="478" height="77" border="0" />][3]
+![](image_thumb-1.png)
 
 And this can be used directly to login automatically once a Chrome session exists using the `--use-browser-session` switch.
 
@@ -77,6 +87,4 @@ Also note that you can obtain the session ID like this from vcd-cli and use it t
 
 Jon.
 
- [1]: https://kiwicloud.ninja/wp-content/uploads/2018/03/image.png
  [2]: https://pypi.python.org/pypi/browser-cookie3/0.6.0 "https://pypi.python.org/pypi/browser-cookie3/0.6.0"
- [3]: https://kiwicloud.ninja/wp-content/uploads/2018/03/image-1.png

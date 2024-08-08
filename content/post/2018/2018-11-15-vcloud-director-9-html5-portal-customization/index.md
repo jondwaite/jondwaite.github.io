@@ -18,7 +18,7 @@ tags:
 ---
 One of the great features in vCloud Director 9 which has been further enhanced in the latest v9.5 release is the new HTML5 portal:
 
-[<img loading="lazy" decoding="async" style="display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2018/11/image_thumb.png" alt="image" width="1028" height="430" border="0" />][1]
+![](image_thumb.png)
 
 Even better, VMware has released a toolkit to allow Service Providers to fully customise the look and feel of the portal using CSS themes in their <a href="https://github.com/vmware/clarity" target="_blank" rel="noopener">Clarity</a> framework..
 
