@@ -20,14 +20,16 @@ tags:
 ---
 I had some queries on my [previous blog post][1] on using the new API Tokens in VMware Cloud Director (VCD) 10.3.1 about whether these can be used in PowerCLI scripts from PowerShell or Terraform scripts which use the VMware Terraform Provider against Cloud Director. Fortunately the answer to both questions is 'Yes' and I've created a [small github repository][2] with examples of how these can be done.
 
-For both scripts the variables need to be set to something appropriate:  
+For both scripts the variables need to be set to something appropriate:
+
 `org` should be set to the 'short' organization code for VCD (the same name as you'd use after 'tenant' when accessing the VCD UI)  
 `vcdhost` should be set to the FQDN of the VCD environment you are using (e.g. cloud.my.service.provider.net)  
 `token` should be set to the API Token value created in VCD
 
 For PowerCLI we can use the `SessionId` returned from first refreshing the API token and then accessing the `/api/session` path to login with `Connect-CIServer` which provides full access to all PowerCLI cmdlets, the script to do this is included below and in the [Github repository][2] as `vcd-token.ps1`.
 
-<pre class="EnlighterJSRAW" data-enlighter-language="powershell">$org = "<VCD Organization Code>"
+```powershell
+$org = "<VCD Organization Code>"
 $vcdhost = "<VCD Hostname>"
 $token = "<VCD API Token String>"
 
@@ -59,13 +61,14 @@ Get-CIVM | Format-Table
 
 # (Optional) Disconnect the CIServer session:
 Disconnect-CIServer -Server $vcdhost -Confirm:$false
-</pre>
+```
 
 Usage should be pretty straightforward - just change the variables at the top of the file for the VCD Organization code, VCD API hostname and the Token generated in the VCD UI and the commands at the bottom of the file as appropriate.
 
 For Terraform, we can use a small Bash script in a similar way to set a `VCD_TOKEN` environment variable which can then be consumed by the [VCD Terraform Provider][3] to authenticate when applying Terraform plans. This script is in the [Github repository][2] as `vcd-token.sh`.
 
-<pre class="EnlighterJSRAW" data-enlighter-language="shell">#!/bin/bash
+```bash
+#!/bin/bash
 
 org="<VCD Organization Code>"
 vcdhost="<VCD Hostname>"
@@ -74,7 +77,8 @@ token="<VCD API Token String>"
 uri="https://$vcdhost/oauth/tenant/$org/token?grant_type=refresh_token&refresh_token=$token"
 accesstok=`curl -s -k -X POST $uri -H "Accept: application/json" | jq -r '.access_token'`
 headers=`curl -s -H "Accept: application/*+xml;version=36.1" -H "Authorization: Bearer $accesstok" -k -I -X GET https://$vcdhost/api/session`
-export VCD_TOKEN=`echo "$headers" | grep X-VMWARE-VCLOUD-ACCESS-TOKEN: | cut -f2- -d: | awk '{$1=$1};1'`</pre>
+export VCD_TOKEN=`echo "$headers" | grep X-VMWARE-VCLOUD-ACCESS-TOKEN: | cut -f2- -d: | awk '{$1=$1};1'`
+```
 
 The easiest way to use this is to save as a shell script (and make executable) and then 'dot source' this `. ./vcd-token.sh` or `source ./vcd-token.sh` prior to applying any Terraform plan that requires the token to be set.
 
