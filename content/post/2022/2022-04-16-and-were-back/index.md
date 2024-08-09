@@ -8,9 +8,9 @@ categories:
   - Uncategorized
 
 ---
-So I had an 'interesting' email from Oracle cloud (OCI) which I almost missed:<figure class="wp-block-image size-large">
+So I had an 'interesting' email from Oracle cloud (OCI) which I almost missed:
 
-<img loading="lazy" decoding="async" width="761" height="800" src="https://kiwicloud.ninja/wp-content/uploads/2022/04/image-761x800.png" alt="" class="wp-image-68982" srcset="https://kiwicloud.ninja/wp-content/uploads/2022/04/image-761x800.png 761w, https://kiwicloud.ninja/wp-content/uploads/2022/04/image-285x300.png 285w, https://kiwicloud.ninja/wp-content/uploads/2022/04/image-768x807.png 768w, https://kiwicloud.ninja/wp-content/uploads/2022/04/image-143x150.png 143w, https://kiwicloud.ninja/wp-content/uploads/2022/04/image.png 1001w" sizes="(max-width: 761px) 100vw, 761px" /> </figure> 
+![](image.png)
 
 As this site (kiwicloud.ninja) is currently hosted on the 'Free Tier' of Oracle Cloud I was a bit concerned, but figured the odds of being impacted were low and I 'should be alright'.
 
