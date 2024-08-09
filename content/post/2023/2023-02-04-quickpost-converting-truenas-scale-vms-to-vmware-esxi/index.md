@@ -24,53 +24,20 @@ In my homelab I'm using TrueNAS as a NFS datastore on my ESXi hosts which simpli
 
 You will need shell access to TrueNAS to run the following command, and write access to the path where the converted disk is to be created, in my homelab my VM volume is at the path /dev/zvol/ucs-ssd-int/VMs/dns01 and the NFS share is at /mnt/sata/nfs-cap-01, the command I run is therefore:
 
-<pre class="wp-block-code"><code>qemu-img convert -f raw /dev/zvol/ucs-ssd-int/VMs/dns01 \
+```
+qemu-img convert -f raw /dev/zvol/ucs-ssd-int/VMs/dns01 \
   -O vmdk -o adapter_type=lsilogic,subformat=streamOptimized,compat6 \
-  /mnt/sata/nfs-cap-01/dns01.vmdk -p</code></pre>
+  /mnt/sata/nfs-cap-01/dns01.vmdk -p
+```
 
 The parameters here are reasonably self-explanatory:<figure class="wp-block-table">
 
-<table>
-  <tr>
-    <td>
-      -f raw
-    </td>
-    
-    <td>
-      Tells qemu-img that the source format is a 'raw' disk image (which will be retrieved from the TrueNAS zVol path given - in this example /dev/zvol/ucs-ssd-int/VMs/dns01).
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      -O vmdk
-    </td>
-    
-    <td>
-      Tells qemu-img that we want to write out in VMDK disk format.
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      -o adapter_type&#8230;
-    </td>
-    
-    <td>
-      Specifies the destination disk adapter type, the streamOptimized creates 'thin' format VMDK disk files.
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      -p
-    </td>
-    
-    <td>
-      Shows progress as the disk is being converted (optional) - I find this useful for large disks that can take significant time to convert
-    </td>
-  </tr>
-</table></figure> 
+|Parameter|Description|
+|---|---|
+|-f raw|Tells qemu-img that the source format is a 'raw' disk image (which will be retrieved from the TrueNAS zVol path given - in this example /dev/zvol/ucs-ssd-int/VMs/dns01).|
+|-O vmdk|Tells qemu-img that we want to write out in VMDK disk format.|
+|-o adapter_type|Specifies the destination disk adapter type, the streamOptimized creates 'thin' format VMDK disk files.|
+|-p|Shows progress as the disk is being converted (optional) - I find this useful for large disks that can take significant time to convert|
 
 If your VM has multiple disks attached then the same command can be used to convert each of them (obviously change the output names for each disk so they don't overwrite each other).
 

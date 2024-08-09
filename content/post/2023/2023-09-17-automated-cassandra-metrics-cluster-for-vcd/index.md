@@ -13,11 +13,11 @@ tags:
   - PowerCLI
   - PowerShell
   - vCloud Director
-
 ---
+
 <a rel="noreferrer noopener" href="https://docs.vmware.com/en/VMware-Cloud-Director/index.html" data-type="link" data-id="https://docs.vmware.com/en/VMware-Cloud-Director/index.html" target="_blank">VMware Cloud Director (VCD)</a> has the ability to use an <a rel="noreferrer noopener" href="https://cassandra.apache.org/_/index.html" target="_blank">Apache Cassandra</a> database to store metrics on VM performance and then make these metrics available so that tenants can view the historic performance of their VMs:
 
-![Cassandra Metrics in Cloud Director](/images/uploads/2023/09/image-1.png)
+![Cassandra Metrics in Cloud Director](image-1.png)
 
 Installing a Cassandra cluster for use by VCD is reasonably straightforward and requires a minimum of 4 servers, of which 2 are configured as 'seed' nodes. There are several guides available online on how to do this, but many of these guides available don't cover configuring the cluster with encryption between the nodes themselves or between clients (VCD) and the servers.
 
@@ -132,7 +132,7 @@ Note that the `firstboot.sh` script which runs on the last node to set the cassa
 
 Once the cluster is deployed, operation can be checked using `nodetool status` to confirm that all nodes have been successfully deployed and joined to the cluster ('UN' status for each node):
 
-![Nodetool Status Output](/images/uploads/2023/09/image-2.png)
+![Nodetool Status Output](image-2.png)
 
 If any of the nodes have a status other than `UN` the cluster hasn't formed correctly and consider allowing more time between the node deployments (change the Start-Sleep timer towards the end of `deploy.ps1`/`deploy-nossl.ps1`) and trying to redeploy.
 
@@ -140,13 +140,13 @@ If any of the nodes have a status other than `UN` the cluster hasn't formed corr
 
 When the `deploy.ps1` (or `deploy-nossl.ps1`) script completes successfully it will output the command which needs to be run on the VCD cell to configure VCD to use the deployed cassandra cluster:
 
-![VCD Configuration Command](/images/uploads/2023/09/image-3.png)
+![VCD Configuration Command](image-3.png)
 
 As mentioned before, if you are using the `deploy-nossl.ps1` script you'll also need to set '`cassandra.use.ssl=0`' in the VCD `global.properties` file or VCD won't connect to the cluster.
 
 If everything has been successful, pasting the cell-management-tool command line into VCD shoud give the following:
 
-![VCD Cassandra Configuration Application](/images/uploads/2023/09/image-4.png)
+![VCD Cassandra Configuration Application](image-4.png)
 
 Once VCD has been successfully configured, each cell server will need the VCD service to be restarted by:
 ```bash
