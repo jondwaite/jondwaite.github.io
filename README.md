@@ -1,1 +1,1 @@
-Testing Github Pages deployment of web site
+Github Pages source files for deployment of [kiwicloud.ninja](https://kiwicloud.ninja/) web site
