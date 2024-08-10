@@ -4,6 +4,7 @@ author: Jon Waite
 type: post
 date: 2019-05-11T10:23:46+00:00
 url: /2019/05/vcloud-availability-3-0-working-with-the-vcav-api/
+series: vcloud-availability-3.0-cloud-deployment
 categories:
   - vCloud Availability
   - vCloud Director
@@ -18,7 +19,7 @@ VMware provide 2 python scripts in the vCAV appliances (usage-report.py and stor
 
 VMware has published the vCAV public API specification at&nbsp;<https://code.vmware.com/apis/441/vcav> but at this stage I'm unsure of the exact status of this - some conversations with VMware staff have indicated that this is not 'officially released or supported'. Undeterred I decided to see what could be done to consume this API and write a small PowerShell module to make it easier to consume the API using vCloud Director session credentials rather than relying on 'root' user access to the appliances themselves.
 
-**Note:** I have definitely noticed some inconsistencies between the API usage in the VMware scripts and what is currently documented on code.vmware.com. In some cases this prevented API calls from working and I had to reverse-engineer the calls from c4cli.py from the appliances to get the correct syntax. This may also explain why the public vCAV API is not yet officially supported.
+> **Note:** I have definitely noticed some inconsistencies between the API usage in the VMware scripts and what is currently documented on code.vmware.com. In some cases this prevented API calls from working and I had to reverse-engineer the calls from c4cli.py from the appliances to get the correct syntax. This may also explain why the public vCAV API is not yet officially supported.
 
 The results of my experimentation and development have been published to github here:&nbsp;<https://github.com/jondwaite/PowerVCAV> and I've also made the PowerVCAV module available in PowerShell Gallery so that it can be easily installed using the PowerShell Install-Module cmdlet. Note that PowerVCAV relies on connection information from PowerCLI and the Connect-CIServer cmdlet so this is required.
 

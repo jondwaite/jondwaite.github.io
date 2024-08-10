@@ -31,7 +31,8 @@ There is certainly no ‘right’ answer to the question of persistent storage f
 
 In this post I will detail a deployment using a <a rel="noopener" href="https://ceph.com/" target="_blank" class="broken_link">ceph</a> storage cluster to provide a highly available and scalable storage platform and the configuration required to enable a CSE deployed k8s cluster to use dynamic persistent volumes (DPVs) in this environment.
 
-Due to the large number of servers/VMs involved, and the possibility of confusion / working on the wrong server console - I've added buttons like this: ![:inline](ceph-both.png) prior to each section to show which system(s) the commands should be used on.
+Due to the large number of servers/VMs involved, and the possibility of confusion / working on the wrong server console - I've added buttons like this <img style='vertical-align: middle;' src="./ceph-both.png" /> prior to each section to show which system(s) the commands should be used on.
+
 
 {{% notice note Disclaimer %}}
 I am not an expert in Kubernetes or ceph and have figured out most of the contents in this post from documentation, forums, google and (sometimes) trial and error. Refer to the documentation and support resources at the links at the end of this post if you need the ‘proper’ documentation on these components. Please do not use anything shown in this post in a production environment without appropriate due diligence and making sure you understand what you are doing (and why!).
@@ -74,7 +75,8 @@ On the 3 storage nodes (ceph01, ceph02 and ceph03) add a hard disk to the server
 
 Once the servers are deployed the following are performed on each server to update their repositories and upgrade any modules to current security levels. We will also upgrade the Linux kernel to a more up-to-date version by enabling the Ubuntu Hardware Extension (HWE) kernel which resolves some compatibility issues between ceph and older Linux kernel versions.
 
-![](ceph-both.png)
+<img src="./ceph-both.png" />
+
 ```bash
 $ sudo apt-get update
 $ sudo apt-get upgrade
@@ -86,7 +88,8 @@ Each server should now be restarted to ensure the new Linux kernel is loaded and
 ### Ceph Admin Account
 
 We need a user account configured on each of the ceph servers to allow ceph-deploy to work and to co-ordinate access, this account must NOT be named 'ceph' due to potential conflicts in the ceph-deploy scripts, but can be called just about anything else. In this lab environment I've used 'cephadmin'. First we create the account on each server and set the password, the 3rd line permits the cephadmin user to use 'sudo' without a password which is required for the ceph-deploy script:
-![](ceph-both.png)
+
+<img src="./ceph-both.png" />
 
 ```bash
 $ sudo useradd -d /home/cephadmin -m cephadmin -s /bin/bash
@@ -97,7 +100,8 @@ $ echo "cephadmin ALL = (root) NOPASSWD:ALL" > /etc/sudoers.d/cephadmin
 From now on, (unless specified) use the new cephadmin login to perform each step. Next we need to generate an SSH key pair for the ceph admin user and copy this to the authorized-keys file on each of the ceph nodes.
 
 Execute the following on the ceph admin node (as cephadmin):
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ssh-keygen -t rsa
@@ -106,7 +110,7 @@ $ ssh-keygen -t rsa
 Accept the default path (`/home/cephadmin/.ssh/id_rsa`) and don't set a key passphrase. You should copy the generated `.ssh/id_rsa` (private key) file to your admin workstation so you can use it to authenticate to the ceph servers.
 
 Next, enable password logins (temporarily) on the storage nodes (ceph01,2 & 3) by running the following on each node:
-![](ceph-nodes-btn.png)
+<img src="./ceph-nodes-btn.png" />
 
 ```bash
 $ sudo sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
@@ -114,7 +118,8 @@ $ sudo systemctl restart sshd
 ```
 
 Now copy the cephadmin public key to each of the other ceph nodes by running the following (again only on the admin node):
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ssh-keyscan -t rsa ceph01 >> ~/.ssh/known_hosts
@@ -126,7 +131,8 @@ $ ssh-copy-id cephadmin@ceph03
 ```
 
 You should now confirm you can ssh to each storage node as the cephadmin user from the admin node without being prompted for a password:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ssh cephadmin@ceph01 sudo hostname
@@ -140,7 +146,8 @@ ceph03
 If everything is working correctly then each command will return the appropriate hostname for each storage node without any password prompts.
 
 Optional: It is now safe to re-disable password authentication on the ceph servers if required (since public key authentication will be used from now on) by:
-![](ceph-both.png)
+
+<img src="./ceph-both.png" />
 
 ```bash
 $ sudo sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config
@@ -150,7 +157,9 @@ $ sudo systemctl restart sshd
 You'll need to resolve any authentication issues before proceeding as the ceph-deploy script relies on being able to obtain sudo-level remote access to all of the storage nodes to install ceph successfully.
 
 You should also at this stage confirm that you have time synchronised to an external source on each ceph node so that the server clocks agree, by default on Ubuntu 16.04 timesyncd is configured automatically so nothing needs to be done here in our case. You can check this on Ubuntu 16.04 by running timedatectl:
-![](ceph-both.png)
+
+<img src="./ceph-both.png" />
+
 ![Checking time synchronization using timedatectl](image_thumb.png)
 
 For some Linux distributions you may need to create firewall rules at this stage for ceph to function, generally port 6789/tcp (for mon) and the range 6800 to 7300 tcp (for OSD communication) need to be open between the cluster nodes. The default firewall settings in Ubuntu 16.04 allow all network traffic so this is not required (however, do not use this in a production environment without configuring appropriate firewalling).
@@ -159,28 +168,33 @@ For some Linux distributions you may need to create firewall rules at this stage
 
 On all nodes and signed-in as the cephadmin user (**important!**)  
 Add the release key: 
-![](ceph-both.png)
+
+<img src="./ceph-both.png" />
 
 ```bash
 $ wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
 ```
 
 Add ceph packages to your repository:<figure class="wp-block-image">
-![](ceph-both.png)
+
+<img src="./ceph-both.png" />
 
 ```bash
 $ echo deb https://download.ceph.com/debian-mimic/ $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph.list
 ```
 
 On the admin node only, update and install ceph-deploy:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
+
 
 ```bash
 $ sudo apt update; sudo apt install ceph-deploy -y
 ```
 
 On all nodes, update and install ceph-common:
-![](ceph-both.png)
+
+<img src="./ceph-both.png" />
 ```bash
 $ sudo apt update; sudo apt install ceph-common -y
 ```
@@ -190,24 +204,27 @@ Installing ceph-common on the storage nodes isn't strictly required as the ceph-
 {{% /notice %}}
 
 Next again working on the admin node logged in as cephadmin, make a directory to store the ceph cluster configuration files and change to that directory. Note that ceph-deploy will use and write files to the current directory so make sure you are in this folder whenever making changes to the ceph configuration.
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo apt install ceph-deploy -y
 ```
 
 Now we can create the initial ceph cluster from the admin node, use ceph-deploy with the 'new' switch and supply the monitor nodes (in our case all 3 nodes will be both monitors and OSD nodes). Make sure you do NOT use sudo for this command and only run on the admin node:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ceph-deploy new ceph01 ceph02 ceph03
 ```
 
 If everything has run correctly you'll see output similar to the following:
-![](image_thumb-1.png)
+![Ceph deployment output](image_thumb-1.png)
 
 Checking the contents of the ~/mycluster/ folder should show the cluster configuration files have been added:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ls -al ~/mycluster
@@ -220,7 +237,8 @@ drwxr-xr-x 5 cephadmin cephadmin 4096 Jan 25 00:57 ..
 ```
 
 The ceph.conf file will look something like this:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ cat ~/mycluster/ceph.conf
@@ -233,7 +251,8 @@ auth_client_required = cephx
 ```
 
 Run the ceph installation for the nodes (again from the admin node only):
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ceph-deploy install ceph01 ceph02 ceph03
@@ -244,14 +263,16 @@ This will run through the installation of ceph and pre-requisite packages on eac
 ### Ceph Configuration
 
 Once you've successfully installed ceph on each node, use the following (again from only the admin node) to deploy the initial ceph monitor services:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ceph-deploy mon create-initial
 ```
 
 If all goes well you'll get some messages at the completion of this process showing the keyring files being stored in your 'mycluster' folder, you can check these exist:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ls -al ~/mycluster
@@ -269,14 +290,15 @@ drwxr-xr-x 5 cephadmin cephadmin   4096 Jan 25 00:57 ..
 ```
 
 To avoid having to specify the monitor node address and ceph.client.admin.keyring path in every command, we can now deploy these to each node so they are available automatically. Again working from the 'mycluster' folder on the admin node:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ceph-deploy admin cephadmin ceph01 ceph02 ceph03
 ```
 
 This should give the following:
-![](image_thumb-2.png)
+![Ceph deployment output](image_thumb-2.png)
 
 Next we need to deploy the manager ('mgr') service to the OSD nodes, again working from the 'mycluster' folder on the admin node:
 
@@ -285,7 +307,8 @@ $ ceph-deploy mgr create ceph01 ceph02 ceph03
 ```
 
 At this stage we can check that all of the mon and mgr services are started and ok by running (on the admin node):
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo ceph -s
@@ -308,7 +331,8 @@ $ sudo ceph -s
 As you can see, the manager ('mgr') service is installed on all 3 nodes but only active on the first and in standby mode on the other 2 - this is normal and correct. The monitor ('mon') service is running on all of the storage nodes.
 
 Next we can configure the disks attached to our storage nodes for use by ceph. Ensure that you know and use the correct identifier for your disk devices (in this case, we are using the 2nd SCSI disk attached to the storage node VMs which is at /dev/sdb so that's what we'll use in the commands below). As before, run the following only on the admin node:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ceph-deploy osd create --data /dev/sdb ceph01
@@ -319,7 +343,8 @@ $ ceph-deploy osd create --data /dev/sdb ceph03
 For each command the last line of the logs shown when run should be similar to 'Host ceph01 is now ready for osd use.'
 
 We can now check the overall cluster health with:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ ssh ceph01 sudo ceph health
@@ -344,7 +369,8 @@ $ ssh ceph01 sudo ceph -s
 As you can see, the 3 x 50GB disks have now been added and the total (150 GiB) capacity is available under the data: section.
 
 Now we need to create a ceph storage pool ready for Kubernetes to consume from - the default name of this pool is 'rbd' (if not specified), but it is strongly recommended to name it differently from the default when using for k8s so I've created a storage pool called 'kube' in this example (again running from the mycluster folder on the admin node):
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo ceph osd pool create kube 30 30
@@ -354,7 +380,8 @@ pool 'kube' created
 The two '30's are important - you should review the ceph documentation <a href="http://docs.ceph.com/docs/mimic/rados/configuration/pool-pg-config-ref" target="_blank" rel="noopener" class="broken_link">here</a> for Pool, PG and CRUSH configuration to establish values for PG and PGP appropriate to your environment.
 
 We now associated this pool with the rbd (RADOS block device) application so it is available to be used as a RADOS block device:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo ceph osd pool application enable kube rbd
@@ -366,7 +393,8 @@ enabled application 'rbd' on pool 'kube'
 The easiest way to test our ceph cluster is working correctly and can provide storage is to attempt creating and using a new RADOS Block Device (rbd) volume from our admin node.
 
 Before this will work we need to tune the rbd features map by editing ceph.conf on our client to disable rbd features that aren't available in our Linux kernel (on admin/client node):
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ echo "rbd_default_features = 7" | sudo tee -a /etc/ceph/ceph.conf
@@ -374,14 +402,16 @@ rbd_default_features = 7
 ```
 
 Now we can test creating a volume:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo rbd create --size 1G kube/testvol01
 ```
 
 Confirm that the volume exists:<figure class="wp-block-image">
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo rbd ls kube
@@ -389,7 +419,8 @@ testvol01
 ```
 
 Get information on our volume:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo rbd info kube/testvol01
@@ -406,7 +437,8 @@ rbd image 'testvol01':
 ```
 
 Map the volume to our admin host (which creates the block device /dev/rbd0):
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo rbd map kube/testvol01
@@ -414,7 +446,8 @@ $ sudo rbd map kube/testvol01
 ```
 
 Now we can create a temporary mount folder, make a filesystem on our volume and mount it to our temporary mount:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo mkdir /testmnt
@@ -445,7 +478,8 @@ tmpfs           395M     0  395M   0% /run/user/1001
 We can see our volume has been mounted successfully and can now be used as any other disk.
 
 To tidy up and remove our test volume:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo umount /dev/rbd0
@@ -470,46 +504,59 @@ If you do not make this change this you won't be able to authenticate to your cl
 {{% /notice %}}
 
 Next we login to vCD using the vcd-cli (see my post linked above if you need to install/configure vcd-cli and the CSE extension):
-![](admin-ws-btn.png)
+
+<img src="./admin-ws-btn.png" />
+
 ![Logging in to vcd-cli](image-4.png)
 
 Now we can see what virtual Datacenters (VDCs) are available to us:
-![](admin-ws-btn.png)
+
+<img src="./admin-ws-btn.png" />
+
 ![Showing available VDCs](image-5.png)
 
 If we had multiple VDCs available, we need to select which one is 'in_use' (active) for deployment of our cluster using `vcd vdc use "<VDC Name>"`. In this case we only have a single VDC and it's already active/in use.
 
 We can get the information of our VDC which will help us fill out the required properties when creating our k8s cluster:
-![](admin-ws-btn.png)
+
+<img src="./admin-ws-btn.png" />
+
 ![VDC Properties returned by vdc info](image-6.png)
 
 We will be using the 'Tyrell Servers A03' network (where our ceph cluster exists) and the 'A03 VSAN Performance' storage profile for our cluster.
 
 To get the options available when creating a cluster we can see the cluster creation help:
-![](admin-ws-btn.png)
+
+<img src="./admin-ws-btn.png" />
+
 ![CSE cluster create options](image-7.png)
 
-
 Now we can go ahead and create out Kubernetes cluster with CSE:
-![](admin-ws-btn.png)
+
+<img src="./admin-ws-btn.png" />
+
 ![CSE cluster create](image-17.png)
 
 Looking in vCloud Director we can see the new vApp and VMs deployed:
 ![CSE Cluster viewed from VCD](image-18.png)
 
 We obtain the kubectl config of our cluster and store this for later use (make the .kube folder first if it doesn't already exist):
-![](admin-ws-btn.png)
+
+<img src="./admin-ws-btn.png" />
 
 ```cmd
 C:\Users\admin>vcd cse cluster config k8sceph > .kube\config
 ```
 
 And get the details of our k8s nodes from vcd-cli:
-![](admin-ws-btn.png)
+
+<img src="./admin-ws-btn.png" />
+
 ![CSE cluster node details](image-19.png)
 
 Next we need to update and install the ceph client on each cluster node - run the following on each node (including the master). To do this we can connect via ssh as root using the key pair we specified when creating the cluster.
-![](k8s-both-btn.png)
+
+<img src="./k8s-both-btn.png" />
 
 ```bash
 # wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
@@ -527,15 +574,19 @@ You should now be able to connect from an admin workstation and get the nodes in
 If you expand the CSE cluster at any point (add nodes), you will need to repeat this series of commands on each new node in order for it to be able to mount rbd volumes from the ceph cluster.
 {{% /notice %}}
 
-![](admin-ws-btn.png)
+<img src="./admin-ws-btn.png" />
+
 ![Showing cluster nodes from kubectl](image-20.png)
 
 You should also be able to verify that the core kubernetes services are running in your cluster:
-![](admin-ws-btn.png)
+
+<img src="./admin-ws-btn.png" />
+
 ![Showing cluster pods from kubectl](image-21.png)
 
 The ceph configuration files from the ceph cluster nodes need to be added to all nodes in the kubernetes cluster. Depending on which ssh keys you have configured for access, you may be able to do this directly from the ceph admin node as follows:
-![](ceph-admin-btn.png)
+
+<img src="./ceph-admin-btn.png" />
 
 ```bash
 $ sudo scp /etc/ceph/ceph.* root@192.168.207.102:/etc/ceph/
@@ -547,7 +598,9 @@ $ sudo scp /etc/ceph/ceph.* root@192.168.207.105:/etc/ceph/
 If not, manually copy the `/etc/ceph/ceph.conf` and `/etc/ceph/ceph.client.admin.keyring` files to each of the kubernetes nodes using copy/paste or scp from your admin workstation (copy the files from the ceph admin node to ensure that the `rbd_default_features` line is included).
 
 To confirm everything is configured correctly, we should now be able to create and mount a test rbd volume on any of the kubernetes nodes as we did for the ceph admin node previously:
-![](k8s-master-btn.png)
+
+<img src="./k8s-master-btn.png" />
+
 
 ```bash
 root@mstr-x4nb:~# rbd create --size 1G kube/testvol02
@@ -606,7 +659,9 @@ Now we have a functional ceph storage cluster capable of serving block storage d
 ### Kubernetes secrets
 
 We need to first tell Kubernetes account information to be used to connect to the ceph cluster, to do this we create a 'secret' for the ceph admin user, and also create a client user to be used by k8s provisioning. Working on the kubernetes master node is easiest for this as it has ceph and kubectl already configured from our previous steps:
-![](k8s-master-btn.png)
+
+<img src="./k8s-master-btn.png" />
+
 
 ```bash
 # ceph auth get-key client.admin
@@ -617,7 +672,9 @@ This will return a key like `AQCLY0pcFXBYIxAAhmTCXWwfSIZxJ3WhHnqK/w==` which is 
 {{% notice warning Note %}}
 The '=' sign between **-from-literal** and **key** in the following command is **not** a typo - it actually needs to be like this.
 {{% /notice %}}
-![](k8s-master-btn.png)
+
+<img src="./k8s-master-btn.png" />
+
 ```bash
 # kubectl create secret generic ceph-secret --type="kubernetes.io/rbd" \
 --from-literal=key='AQCLY0pcFXBYIxAAhmTCXWwfSIZxJ3WhHnqK/w==' --namespace=kube-system
@@ -625,7 +682,9 @@ secret "ceph-secret" created
 ```
 
 We can now create a new ceph user 'kube' and register the secret from this user in kubernetes as 'ceph-secret-kube':
-![](k8s-master-btn.png)
+
+<img src="./k8s-master-btn.png" />
+
 
 ```bash
 # ceph auth get-or-create client.kube mon 'allow r' osd 'allow rwx pool=kube'
@@ -639,7 +698,8 @@ secret "ceph-secret-kube" created
 ### rbd-provisioner
 
 Kubernetes is in the process of moving storage provisioners (such as the rbd one we will be using) out of its main packages and into separate projects and packages. There's also an issue that the kubernetes-controller-manager container no longer has access to an 'rbd' binary in order to be able to connect to a ceph cluster directly. We therefore need to deploy a small 'rbd-provisioner' to act as the go-between from the kubernetes cluster to the ceph storage cluster. This project is available under [this][7] link and the steps below show how to obtain get a kubernetes pod running the rbd-provisioner service up and running (again working from the k8s cluster 'master' node):
-![](k8s-master-btn.png)
+
+<img src="./k8s-master-btn.png" />
 
 ```bash
 # git clone https://github.com/kubernetes-incubator/external-storage
@@ -664,13 +724,17 @@ serviceaccount "rbd-provisioner" created
 ```
 
 You should now be able to see the 'rbd-provisioner' container starting and then running in kubernetes:
-![](k8s-master-btn.png)
+
+<img src="./k8s-master-btn.png" />
+
 ![rbd-provisioner container](image-22.png)
 
 ### Testing it out
 
 Now we can create our kubernetes Storageclass using this storage ready for a pod to make a persistent volume claim (PVC) against. Create the following as a new file (I've named mine 'rbd-storageclass.yaml'). Change the 'monitors' line to reflect the IP addresses of the 'mon' nodes in your ceph cluster (in our case these are on the ceph01, ceph02 and ceph03 nodes on the IP addresses shown in the file).
-![](k8s-master-btn.png)
+
+<img src="./k8s-master-btn.png" />
+
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -692,7 +756,9 @@ parameters:
 ```
 
 You can then add this StorageClass to kubernetes using:
-![](k8s-master-btn.png)
+
+<img src="./k8s-master-btn.png" />
+
 
 ```bash
 # kubectl create -f ./rbd-storageclass.yaml
@@ -700,8 +766,8 @@ storageclass.storage.k8s.io "rbd" created
 ```
 
 Next we can create a test PVC and make sure that storage is created in our ceph cluster and assigned to the pod. Create a new file `pvc-test.yaml` as:
-![](k8s-master-btn.png)
 
+<img src="./k8s-master-btn.png" />
 
 ```yaml
 kind: PersistentVolumeClaim
@@ -718,7 +784,7 @@ spec:
 ```
 We can now submit the PVC to kubernetes and check it has been successfully created:
 
-![](k8s-master-btn.png)
+<img src="./k8s-master-btn.png" />
 
 ```bash
 # kubectl create -f ./pvc-test.yaml

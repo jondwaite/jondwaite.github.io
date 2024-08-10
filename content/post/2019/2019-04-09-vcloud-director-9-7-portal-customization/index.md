@@ -19,18 +19,17 @@ tags:
 ---
 One of the nicest additions to the new VMware vCloud Director 9.7 release is the ability to more fully customize the tenant portal. This now includes the capability to define custom links (together with section groupings / separators) and also the capability to customize the portal (and links) on a per-tenant basis:
 
-[<img loading="lazy" decoding="async" style="display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2019/04/image_thumb.png" alt="image" width="1076" height="157" border="0" />][1]
+![Adding custom links to VMware Cloud Director](image_thumb.png)
 
 To help take advantage of this, I've updated my <a href="https://github.com/jondwaite/vcd-h5-themes" target="_blank" rel="noopener noreferrer">vcd-h5-themes</a> module on Github to understand the new capabilities in vCloud Director v9.7 (API version 32.0) to allow easier manipulation of the portal branding configuration options.
 
-In particular the 'Set-Branding' cmdlet can now take a PSObject parameter with the customization links to be overridden or added to the portal (more about what this means later), it will also now take an optional parameter to limit the scope to a single vCD tenant organization (rather than applying changes to the system-default branding).
+In particular the `Set-Branding` cmdlet can now take a PSObject parameter with the customization links to be overridden or added to the portal (more about what this means later), it will also now take an optional parameter to limit the scope to a single vCD tenant organization (rather than applying changes to the system-default branding).
 
-The 'Get-Branding' cmdlet has also been updated and can now retrieve either the global default branding, or the branding from a specific tenant organization.
+The `Get-Branding` cmdlet has also been updated and can now retrieve either the global default branding, or the branding from a specific tenant organization.
 
 There are actually 2 types of links that can be specified:
 
 1) The 'Help' and the 'About' links under the circled ? icon can be redirected to other sites/pages (rather than showing the default VMware pages)
-
 2) The menu under the current username (highlighted in red above) can be extended with any number of new sections, separators and links to other pages.
 
 The way these are performed is slightly different, but both are placed into the customLinks object passed to Set-Branding.
@@ -40,15 +39,23 @@ Worked example
 Let's say that we want to make the following changes to the portal links:
 
 - The 'About' link under the ? icon should redirect to our company about page at https://my.company.com/about/ instead of the default VMware 'About' page.
-
 - The Extensible menu under the username drop-down should have the following structure:
 
-> <span style="font-family: Consolas;">Support<br /> +- Help Desk (redirecting to https://my.company.com/helpdesk/)<br /> +- Contact Us (redirecting to mailto contact@my.company.com with a subject line of 'Web Support')<br /> &#8212;- (Separator)<br /> Services<br /> +- Other services (redirecting to https://my.company.com/services/)<br /> &#8212;- (Separator)<br /> Terms & Conditions (redirecting to https://my.company.com/tsandcs/)</span>
+```
+Support
+  +- Help Desk (redirecting to https://my.company.com/helpdesk/)
+  +- Contact Us (redirecting to mailto contact@my.company.com with a subject line of 'Web Support')
+-- (Separator)
+Services
+  +- Other services (redirecting to https://my.company.com/services/)
+-- (Separator)
+Terms & Conditions (redirecting to https://my.company.com/tsandcs/)
+```
 
 To create these changes, we need to build a customLink object in PowerShell that reflects this arrangement, the code to do this is shown below. Running this code will create a PowerShell object variable '$mylinks' which can then be passed to the Set-Branding cmdlet:
 
-<div id="scid:C89E2BDB-ADD3-4f7a-9810-1B7EACF446C1:88cc651d-d8e3-4759-86cf-d81870802bae" class="wlWriterEditableSmartContent" style="margin: 0px; padding: 0px; float: none; display: inline;">
-  <pre class="EnlighterJSRAW" data-enlighter-language="js">### Create $mylinks variable with our branding menu structure
+```powershell
+### Create $mylinks variable with our branding menu structure
 $mylinks = [PSCustomObject]@(
     # Override the default 'about' link to redirect to https://my.company.com/about/:
     @{
@@ -99,17 +106,15 @@ $mylinks = [PSCustomObject]@(
         url="https://my.company.com/tsandcs/"
     }
 )
-### End of File ###</pre>
-  
-  <p>
-    The syntax is a bit fiddly here - in particular make sure that you place quote marks around each value as shown above - it may be easier to copy this script and edit the values rather than creating from scratch.
-  </p>
-</div>
+### End of File ###
+```
 
-To test the object has been created successfully prior to configuring the portal, you can do 'ConvertTo-Json $mylinks' which should show a well-formatted JSON object if everything is correct:
+The syntax is a bit fiddly here - in particular make sure that you place quote marks around each value as shown above - it may be easier to copy this script and edit the values rather than creating from scratch.
 
-<div id="scid:C89E2BDB-ADD3-4f7a-9810-1B7EACF446C1:324c3af6-29d0-4be5-b36b-aa4ad140bfc9" class="wlWriterEditableSmartContent" style="margin: 0px; padding: 0px; float: none; display: inline;">
-  <pre class="EnlighterJSRAW" data-enlighter-language="json">[
+To test the object has been created successfully prior to configuring the portal, you can do `ConvertTo-Json $mylinks` which should show a well-formatted JSON object if everything is correct:
+
+```json
+[
    {
      "menuItemType": "override",
      "url": "https://my.company.com/about/",
@@ -149,26 +154,22 @@ To test the object has been created successfully prior to configuring the portal
      "url": "https://my.company.com/tsandcs/",
      "name": "Terms & Conditions"
    }
- ]</pre>
-</div>
+ ]
+ ```
 
 To set our branding (make sure you use Connect-CIServer to connect to the appropriate cloud first in the 'System' context) then:
 
-<div id="scid:C89E2BDB-ADD3-4f7a-9810-1B7EACF446C1:aac8b9c3-082a-45ca-9810-29e4d800c286" class="wlWriterEditableSmartContent" style="margin: 0px; padding: 0px; float: none; display: inline;">
-  <pre class="EnlighterJSRAW" data-enlighter-language="null">Set-Branding -customLinks $mylinks
-Branding configuration sent successfully.</pre>
-</div>
+```powershell
+Set-Branding -customLinks $mylinks
+Branding configuration sent successfully.
+```
 
 You can also use the '-Tenant' switch to apply the changes to a specific tenant organization only.
 
 When we look in the vCD HTML5 portal clicking on our username in the top-right of the portal we can now see our new link structure in place:
 
-[<img loading="lazy" decoding="async" style="margin: 0px; display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2019/04/image_thumb-1.png" alt="image" width="156" height="244" border="0" />][2]
+![The new links menu created](image_thumb-1.png)
 
 In addition, the 'About' option under the menu obtained by clicking the circled ? will now redirect to our own site:
 
-[<img loading="lazy" decoding="async" style="margin: 0px; display: inline; background-image: none;" title="image" src="https://kiwicloud.ninja/wp-content/uploads/2019/04/image_thumb-2.png" alt="image" width="244" height="113" border="0" />][3]
-
- [1]: https://kiwicloud.ninja/wp-content/uploads/2019/04/image.png
- [2]: https://kiwicloud.ninja/wp-content/uploads/2019/04/image-1.png
- [3]: https://kiwicloud.ninja/wp-content/uploads/2019/04/image-2.png
+![](image_thumb-2.png)
