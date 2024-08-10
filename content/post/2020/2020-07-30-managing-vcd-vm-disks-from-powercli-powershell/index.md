@@ -26,47 +26,12 @@ The result of all of this is a module I've published today on Github and in [Pow
 
 The module contains 4 cmdlets:
 
-<table class="aligncenter" style="height: 99px; width: 100%; border-collapse: collapse; border-style: none; border-color: #0000ff; background-color: #ffffff;" border="1" cellspacing="1" cellpadding="1">
-  <tr>
-    <td style="width: 30.1531%;">
-      Get-CIVMDisk
-    </td>
-    
-    <td style="width: 49.3522%;">
-      Get the details of existing internal disks on a VCD VM
-    </td>
-  </tr>
-  
-  <tr>
-    <td style="width: 30.1531%;">
-      Add-CIVMDisk
-    </td>
-    
-    <td style="width: 49.3522%;">
-      Add a new disk (and controller if required) to a VCD VM
-    </td>
-  </tr>
-  
-  <tr>
-    <td style="width: 30.1531%;">
-      Update-CIVMDiskSize
-    </td>
-    
-    <td style="width: 49.3522%;">
-      Resize an existing VCD VM disk (only increases permitted)
-    </td>
-  </tr>
-  
-  <tr>
-    <td style="width: 30.1531%;">
-      Remove-CIVMDisk
-    </td>
-    
-    <td style="width: 49.3522%;">
-      Remove/delete a disk from a VCD VM
-    </td>
-  </tr>
-</table>
+|Module|Description|
+|---|---|
+|Get-CIVMDisk|Get the details of existing internal disks on a VCD VM|
+|Add-CIVMDisk|Add a new disk (and controller if required) to a VCD VM|
+|Update-CIVMDiskSize|Resize an existing VCD VM disk (only increases permitted)|
+|Remove-CIVMDisk|Remove/delete a disk from a VCD VM|
 
 **As always, please test properly in a test/dev environment before using this in production**, and feel free to log issues and/or PRs against the github repo if you find problems.
 
