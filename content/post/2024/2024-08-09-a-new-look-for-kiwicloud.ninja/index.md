@@ -34,7 +34,7 @@ All of this came to a head about a month ago when I was attempting to write a ne
 - Broken links to images, and image tags referencing IP addresses directly instead of URLs
 - Many other minor annoyances with the block editor and interaction with plugins
 
-Since I already write the majority of my notes and documentation in [Markdown](https://www.markdownguide.org/), I decided it was finally time to look for alternatives, and now this site is running with a static Markdown site generate called [Hugo](https://gohugo.io/). The main features of Hugo that appealed were:
+Since I already write the majority of my notes and documentation in [Markdown](https://www.markdownguide.org/), I decided it was finally time to look for alternatives, and now this site is running with a static Markdown site generator called [Hugo](https://gohugo.io/). The main features of Hugo that appealed were:
 
 - Native way to work with Markdown files
 - Flexible layout options and good/easy to use theme library
@@ -51,7 +51,7 @@ The code blocks look nice too:
 ```bash
 #!/bin/bash
 echo "I also like the default code blocks"
-echo "available 'out of the box' in this theme
+echo "available 'out of the box' in this theme"
 ```
 
 Unfortunately, the migration tools available from WordPress to Hugo suffered from many of the issues I was experiencing (again, self-inflicted and caused by the large numbers of plugins I'd used over the years) which is involving a considerable amount of work to fix. While I could easily migrate the text content, many links were broken (especially for images) and styling for code, tables and many other (plugin related) bits simply didn't work.
@@ -67,5 +67,9 @@ As a bonus, I also no longer need to provide any hosting for the site, it's enti
 This also means I can work from anywhere - I can carry around the repository on my laptop and write while offline but still able to preview the site/content and then just push the changes to the repository when connected. For any other machine I can clone the repository, make changes and push these back easily too.
 
 Hopefully you'll agree that the site looks better - and more importantly I'm happy that it will provide a platform for me to publish from more easily & quickly in future.
+
+> Quick update - I've now finished going back through all my old posts and fixing up the formatting and image links - should all now be working. Also, thanks to an awesome post [here](https://techbrij.com/migrate-wordpress-comments-giscus-github-discussion) by Brij Mohan I've managed to get the original WordPress comments migrated across to github discussions here using [giscus](https://giscus.app/) which wasn't altogether straightforward, but I'm glad I was able to keep that history in the site. Unfortunately I can't repost all the comments as the original authors (obviously), so they all have 'migrated from wordpress' headers and appear to be from me, but at least they're now preserved here.
+
+One thing I have left to do is find a way to replicate the 'old' permalink structure so that people who have bookmarks/links saved will still get to the right pages - not sure if/how that's possible yet but is probably the last bit of migration tidy-up left.
 
 Jon
